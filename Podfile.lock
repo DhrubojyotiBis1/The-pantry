@@ -1,0 +1,16 @@
+PODS:
+  - DotsLoading (1.0.0)
+
+DEPENDENCIES:
+  - DotsLoading
+
+SPEC REPOS:
+  trunk:
+    - DotsLoading
+
+SPEC CHECKSUMS:
+  DotsLoading: 1721e46a85d2424e5febbe705fb9e8b23cfea2db
+
+PODFILE CHECKSUM: 1453484daac7367c20aee88264d302a8025064df
+
+COCOAPODS: 1.8.4
