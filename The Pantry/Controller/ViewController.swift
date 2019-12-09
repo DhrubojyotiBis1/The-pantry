@@ -17,9 +17,15 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        navigationController?.navigationBar.isHidden = true
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         self.startDotAnimation()
+        performSegue(withIdentifier: segueId().registrationVCId, sender: nil)
     }
 }
 
@@ -34,6 +40,6 @@ extension ViewController{
         loadingView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -60).isActive = true
         loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
         //starting animation
-        loadingView.show()
+       // loadingView.show()
     }
 }
