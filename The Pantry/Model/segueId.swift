@@ -10,4 +10,5 @@ import Foundation
 
 public class segueId{
     let registrationVCId = "goToRegisterVC"
+    let loginVCId = "goToLoginVC"
 }

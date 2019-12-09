@@ -25,7 +25,7 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         self.startDotAnimation()
-        performSegue(withIdentifier: segueId().registrationVCId, sender: nil)
+        performSegue(withIdentifier: segueId().loginVCId, sender: nil)
     }
 }
 
