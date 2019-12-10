@@ -38,7 +38,7 @@ class LoginViewController: UIViewController {
 //MARK:- Networking stuff
 extension LoginViewController{
     private func neworking() {
-        Networking().CheckforLogin(withEmail: self.email.text!, andPassword: self.password.text!){success in
+        Networking().CheckforLogin(withEmail: self.email.text!, andPassword: self.password.text!, comingfromLoginVC: true){success,_  in
             SVProgressHUD.dismiss()
             if(success){
                 //save the credential for auto login
