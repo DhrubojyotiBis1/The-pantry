@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class LoginViewController: UIViewController {
 
@@ -25,7 +26,30 @@ class LoginViewController: UIViewController {
         super.viewWillAppear(true)
         setup()
     }
+    
+    
+    @IBAction func logInButtonPressed(_ sender: Any) {
+        SVProgressHUD.show()
+        self.neworking()
+    }
+    
+}
 
+//MARK:- Networking stuff
+extension LoginViewController{
+    private func neworking() {
+        Networking().CheckforLogin(withEmail: self.email.text!, andPassword: self.password.text!){success in
+            SVProgressHUD.dismiss()
+            if(success){
+                //save the credential for auto login
+                //take to next VC
+                print("Login done")
+            }else{
+                //show alar for the faliur of login
+                print("login failed")
+            }
+        }
+    }
 }
 
 extension LoginViewController{

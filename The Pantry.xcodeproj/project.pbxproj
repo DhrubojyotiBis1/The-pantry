@@ -12,6 +12,8 @@
 		6FA83262239EE3D600DEC90E /* segueId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FA83261239EE3D600DEC90E /* segueId.swift */; };
 		6FA83265239EE90A00DEC90E /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FA83264239EE90A00DEC90E /* RegisterViewController.swift */; };
 		6FEE1731239F05C0002079FC /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FEE1730239F05C0002079FC /* LoginViewController.swift */; };
+		6FEE1733239F0ABD002079FC /* url.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FEE1732239F0ABD002079FC /* url.swift */; };
+		6FEE1735239F0B29002079FC /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FEE1734239F0B28002079FC /* Networking.swift */; };
 		A368231BCC0F8436D21EA64A /* Pods_The_Pantry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A51DDFF6D2F1570F5A9A959F /* Pods_The_Pantry.framework */; };
 		E084D04D225BBC1200E6F163 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E084D04C225BBC1200E6F163 /* AppDelegate.swift */; };
 		E084D052225BBC1200E6F163 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E084D050225BBC1200E6F163 /* Main.storyboard */; };
@@ -25,6 +27,8 @@
 		6FA83261239EE3D600DEC90E /* segueId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = segueId.swift; sourceTree = "<group>"; };
 		6FA83264239EE90A00DEC90E /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		6FEE1730239F05C0002079FC /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		6FEE1732239F0ABD002079FC /* url.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = url.swift; sourceTree = "<group>"; };
+		6FEE1734239F0B28002079FC /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		9884DA8C67A82A5E9F87DB0E /* Pods-The Pantry.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Pantry.debug.xcconfig"; path = "Target Support Files/Pods-The Pantry/Pods-The Pantry.debug.xcconfig"; sourceTree = "<group>"; };
 		A51DDFF6D2F1570F5A9A959F /* Pods_The_Pantry.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_The_Pantry.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E084D049225BBC1200E6F163 /* The Pantry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Pantry.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,6 +83,8 @@
 			isa = PBXGroup;
 			children = (
 				6FA83261239EE3D600DEC90E /* segueId.swift */,
+				6FEE1732239F0ABD002079FC /* url.swift */,
+				6FEE1734239F0B28002079FC /* Networking.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -237,7 +243,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				6FA83262239EE3D600DEC90E /* segueId.swift in Sources */,
+				6FEE1733239F0ABD002079FC /* url.swift in Sources */,
 				6FA8325B239EBF8B00DEC90E /* ViewController.swift in Sources */,
+				6FEE1735239F0B29002079FC /* Networking.swift in Sources */,
 				E084D04D225BBC1200E6F163 /* AppDelegate.swift in Sources */,
 				6FEE1731239F05C0002079FC /* LoginViewController.swift in Sources */,
 				6FA83265239EE90A00DEC90E /* RegisterViewController.swift in Sources */,

@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+import SVProgressHUD
 
 class RegisterViewController: UIViewController {
 
@@ -26,8 +28,32 @@ class RegisterViewController: UIViewController {
         super.viewWillAppear(true)
         self.setup()
     }
+    
 
+    @IBAction func registerButtonPressed(_ sender: Any) {
+        SVProgressHUD.show()
+        neworking()
+    }
+    
+}
 
+//MARK:- Networking stuff
+extension RegisterViewController{
+    private func neworking() {
+        Networking().checkRegistration(withFirstName: firstName.text!, lastName: lastName.text!, email: email.text!, password: password.text!){success in
+            SVProgressHUD.dismiss()
+            if(success){
+                print("Done registration")
+                //save the credential for automatic login 
+                //take the user to the next page
+            }else{
+                print("Failed")
+                //show the alart that the registration is failed
+            }
+            
+        }
+        
+    }
 }
 
 extension RegisterViewController{

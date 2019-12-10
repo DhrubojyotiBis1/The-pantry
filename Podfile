@@ -6,4 +6,7 @@ target 'The Pantry' do
 
   # Pods for The Pantry
     pod 'DotsLoading'
+    pod 'Alamofire'
+    pod 'SwiftyJSON'
+    pod 'SVProgressHUD'
 end
