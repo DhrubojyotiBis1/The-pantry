@@ -9,7 +9,6 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
-import CoreData
 
 public class Networking{
     
@@ -17,7 +16,7 @@ public class Networking{
     func checkRegistration(withFirstName firstname:String,lastName:String,email:String,password:String,completion: @escaping (_ result:Bool) -> ()){
         let pram = [registeAndLoginPram.firstName:firstname,  registeAndLoginPram.lastName:lastName, registeAndLoginPram.password:password, registeAndLoginPram.email:email]
         
-        Alamofire.request(url().registerURL ,method: .post , parameters : pram).responseJSON { (response) in
+        Alamofire.request(url.registerURL ,method: .post , parameters : pram).responseJSON { (response) in
             if response.result.isSuccess{
                 //Registration is success
                 //Handel the error casses
@@ -44,7 +43,7 @@ public class Networking{
     func CheckforLogin(withEmail email:String,andPassword password:String,comingfromLoginVC : Bool,completion: @escaping(_ result:Bool,_ token:String)->()){
         let pram = [registeAndLoginPram.password:password, registeAndLoginPram.email:email]
         
-        Alamofire.request(url().loginURL ,method: .post , parameters : pram).responseJSON { (response) in
+        Alamofire.request(url.loginURL ,method: .post , parameters : pram).responseJSON { (response) in
             if response.result.isSuccess{
                 //Registration is success
                 let userJSON : JSON = JSON(response.result.value!)
@@ -75,6 +74,26 @@ public class Networking{
                 completion(false, "login faild")
             }
         }
+    }
+    
+    //For account detalis change
+    func changeAccountDetails(withFirstName firstName:String,lastName:String,email:String,token:String,password:String,completion: @escaping(_ result:Bool)->()){
+        
+        
+        let pram = [registeAndLoginPram.firstName:firstName,  registeAndLoginPram.lastName:lastName, registeAndLoginPram.password:password, registeAndLoginPram.email:email,responceKey.token:token]
+        
+        Alamofire.request(url.changeAccountDetailsURL ,method: .post , parameters : pram).responseJSON { (response) in
+            if response.result.isSuccess{
+              
+                let userJSON : JSON = JSON(response.result.value!)
+                print(userJSON)
+                completion(true)
+            }else{
+                //Account detalis change is failed
+                completion(false)
+            }
+        }
+        
     }
 }
 
