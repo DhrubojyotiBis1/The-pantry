@@ -35,6 +35,11 @@ class RegisterViewController: UIViewController {
         neworking()
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if(segue.identifier == segueId.HomeVCId){
+            //send the images to the home VC
+        }
+    }
 }
 
 //MARK:- Networking stuff
@@ -44,8 +49,8 @@ extension RegisterViewController{
             SVProgressHUD.dismiss()
             if(success){
                 print("Done registration")
-                //save the credential for automatic login 
                 //take the user to the next page
+                self.performSegue(withIdentifier: segueId.HomeVCId, sender: nil)
             }else{
                 print("Failed")
                 //show the alart that the registration is failed

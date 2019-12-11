@@ -32,21 +32,29 @@ class LoginViewController: UIViewController {
         SVProgressHUD.show()
         self.neworking()
     }
+ 
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if(segue.identifier == segueId.HomeVCId){
+            //send the images to the home VC
+        }
+    }
     
 }
 
 //MARK:- Networking stuff
 extension LoginViewController{
     private func neworking() {
-        Networking().CheckforLogin(withEmail: self.email.text!, andPassword: self.password.text!, comingfromLoginVC: true){success,_  in
+        Networking().CheckforLogin(withEmail: self.email.text!, andPassword: self.password.text!, comingfromLoginVC: true){success,token in
             SVProgressHUD.dismiss()
             if(success){
                 //save the credential for auto login
-                //take to next VC
                 print("Login done")
+                //Going to the HomeViewController
+                self.performSegue(withIdentifier: segueId.HomeVCId, sender: nil)
             }else{
                 //show alar for the faliur of login
-                print("login failed")
+                print("login failed \(token)")
             }
         }
     }
