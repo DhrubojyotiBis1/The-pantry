@@ -25,8 +25,12 @@ class ChangePasswordViewController: UIViewController {
     }
     @IBAction func submitButtonPressed(_ sender: UIButton) {
         
-        SVProgressHUD.show()
-        self.neworking()
+        if(confirmPassword.text! == newPassword.text!){
+            SVProgressHUD.show()
+            self.neworking()
+        }else{
+            //show a popup that confirm password and new password doesnot matches 
+        }
     }
 }
 

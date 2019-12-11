@@ -106,7 +106,12 @@ public class Networking{
               //Password change is complete
                 let userJSON : JSON = JSON(response.result.value!)
                 print(userJSON)
-                completion(true)
+                if(userJSON["message"] != "password mismatch"){
+                    completion(true)
+                }else{
+                    completion(false)
+                }
+                
             }else{
                 //Password change is failed
                 completion(false)

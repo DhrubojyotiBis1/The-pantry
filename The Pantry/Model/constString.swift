@@ -9,8 +9,10 @@
 import Foundation
 
 struct segueId{
-   static let registrationVCId = "goToRegisterVC"
-   static let loginVCId = "goToLoginVC"
+    static let registrationVCId = "goToRegisterVC"
+    static let loginVCId = "goToLoginVC"
+    static let changePasswordVCId = "goToChangePassword"
+    static let editProfileVCId = "goToEditProfile"
 }
 
 struct registeAndLoginPram {
@@ -25,4 +27,8 @@ struct  responceKey {
     static let firstName = "firstname"
     static let lastName = "lastname"
     static let token = "token"
+}
+
+struct cellIdentifier {
+    static let adsCellID = "adsCustomCollectionViewCell"
 }

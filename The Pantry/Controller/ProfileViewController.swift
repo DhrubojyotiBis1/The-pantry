@@ -9,10 +9,7 @@
 import UIKit
 
 class ProfileViewController: UIViewController {
-
-    let cornerRadius:CGFloat = 10.0
-    @IBOutlet var seperateButtons: [UIButton]!
-    @IBOutlet var seperateViews: [UIView]!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -20,9 +17,13 @@ class ProfileViewController: UIViewController {
     }
     
     @IBAction func changePasswordButtonPressed(_ sender: UIButton) {
+        performSegue(withIdentifier: segueId.changePasswordVCId, sender: nil)
     }
     
     @IBAction func logoutButtonPressed(_ sender: Any) {
     }
     
+    @IBAction func editButtonPressed(_ sender: UIButton) {
+        performSegue(withIdentifier: segueId.editProfileVCId, sender: nil)
+    }
 }
