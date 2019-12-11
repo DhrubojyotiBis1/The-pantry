@@ -13,6 +13,7 @@ struct segueId{
     static let loginVCId = "goToLoginVC"
     static let changePasswordVCId = "goToChangePassword"
     static let editProfileVCId = "goToEditProfile"
+    static let HomeVCId = "goToHomeVC"
 }
 
 struct registeAndLoginPram {

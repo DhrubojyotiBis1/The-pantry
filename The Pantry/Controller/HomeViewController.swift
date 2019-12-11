@@ -19,6 +19,11 @@ class HomeViewController: UIViewController {
         // Do any additional setup after loading the view.
         self.setup()
     }
+    
+    @IBAction func menu(_ sender: UIButton) {
+        print("menu")
+    }
+    
 
 }
 
@@ -47,6 +52,8 @@ extension HomeViewController{
     }
 }
 
+
+//For the ads collection View
 extension HomeViewController:UICollectionViewDelegate,UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 2
