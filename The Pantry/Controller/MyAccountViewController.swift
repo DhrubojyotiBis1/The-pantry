@@ -23,7 +23,6 @@ class MyAccountViewController: UIViewController {
 
         // Do any additional setup after loading the view.
             let credentials = save().getCredentials()
-            print("credentials : \(credentials)")
             addTextIntextField(usingCredentials: credentials)
     }
 

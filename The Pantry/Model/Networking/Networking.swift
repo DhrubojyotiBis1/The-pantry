@@ -95,5 +95,24 @@ public class Networking{
         }
         
     }
+    
+    
+    func changePassword(withCurrentPassword password:String,newPassword : String,email:String,andToken token:String,completion: @escaping (_ result:Bool)->()){
+        //email, password, new_password, token
+        let pram = [registeAndLoginPram.email:email,registeAndLoginPram.password:password,registeAndLoginPram.newPassword:newPassword,responceKey.token:token]
+        
+        Alamofire.request(url.changePasswordURL ,method: .post , parameters : pram).responseJSON { (response) in
+            if response.result.isSuccess{
+              //Password change is complete
+                let userJSON : JSON = JSON(response.result.value!)
+                print(userJSON)
+                completion(true)
+            }else{
+                //Password change is failed
+                completion(false)
+            }
+        }
+
+    }
 }
 

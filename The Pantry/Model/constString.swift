@@ -18,6 +18,7 @@ struct registeAndLoginPram {
     static let lastName = "last_name"
     static let email = "email"
     static let password = "password"
+    static let newPassword = "new_password"
 }
 
 struct  responceKey {

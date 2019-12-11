@@ -12,4 +12,5 @@ public struct url{
     static let registerURL = "https://btoscecom.herokuapp.com/api/register.php"
     static let loginURL = "https://btoscecom.herokuapp.com/api/login.php"
     static let changeAccountDetailsURL = "https://btoscecom.herokuapp.com/api/update_acc.php/"
+    static let changePasswordURL = "https://btoscecom.herokuapp.com/api/change_password.php"
 }
