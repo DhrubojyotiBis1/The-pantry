@@ -22,6 +22,7 @@ public class Networking{
                 //Handel the error casses
                 //Using the login to get the token
                 self.CheckforLogin(withEmail : email,andPassword :password, comingfromLoginVC: false){result , token in
+                    print(token)
                     if(result){
                         //saveing the credentials
                         save().saveCredentials(withFirstName: firstname, lastName: lastName, email: email, token: token)
@@ -45,33 +46,74 @@ public class Networking{
         
         Alamofire.request(url.loginURL ,method: .post , parameters : pram).responseJSON { (response) in
             if response.result.isSuccess{
-                //Registration is success
+                //No network issue
                 let userJSON : JSON = JSON(response.result.value!)
-                print(userJSON)
-                
                 //checking if the login coming from loginVC or from registerVC to get the token
                 if(comingfromLoginVC){
                     //Checking if login is Successfull
                     if(userJSON[responceKey.token].string != nil){
                         save().saveCredentials(withFirstName: userJSON[responceKey.firstName].string!, lastName: userJSON[responceKey.lastName].string!, email: email, token: userJSON[responceKey.token].string!)
-                        completion(true,"nil")
+                        
+                        //getting each urls from the json
+                        let urls = self.getUrls(fromJson: userJSON)
+                        
+                        //checkng if urls are valid or not
+                        if(urls != nil){
+                            //if we get the valid url then only download of the image is possible
+                            self.downloadImageForHomeViewControllerBanner(havingUrls: urls) { (result) in
+                                if(result){
+                                    //login complate along with downloading of the images
+                                    completion(true,"download of image complete"/*,images:[uiImage]?*/)
+                                }else{
+                                    //login complate but downloading of the images fails
+                                    completion(true,"download of image failed"/*,images:[uiImage]?*/)
+                                }
+                            }
+                        }else{
+                            //when we dont get the url
+                            completion(true,"faulty urls"/*,images:[uiImage]?*/)
+                        }
                     }else{
-                        //Something went wrong not loged in
+                        //no toket found
+                        //Something went wrong not
                         //handel the error with a Popup
-                        completion(false,"nil")
+                        completion(false,"wrong password")
                     }
                 }else{
                     //Sending the token to the checkRegistration
                     if(userJSON[responceKey.token].string != nil){
-                        completion(true,userJSON[responceKey.token].string!)
+                        
+                        //getting each urls from the json
+                        let urls = self.getUrls(fromJson: userJSON)
+                        
+                        //checkng if urls are valid or not
+                        if(urls != nil){
+                            //if we get the valid url then only download of the image is possible
+                            self.downloadImageForHomeViewControllerBanner(havingUrls: urls) { (result) in
+                                if(result){
+                                    //Registation complate along with downloading of the images
+                                    completion(true,userJSON[responceKey.token].string!/*,images:[uiImage]?*/)
+                                    print("download of image complete")
+                                }else{
+                                    //Registation complate but downloading of the images fails
+                                    completion(true,userJSON[responceKey.token].string!/*,images:[uiImage]?*/)
+                                    print("download of the image fails")
+                                }
+                            }
+                        }else{
+                            //when we dont get the url
+                            completion(true,userJSON[responceKey.token].string!/*,images:[uiImage]?*/)
+                            print("download of image not possible")
+                        }
                     }else{
                         //login failde hence no token
                         completion(false,"nil")
+                        print("email id used")
                     }
                 }
             }else{
                 //Registration is failed
-                completion(false, "login faild")
+                completion(false, "Registration faild")
             }
         }
     }
@@ -118,6 +160,63 @@ public class Networking{
             }
         }
 
+    }
+    
+    func downloadImageForHomeViewControllerBanner(havingUrls urls: [String.SubSequence]? ,completion:@escaping (_ result:Bool/*,_ images:[UIImage]?*/)->()){
+        if(urls != nil){
+            //coming from the loginVC or registerVC
+            //have the urls
+            //start downloading the image
+            // if image download done send it via completion handeler
+            completion(true)
+            //if image download fail's call the completion handeler with "false" value
+            //completion(false,nil)
+        }else{
+            //coming from the ViewController
+            //getting the urls
+            self.getAdsImageURLForHomeViewControllerBanner { (result, urls) in
+                if(result){
+                    //Got the url
+                    //start downloading the image
+                    // if image download done send it via completion handeler
+                    completion(true)
+                    //if image download fail's call the completion handeler with "false" value
+                    //completion(false,nil)
+                }else{
+                    completion(false)
+                }
+            }
+        }
+    }
+    
+}
+
+//For private functions
+extension Networking{
+    private func getAdsImageURLForHomeViewControllerBanner(completion:@escaping (_ result:Bool,_ imageURLs:[String.SubSequence]?)->()){
+        Alamofire.request(url.downloadImageURL).responseJSON { (response) in
+            if response.result.isSuccess{
+                let userjson:JSON = JSON(response.result.value!)
+                //getting each urls
+                let urls = self.getUrls(fromJson: userjson)
+                if(urls != nil){
+                    //if we get the url then only download of the image is possible
+                    completion(true, urls)
+                }else{
+                    //when we dont get the url just garbage value
+                    completion(false,nil)
+                }
+            }else{
+                print("Error")
+                completion(false,nil)
+            }
+        }
+    }
+    
+    private func getUrls(fromJson json:JSON)->[String.SubSequence]?{
+        //getting each urls by spliting the string contains the urls seperated by ,
+        let urls = json["data"]["banners"].string?.split(separator: ",")
+        return urls
     }
 }
 
