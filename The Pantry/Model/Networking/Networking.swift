@@ -21,17 +21,22 @@ public class Networking{
                 //Registration is success
                 //Handel the error casses
                 //Using the login to get the token
-                self.CheckforLogin(withEmail : email,andPassword :password, comingfromLoginVC: false){result , token in
-                    print(token)
-                    if(result){
-                        //saveing the credentials
-                        save().saveCredentials(withFirstName: firstname, lastName: lastName, email: email, token: token)
-                            completion(true)
-                        
-                    }else{
-                        //Registration complete but not getting token "Something went wrong"
-                        completion(false)
+                let userJSON : JSON = JSON(response.result.value!)
+                if(userJSON[credential.email].string != nil){
+                    self.CheckforLogin(withEmail : email,andPassword :password, comingfromLoginVC: false){result , token in
+                        if(result){
+                            //saveing the credentials
+                            save().saveCredentials(withFirstName: firstname, lastName: lastName, email: email, token: token)
+                                completion(true)
+                            
+                        }else{
+                            //Registration complete but not getting token "Something went wrong"
+                            completion(false)
+                        }
                     }
+                }else{
+                    //registration failed as already register
+                    completion(false)
                 }
             }else{
                 //Registration is failed

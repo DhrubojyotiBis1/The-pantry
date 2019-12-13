@@ -64,7 +64,7 @@ extension HomeViewController:UICollectionViewDelegate,UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = self.adsCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier.adsCellID, for: indexPath) as! HomeCollectionViewCell
-        cell.adsImageView.image = UIImage(named: "Logo")
+        cell.adsImageView.image = UIImage(named: "ads")
         return cell
     }
     

@@ -14,6 +14,7 @@ struct segueId{
     static let changePasswordVCId = "goToChangePassword"
     static let editProfileVCId = "goToEditProfile"
     static let HomeVCId = "goToHomeVC"
+    static let yourCartVC = "goToyourCartVC"
 }
 
 struct registeAndLoginPram {
@@ -32,4 +33,6 @@ struct  responceKey {
 
 struct cellIdentifier {
     static let adsCellID = "adsCustomCollectionViewCell"
+    static let productListCellID = "productListCollectionViewCell"
+    static let yourCartCellID = "yourCartTableViewCell"
 }
