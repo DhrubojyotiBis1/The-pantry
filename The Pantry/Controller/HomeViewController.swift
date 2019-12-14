@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class HomeViewController: UIViewController {
 
@@ -20,8 +21,19 @@ class HomeViewController: UIViewController {
         self.setup()
     }
     
-    @IBAction func menu(_ sender: UIButton) {
-        print("menu")
+    @IBAction func catagoryButtonPressed(_ sender: UIButton) {
+        SVProgressHUD.show()
+        let productCatagory = self.getProductCatagory(fromTag: sender.tag)
+        Networking().getListOfProducts(forCatagory: productCatagory){isSucess in
+            SVProgressHUD.dismiss()
+            if(isSucess){
+                self.performSegue(withIdentifier: segueId.productListVC, sender: nil)
+            }else{
+            //show the error that happend with a popup
+                print("error in getting product details")
+                
+            }
+        }
     }
     
 
@@ -50,6 +62,20 @@ extension HomeViewController{
             self.conteverView[i].layer.shadowOpacity = 0.4
         }
     }
+    
+    private func getProductCatagory(fromTag tag:Int)->String{
+        
+        if(tag == 1){
+            return productCatagory.veg
+        }else if(tag == 2){
+            return productCatagory.nonVeg
+        }else if(tag == 3){
+            return productCatagory.readyToEat
+        }else{
+            return productCatagory.merchandise
+        }
+    }
+    
 }
 
 

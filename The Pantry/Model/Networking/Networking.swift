@@ -194,6 +194,27 @@ public class Networking{
         }
     }
     
+    
+    //to get the product details
+    func getListOfProducts(forCatagory catagory:String,completion:@escaping (_ result : Bool/*,productList: [productDetals] */)->()){
+        
+        let pram = [productCatagory.productCatagoryPram : catagory]
+        Alamofire.request(url.productListURL ,method: .post , parameters : pram).responseJSON { (response) in
+            if response.result.isSuccess{
+              //Got the product detals
+                //let userJSON : JSON = JSON(response.result.value!)
+                //par's the userJSON
+                //make a class name product details
+                //store each product in product details class arry
+                //send the arry back
+                completion(true)
+            }else{
+                //fail to get the product details
+                completion(false)
+            }
+        }
+    }
+    
 }
 
 //For private functions

@@ -15,6 +15,7 @@ struct segueId{
     static let editProfileVCId = "goToEditProfile"
     static let HomeVCId = "goToHomeVC"
     static let yourCartVC = "goToyourCartVC"
+    static let productListVC = "goToProductListVC"
 }
 
 struct registeAndLoginPram {
@@ -35,4 +36,14 @@ struct cellIdentifier {
     static let adsCellID = "adsCustomCollectionViewCell"
     static let productListCellID = "productListCollectionViewCell"
     static let yourCartCellID = "yourCartTableViewCell"
+    static let productDescrptionCellID = "productDescriptionCell"
+    static let productDescriptionCollectionViewCellID = "productDescriptionCollectionViewCell"
+}
+
+struct productCatagory{
+    static let veg = "vegetarian"
+    static let nonVeg = "non-veg"
+    static let readyToEat = "ready-to-eat"
+    static let merchandise = "merchandise"
+    static let productCatagoryPram = "cat"
 }
