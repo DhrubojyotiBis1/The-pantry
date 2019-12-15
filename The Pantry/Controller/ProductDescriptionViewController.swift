@@ -23,6 +23,7 @@ class ProductDescriptionViewController: UIViewController {
 
 }
 
+//table view protocolls of the product ProductDescriptionViewController
 extension ProductDescriptionViewController : UITableViewDataSource , UITableViewDelegate{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
@@ -39,6 +40,8 @@ extension ProductDescriptionViewController : UITableViewDataSource , UITableView
     
 }
 
+
+//collection view protocolls of the product ProductDescriptionViewController
 extension ProductDescriptionViewController:UICollectionViewDataSource, UICollectionViewDelegate{
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -57,6 +60,8 @@ extension ProductDescriptionViewController:UICollectionViewDataSource, UICollect
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        
+        //function showing one image at a time
         let layout = self.productDescriptionCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
         
         let cellWidthIncludingSpacing = layout.itemSize.width + layout.minimumLineSpacing
@@ -71,6 +76,7 @@ extension ProductDescriptionViewController:UICollectionViewDataSource, UICollect
     }
 }
 
+//function to size the cell of the collection view also to make it in the center of the collection view
 extension ProductDescriptionViewController:UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let size = productDescriptionCollectionView.frame.size
@@ -95,14 +101,16 @@ extension ProductDescriptionViewController:UICollectionViewDelegateFlowLayout{
 }
 
 
-
+//All private functions
 extension ProductDescriptionViewController{
     private func setUp(){
+        //setting the delegate and data source of the table and collection view to self
         productDescescriptionTableView.dataSource = self
         productDescescriptionTableView.delegate = self
         productDescriptionCollectionView.delegate = self
         productDescriptionCollectionView.dataSource = self
         
+        //setting the initial value of page controller 
         self.pageController.numberOfPages = 3
         self.pageController.currentPage = 0
     }

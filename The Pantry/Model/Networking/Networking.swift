@@ -215,16 +215,34 @@ public class Networking{
         }
     }
     
+    //to get the user cart details
     func getUserCartDetails(withUserToken token:String,completion:@escaping (_ result:Bool/*,cartdetails:userCartdetails */)->()){
         let pram = [responceKey.token : token]
-        Alamofire.request(url.productListURL ,method: .get , parameters : pram).responseJSON { (response) in
+        Alamofire.request(url.cartDetailsURL, parameters : pram).responseJSON { (response) in
             if response.result.isSuccess{
               //Got the cart detals
-                //let userJSON : JSON = JSON(response.result.value!)
+                let userJSON : JSON = JSON(response.result.value!)
                 //par's the userJSON
                 //make a class name product details
                 //store each product in product details class arry
                 //send the arry back
+                print(userJSON)
+                completion(true)
+            }else{
+                //fail to get the cart details
+                completion(false)
+            }
+        }
+    }
+    
+    //to update the cart
+    func updateCartDetais(withToken token:String,cartDetails details:String,completion:@escaping (_ result:Bool)->()){
+        let pram = [userCart.token : token,userCart.details:details] 
+        Alamofire.request(url.updateCartURL,method: .post ,parameters : pram).responseJSON { (response) in
+            if response.result.isSuccess{
+              //Got the cart detals
+                let userJSON : JSON = JSON(response.result.value!)
+                print(userJSON)
                 completion(true)
             }else{
                 //fail to get the cart details

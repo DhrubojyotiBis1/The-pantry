@@ -29,6 +29,12 @@ class ProductListViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        //update the surver about the changes in the cart
+        //Networking().updateCartDetais(withToken: <#T##String#>, cartDetails: <#T##String#>, completion: <#T##(Bool) -> ()#>)
+    }
+    
 
 }
 
@@ -71,6 +77,8 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
 extension ProductListViewController:ProductListCollectionViewCellDelegate{
     func cellAddButton(haveTag tag: [Int]) {
         //function called when add button of the cell is taped
+        //create a product class
+        //add the item to the array of product class
        print(tag)
         self.viewCartView.isHidden = false
     }

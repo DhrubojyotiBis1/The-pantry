@@ -20,6 +20,12 @@ class YourCartViewController: UIViewController {
         self.yourCartTableView.dataSource = self
         self.yourCartTableView.delegate = self
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        //update the server about the changes in the cart
+        //Networking().updateCartDetais(withToken: <#T##String#>, cartDetails: <#T##String#>, completion: <#T##(Bool) -> ()#>)
+    }
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
@@ -56,7 +62,7 @@ extension YourCartViewController : UITableViewDelegate,UITableViewDataSource{
 
 extension YourCartViewController:YourCartTableViewCellDelegate{
     func removedButtonClicked(atRow row: Int) {
-        print(row)
+        //function is called when remove button of a cell is pressed
     }
 }
 

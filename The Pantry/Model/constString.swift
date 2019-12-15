@@ -47,3 +47,8 @@ struct productCatagory{
     static let merchandise = "merchandise"
     static let productCatagoryPram = "cat"
 }
+
+struct userCart {
+    static let details = "cart_details"
+    static let token = "token"
+}
