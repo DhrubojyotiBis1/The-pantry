@@ -11,6 +11,7 @@ import SVProgressHUD
 
 class HomeViewController: UIViewController {
 
+    var didGotCartDetails = Bool()
     @IBOutlet weak var adsCollectionView: UICollectionView!
     @IBOutlet var conteverView: [UIView]!
     @IBOutlet weak var topView: UIView!
@@ -19,21 +20,13 @@ class HomeViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         self.setup()
+        self.getCartDetails()
     }
     
     @IBAction func catagoryButtonPressed(_ sender: UIButton) {
         SVProgressHUD.show()
         let productCatagory = self.getProductCatagory(fromTag: sender.tag)
-        Networking().getListOfProducts(forCatagory: productCatagory){isSucess in
-            SVProgressHUD.dismiss()
-            if(isSucess){
-                self.performSegue(withIdentifier: segueId.productListVC, sender: nil)
-            }else{
-            //show the error that happend with a popup
-                print("error in getting product details")
-                
-            }
-        }
+        self.getProdctListDetails(withProductCatagory: productCatagory)
     }
     
 
@@ -64,7 +57,7 @@ extension HomeViewController{
     }
     
     private func getProductCatagory(fromTag tag:Int)->String{
-        
+        //returns the catagory of the product which the user want to buy
         if(tag == 1){
             return productCatagory.veg
         }else if(tag == 2){
@@ -76,6 +69,43 @@ extension HomeViewController{
         }
     }
     
+}
+
+//MARK:- Networking stuff
+extension HomeViewController{
+    private func getCartDetails(){
+        let userCredentials = save().getCredentials()
+        Networking().getUserCartDetails(withUserToken: userCredentials[responceKey.token]!) { (isSucess) in
+            if(isSucess){
+                //got the cart Details
+                self.didGotCartDetails = true
+            }else{
+                //failed to get the cart details
+                self.didGotCartDetails = false
+            }
+        }
+    }
+    private func getProdctListDetails(withProductCatagory productCatagory:String){
+        if(self.didGotCartDetails){
+            //got the cart details hence can add move the user to product list VC
+            Networking().getListOfProducts(forCatagory: productCatagory){isSucess in
+                SVProgressHUD.dismiss()
+                if(isSucess){
+                    //got the product list details
+                    //move the user to the next VC
+                    self.performSegue(withIdentifier: segueId.productListVC, sender: nil)
+                }else{
+                //show the error that happend with a popup
+                    print("error in getting product details")
+                    
+                }
+            }
+        }else{
+            //failed to get the cart details
+            SVProgressHUD.dismiss()
+            print("faild to get cart detais")
+        }
+    }
 }
 
 
@@ -108,7 +138,4 @@ extension HomeViewController:UICollectionViewDelegate,UICollectionViewDataSource
         
         
     }
-    
-    
-    
 }
