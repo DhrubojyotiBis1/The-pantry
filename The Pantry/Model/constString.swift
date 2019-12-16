@@ -52,3 +52,9 @@ struct userCart {
     static let details = "cart_details"
     static let token = "token"
 }
+
+struct webPageURL {
+    static let FAQ = "https://www.google.com/"
+    static let privacyPolicy = "https://www.youtube.com/"
+    static let aboutUs = "http://stackoverflow.com/"
+}
