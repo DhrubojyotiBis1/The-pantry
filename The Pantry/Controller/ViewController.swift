@@ -17,8 +17,9 @@ class ViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        self.decideDestinationSegueID()
-        self.neworking()
+       // self.decideDestinationSegueID()
+        //self.neworking()
+        Networking().getOtp(withPhoneNumber: "918961388276")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

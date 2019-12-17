@@ -17,4 +17,7 @@ public struct url{
     static let productListURL = "http://btoscecom.herokuapp.com/api/get_homescreen.php/"
     static let cartDetailsURL = "http://btoscecom.herokuapp.com/api/cart.php"
     static let updateCartURL = "http://btoscecom.herokuapp.com/api/cart.php?apicall=sync"
+    static let getOtpURL = "http://www.mysmscenter.com/api/otp.php?"
+    static let varifyOtpURL = "http://www.mysmscenter.com/api/verifyRequestOTP.php?"
+    static let reSendOtpURL = "http://www.mysmscenter.com/api/retryotp.php?"
 }

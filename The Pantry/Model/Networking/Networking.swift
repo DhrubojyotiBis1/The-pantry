@@ -251,6 +251,76 @@ public class Networking{
         }
     }
     
+    //For OTP varification
+    func getOtp(withPhoneNumber phoneNumber:String){
+        let pram = [smsGateWay.authenticationKey:smsGateWayConstants.authenticationKey,smsGateWay.phoneNumber : phoneNumber,smsGateWay.otpExpiryTimeing:smsGateWayConstants.expiryTime]
+        //trying to do networking for varification
+        Alamofire.request(url.getOtpURL,method: .get ,parameters : pram).responseJSON { (response) in
+            if response.result.isSuccess{
+              //networking done
+                let userJSON : JSON = JSON(response.result.value!)
+                print(userJSON)
+                if(userJSON[smsGateWay.type].string! == smsGateWayConstants.smsSendSuccessType){
+                    //take to the next view controller for otp Varification
+                    
+                }else{
+                    //failed to send otp
+                    print(userJSON[smsGateWay.type])
+                }
+                
+            }else{
+                //fail to do networking
+                print(response.error?.localizedDescription as Any)
+            }
+        }
+    }
+    
+    
+    //For OTP varification
+    func otpVarification(withOtp otp:String,andPhoneNumber phoneNumber:String){
+        let pram = [smsGateWay.authenticationKey:smsGateWayConstants.authenticationKey,smsGateWay.phoneNumber : phoneNumber,smsGateWay.otp:otp]
+        //trying to do networking for varification
+        Alamofire.request(url.varifyOtpURL,method: .get ,parameters : pram).responseJSON { (response) in
+            if response.result.isSuccess{
+              //networking done
+                let userJSON : JSON = JSON(response.result.value!)
+                if(userJSON[smsGateWay.type].string! == smsGateWayConstants.smsSendSuccessType){
+                    //otp varification uccess
+                    //take to the next view controller
+                }else{
+                    //failed to varify otp
+                    print(userJSON[smsGateWay.type])
+                }
+            }else{
+                //fail to do networking
+                print(response.error?.localizedDescription as Any)
+            }
+        }
+    }
+    
+    //For resending the same otp 
+    func resendOtp(forPhoneNumber phoneNumber:String){
+        let pram = [smsGateWay.authenticationKey:smsGateWayConstants.authenticationKey,smsGateWay.phoneNumber : phoneNumber,smsGateWay.reciveType:smsGateWayConstants.reciveType]
+        //trying to do networking for varification
+        Alamofire.request(url.reSendOtpURL,method: .get ,parameters : pram).responseJSON { (response) in
+            if response.result.isSuccess{
+              //networking done
+                let userJSON : JSON = JSON(response.result.value!)
+                if(userJSON[smsGateWay.type].string! == smsGateWayConstants.smsSendSuccessType){
+                    //otp varification uccess
+                    //take to the next view controller
+                    print(userJSON)
+                }else{
+                    //failed to varify otp
+                    print(userJSON[smsGateWay.type])
+                }
+            }else{
+                //fail to do networking
+                print(response.error?.localizedDescription as Any)
+            }
+        }
+    }
+    
 }
 
 //For private functions

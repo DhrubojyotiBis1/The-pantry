@@ -58,3 +58,23 @@ struct webPageURL {
     static let privacyPolicy = "https://www.youtube.com/"
     static let aboutUs = "http://stackoverflow.com/"
 }
+
+struct smsGateWay {
+    static let otp = "otp"
+    static let phoneNumber = "mobile"
+    static let authenticationKey = "authkey"
+    static let reciveType = "retrytype"
+    static let headingOfTheOtpSended = "sender"
+    static let otpMessage = "message"
+    static let otpExpiryTimeing = "otp_expiry"
+    static let type = "type"
+}
+
+struct smsGateWayConstants {
+    static let authenticationKey = "308673A7RsGaro625df870d5"
+    static let reciveType = "text"
+    static let heading = "BTOSC"
+    static let otpMessage = "##Dear Customer,\n734399 is your one time password (OTP). Please enter the OTP to proceed.\nThank you,\nTeam Jio.##"
+    static let expiryTime = "1"
+    static let smsSendSuccessType = "success"
+}
