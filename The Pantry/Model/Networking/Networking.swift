@@ -252,8 +252,9 @@ public class Networking{
     }
     
     //For OTP varification
-    func getOtp(withPhoneNumber phoneNumber:String){
-        let pram = [smsGateWay.authenticationKey:smsGateWayConstants.authenticationKey,smsGateWay.phoneNumber : phoneNumber,smsGateWay.otpExpiryTimeing:smsGateWayConstants.expiryTime]
+    func getOtp(withPhoneNumber phoneNumber:String,completion:@escaping (_ result:Bool)->()){
+        //request failing if massage is included in parameter
+        let pram = [smsGateWay.authenticationKey:smsGateWayConstants.authenticationKey,smsGateWay.phoneNumber : phoneNumber,smsGateWay.otpExpiryTimeing:smsGateWayConstants.expiryTime,smsGateWay.headingOfTheSended:smsGateWayConstants.heading]
         //trying to do networking for varification
         Alamofire.request(url.getOtpURL,method: .get ,parameters : pram).responseJSON { (response) in
             if response.result.isSuccess{
@@ -262,7 +263,6 @@ public class Networking{
                 print(userJSON)
                 if(userJSON[smsGateWay.type].string! == smsGateWayConstants.smsSendSuccessType){
                     //take to the next view controller for otp Varification
-                    
                 }else{
                     //failed to send otp
                     print(userJSON[smsGateWay.type])
@@ -277,7 +277,7 @@ public class Networking{
     
     
     //For OTP varification
-    func otpVarification(withOtp otp:String,andPhoneNumber phoneNumber:String){
+    func otpVarification(withOtp otp:String,andPhoneNumber phoneNumber:String,completion:@escaping (_ result:Bool)->()){
         let pram = [smsGateWay.authenticationKey:smsGateWayConstants.authenticationKey,smsGateWay.phoneNumber : phoneNumber,smsGateWay.otp:otp]
         //trying to do networking for varification
         Alamofire.request(url.varifyOtpURL,method: .get ,parameters : pram).responseJSON { (response) in
@@ -299,7 +299,7 @@ public class Networking{
     }
     
     //For resending the same otp 
-    func resendOtp(forPhoneNumber phoneNumber:String){
+    func resendOtp(forPhoneNumber phoneNumber:String,completion:@escaping (_ result:Bool)->()){
         let pram = [smsGateWay.authenticationKey:smsGateWayConstants.authenticationKey,smsGateWay.phoneNumber : phoneNumber,smsGateWay.reciveType:smsGateWayConstants.reciveType]
         //trying to do networking for varification
         Alamofire.request(url.reSendOtpURL,method: .get ,parameters : pram).responseJSON { (response) in
@@ -319,6 +319,24 @@ public class Networking{
                 print(response.error?.localizedDescription as Any)
             }
         }
+    }
+    
+    //For sending massages
+    func sendMassage(toPhoneNumber phoneNumber:String,completion:@escaping (_ result:Bool)->()){
+        let param = [smsGateWay.authenticationKey : smsGateWayConstants.authenticationKey,smsGateWay.phoneNumberForSendingSms:phoneNumber,smsGateWay.headingOfTheSended:smsGateWayConstants.heading,smsGateWay.message:smsGateWayConstants.transactionMassage,smsGateWay.route:smsGateWayConstants.transactionRoute]
+        
+        //trying to do networking to send massage
+        Alamofire.request(url.sendTransactionalAndPromotionalMassageURL,method: .get ,parameters : param).responseString { (response) in
+            if response.result.isSuccess{
+              //networking done
+                //if response.result.value!.cout is 16 then the massage is send
+                 print(response.result.value!)
+            }else{
+                //fail to do networking
+                print(response.error?.localizedDescription as Any)
+            }
+        }
+        
     }
     
 }

@@ -20,4 +20,5 @@ public struct url{
     static let getOtpURL = "http://www.mysmscenter.com/api/otp.php?"
     static let varifyOtpURL = "http://www.mysmscenter.com/api/verifyRequestOTP.php?"
     static let reSendOtpURL = "http://www.mysmscenter.com/api/retryotp.php?"
+    static let sendTransactionalAndPromotionalMassageURL = "http://www.mysmscenter.com/api/sendhttp.php?"
 }
