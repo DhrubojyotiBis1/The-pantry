@@ -74,6 +74,7 @@ struct smsGateWay {
     static let route = "route"
     static let countryToSendMassage = "country"
     static let phoneNumberForSendingSms = "mobiles"
+    static let otpLength = "otp_length"
 }
 
 struct smsGateWayConstants {
@@ -90,4 +91,5 @@ struct smsGateWayConstants {
     static let india = "91"
     static let international = "0"
     static let usa = "1"
+    static let lengthOfOtp = "6"
 }

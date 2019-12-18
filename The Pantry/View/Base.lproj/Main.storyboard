@@ -560,6 +560,7 @@
                         <outlet property="fifthNumberInOtpTextField" destination="KZg-Aw-Aas" id="c8k-Fl-LG7"/>
                         <outlet property="firstNumberInOtpTextField" destination="nmD-Gb-OLJ" id="Jhd-Yg-1Nv"/>
                         <outlet property="fourthNumberInOtpTextField" destination="PI9-Ab-SCX" id="Rtg-b8-d67"/>
+                        <outlet property="phoneNumberLable" destination="bTd-3b-9Bd" id="Icg-a7-uMN"/>
                         <outlet property="secondNumberInOtpTextField" destination="dAE-1G-u2B" id="K3N-QZ-YLF"/>
                         <outlet property="sixthNumberInOtpTextField" destination="aSL-pL-sHw" id="pmR-TB-mM4"/>
                         <outlet property="thirdNumberInOtpTextField" destination="DHE-kV-g4T" id="DnU-9M-0Xt"/>

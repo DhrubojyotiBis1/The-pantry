@@ -255,9 +255,9 @@ public class Networking{
     }
     
     //For OTP varification
-    func getOtp(withPhoneNumber phoneNumber:String,completion:@escaping (_ result:Bool)->()){
+    func getOtp(withPhoneNumber phoneNumber:String,completion:@escaping (_ result:Bool,_ type:String)->()){
         //request failing if massage is included in parameter
-        let pram = [smsGateWay.authenticationKey:smsGateWayConstants.authenticationKey,smsGateWay.phoneNumber : phoneNumber,smsGateWay.otpExpiryTimeing:smsGateWayConstants.expiryTime,smsGateWay.headingOfTheSended:smsGateWayConstants.heading]
+        let pram = [smsGateWay.authenticationKey:smsGateWayConstants.authenticationKey,smsGateWay.phoneNumber : phoneNumber,smsGateWay.otpExpiryTimeing:smsGateWayConstants.expiryTime,smsGateWay.headingOfTheSended:smsGateWayConstants.heading,smsGateWay.otpLength:smsGateWayConstants.lengthOfOtp]
         //trying to do networking for varification
         Alamofire.request(url.getOtpURL,method: .get ,parameters : pram).responseJSON { (response) in
             if response.result.isSuccess{
@@ -266,13 +266,16 @@ public class Networking{
                 print(userJSON)
                 if(userJSON[smsGateWay.type].string! == smsGateWayConstants.smsSendSuccessType){
                     //take to the next view controller for otp Varification
+                    completion(true,userJSON[smsGateWay.type].string!)
                 }else{
                     //failed to send otp
+                    completion(false,userJSON[smsGateWay.type].string!)
                     print(userJSON[smsGateWay.type])
                 }
                 
             }else{
                 //fail to do networking
+                completion(false,"Network Error")
                 print(response.error?.localizedDescription as Any)
             }
         }
@@ -280,29 +283,32 @@ public class Networking{
     
     
     //For OTP varification
-    func otpVarification(withOtp otp:String,andPhoneNumber phoneNumber:String,completion:@escaping (_ result:Bool)->()){
+    func otpVarification(withOtp otp:String,andPhoneNumber phoneNumber:String,completion:@escaping (_ result:Bool,_ type:String)->()){
         let pram = [smsGateWay.authenticationKey:smsGateWayConstants.authenticationKey,smsGateWay.phoneNumber : phoneNumber,smsGateWay.otp:otp]
         //trying to do networking for varification
         Alamofire.request(url.varifyOtpURL,method: .get ,parameters : pram).responseJSON { (response) in
             if response.result.isSuccess{
               //networking done
                 let userJSON : JSON = JSON(response.result.value!)
+                print(userJSON)
                 if(userJSON[smsGateWay.type].string! == smsGateWayConstants.smsSendSuccessType){
                     //otp varification uccess
                     //take to the next view controller
+                    completion(true,userJSON[smsGateWay.type].string!)
                 }else{
                     //failed to varify otp
-                    print(userJSON[smsGateWay.type])
+                    completion(false,userJSON["message"].string!)
                 }
             }else{
                 //fail to do networking
                 print(response.error?.localizedDescription as Any)
+                completion(false,"Network Error")
             }
         }
     }
     
     //For resending the same otp 
-    func resendOtp(forPhoneNumber phoneNumber:String,completion:@escaping (_ result:Bool)->()){
+    func resendOtp(forPhoneNumber phoneNumber:String,completion:@escaping (_ result:Bool,_ token:Int)->()){
         let pram = [smsGateWay.authenticationKey:smsGateWayConstants.authenticationKey,smsGateWay.phoneNumber : phoneNumber,smsGateWay.reciveType:smsGateWayConstants.reciveType]
         //trying to do networking for varification
         Alamofire.request(url.reSendOtpURL,method: .get ,parameters : pram).responseJSON { (response) in
@@ -313,13 +319,16 @@ public class Networking{
                     //otp varification uccess
                     //take to the next view controller
                     print(userJSON)
+                    completion(true,1)
                 }else{
                     //failed to varify otp
                     print(userJSON[smsGateWay.type])
+                    completion(false,2)
                 }
             }else{
                 //fail to do networking
                 print(response.error?.localizedDescription as Any)
+                completion(false,0)
             }
         }
     }

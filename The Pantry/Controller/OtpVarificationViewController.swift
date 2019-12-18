@@ -10,6 +10,9 @@ import UIKit
 
 class OtpVarificationViewController: UIViewController {
     
+    var phoneNumber = String()
+    
+    @IBOutlet weak var phoneNumberLable : UILabel!
     @IBOutlet weak var firstNumberInOtpTextField:UITextField!
     @IBOutlet weak var secondNumberInOtpTextField:UITextField!
     @IBOutlet weak var thirdNumberInOtpTextField:UITextField!
@@ -26,7 +29,7 @@ class OtpVarificationViewController: UIViewController {
     }
     
     @IBAction func continueButtonPressed(_ sender:UIButton){
-        
+        self.neworkingForOtpVarification()
     }
     
     @IBAction func backButtonPressed(_ sender:UIButton){
@@ -35,12 +38,69 @@ class OtpVarificationViewController: UIViewController {
     
 
     @IBAction func didNotGetOtpButtonPressed(_ sender: UIButton) {
+        self.networkingForResendingOtp()
+    }
+}
+
+
+
+//MARK:- Networking stuff
+extension OtpVarificationViewController{
+    private func neworkingForOtpVarification() {
+        let first = self.firstNumberInOtpTextField.text!
+        let second = self.secondNumberInOtpTextField.text!
+        let third = self.thirdNumberInOtpTextField.text!
+        let fourth = self.fourthNumberInOtpTextField.text!
+        let fifth = self.fifthNumberInOtpTextField.text!
+        let sixth = self.sixthNumberInOtpTextField.text!
+        
+        let otp = first + second + third + fourth + fifth + sixth
+        Networking().otpVarification(withOtp: otp, andPhoneNumber: self.phoneNumber) { (result, massage) in
+            if(result){
+                print("otp varification done")
+                //check it the user is existing user or not
+                //if not then send to register page
+                //else send to home VC
+            }else{
+                if(massage == "otp_not_verified"){
+                    //error deu to wrong otp entered
+                    //show th error massage to user
+                    print(1)
+                }else if massage == "otp_expired"{
+                    //error due to experied otp
+                    //show th error massage to user
+                    print(2)
+                }else{
+                    //netwok error
+                    print("Network not present")
+                }
+            }
+        }
+        
+    }
+    
+    private func networkingForResendingOtp(){
+        Networking().resendOtp(forPhoneNumber: phoneNumber) { (result,token) in
+            if(result){
+                //otp resended done
+                print("otp resended done")
+            }else{
+                if(token == 2){
+                    //wrong mobile number
+                    //show the error to the user
+                }else{
+                    //network probem
+                    print("network problem")
+                }
+            }
+        }
     }
 }
 
 //All private function
 extension OtpVarificationViewController{
     private func setup(){
+        self.phoneNumberLable.text = self.phoneNumber
         
         self.makeCardView(forButton: self.continueButton)
         
