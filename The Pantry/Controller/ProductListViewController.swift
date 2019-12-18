@@ -20,8 +20,9 @@ class ProductListViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         self.setup()
-        productListCollectionView.delegate = self
-        productListCollectionView.dataSource = self
+        
+        //if something is asready present in the cart the show the view cart option with correct values
+        //else hide view cart option
     }
     
     
@@ -54,12 +55,16 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
         
         cell.delegate = self
         
-        //set some image in the product image
-        //cell.productImage
-        
         //setting row and section no. to get which add button pressed later
         cell.section = indexPath.section
         cell.productAddButton.tag = indexPath.row
+        cell.activityIndicator.startAnimating()
+        
+        
+        //if there is image in the uiimage array for the index path the show that
+        //else download image using the url from the array of the product details class and store it in a different [uiimage]
+        //stop the activity indicator
+        
         
         //general information of the product
         cell.productName.text = "Rice"
@@ -70,6 +75,12 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
         
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        //go to the product description View cntroller
+        //pass the general infornamtion of the product to next VC
+        performSegue(withIdentifier: segueId.productDescriptionVCId, sender: nil)
+    }
+    
     
 }
 
@@ -77,7 +88,7 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
 extension ProductListViewController:ProductListCollectionViewCellDelegate{
     func cellAddButton(haveTag tag: [Int]) {
         //function called when add button of the cell is taped
-        //create a product class
+        //create a array of the product class
         //add the item to the array of product class
        print(tag)
         self.viewCartView.isHidden = false
@@ -89,8 +100,17 @@ extension ProductListViewController:ProductListCollectionViewCellDelegate{
 extension ProductListViewController{
     
     private func setup(){
+        //confinding to delegate
+        self.productListCollectionView.delegate = self
+        self.productListCollectionView.dataSource = self
+        
+        //allowing selection of the collection view cell
+        self.productListCollectionView.allowsSelection = true
+        
         //making the navigation bar a card view
         self.makeCardView(fromViews: self.navigationBarView, isViewNavigationBar: true)
+        
+        
         self.viewCartView.isHidden = true
         
         //adding tap gesture to the view cart view
@@ -117,6 +137,7 @@ extension ProductListViewController{
     
     @objc private func onTap(){
         //go to the your cart View controller
+        //pass the array of the product class to next VC
         performSegue(withIdentifier: segueId.yourCartVC, sender: nil)
     }
 }

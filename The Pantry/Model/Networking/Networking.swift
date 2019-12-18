@@ -22,7 +22,8 @@ public class Networking{
                 //Handel the error casses
                 //Using the login to get the token
                 let userJSON : JSON = JSON(response.result.value!)
-                if(userJSON[credential.email].string != nil){
+                print(userJSON)
+                if(userJSON["message"].string == "success"){
                     self.CheckforLogin(withEmail : email,andPassword :password, comingfromLoginVC: false){result , token in
                         if(result){
                             //saveing the credentials
@@ -65,7 +66,7 @@ public class Networking{
                         //checkng if urls are valid or not
                         if(urls != nil){
                             //if we get the valid url then only download of the image is possible
-                            self.downloadImageForHomeViewControllerBanner(havingUrls: urls) { (result) in
+                            self.downloadImage(havingUrls: urls) { (result) in
                                 if(result){
                                     //login complate along with downloading of the images
                                     completion(true,"download of image complete"/*,images:[uiImage]?*/)
@@ -94,7 +95,7 @@ public class Networking{
                         //checkng if urls are valid or not
                         if(urls != nil){
                             //if we get the valid url then only download of the image is possible
-                            self.downloadImageForHomeViewControllerBanner(havingUrls: urls) { (result) in
+                            self.downloadImage(havingUrls: urls) { (result) in
                                 if(result){
                                     //Registation complate along with downloading of the images
                                     completion(true,userJSON[responceKey.token].string!/*,images:[uiImage]?*/)
@@ -167,7 +168,7 @@ public class Networking{
 
     }
     
-    func downloadImageForHomeViewControllerBanner(havingUrls urls: [String.SubSequence]? ,completion:@escaping (_ result:Bool/*,_ images:[UIImage]?*/)->()){
+    func downloadImage(havingUrls urls: [String.SubSequence]? ,completion:@escaping (_ result:Bool/*,_ images:[UIImage]?*/)->()){
         if(urls != nil){
             //coming from the loginVC or registerVC
             //have the urls
@@ -204,9 +205,10 @@ public class Networking{
               //Got the product detals
                 //let userJSON : JSON = JSON(response.result.value!)
                 //par's the userJSON
-                //make a class name product details
+                //make a class name product details along with urls
                 //store each product in product details class arry
                 //send the arry back
+                print(response.result.value!)
                 completion(true)
             }else{
                 //fail to get the product details
@@ -226,6 +228,7 @@ public class Networking{
                 //make a class name product details
                 //store each product in product details class arry
                 //send the arry back
+                //handel the token expired error
                 print(userJSON)
                 completion(true)
             }else{

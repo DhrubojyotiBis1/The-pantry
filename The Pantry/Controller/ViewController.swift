@@ -18,7 +18,18 @@ class ViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         self.decideDestinationSegueID()
-        self.neworking()
+        //doing the networking i.e downloading image if user is going to Home VC
+        if self.destinationSegueId == segueId.HomeVCId{
+            self.neworking()
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        //if user is going to the register VC
+        if self.destinationSegueId == segueId.registrationVCId{
+            performSegue(withIdentifier: self.destinationSegueId, sender: nil)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -34,19 +45,18 @@ extension ViewController{
         let animator = createAnimatorDotView()
         self.addConstrain(toAnimator: animator)
         animator.show()
-        
-        Networking().downloadImageForHomeViewControllerBanner(havingUrls: nil) { (result) in
-            if(result){
-                //Pass the image array to the home VC
-                print("Image download complete")
-            }else{
-                //handel the error
-                print("Image download fails")
+            Networking().downloadImage(havingUrls: nil) { (result) in
+                if(result){
+                    //Pass the image array to the home VC
+                    print("Image download complete")
+                }else{
+                    //handel the error
+                    print("Image download fails")
+                }
+                animator.stop()
+                //going to home VC
+                self.performSegue(withIdentifier: self.destinationSegueId, sender: nil)
             }
-            animator.stop()
-            //going to home VC
-            self.performSegue(withIdentifier: self.destinationSegueId, sender: nil)
-        }
     }
 }
 

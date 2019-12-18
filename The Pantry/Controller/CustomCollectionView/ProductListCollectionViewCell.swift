@@ -15,6 +15,8 @@ protocol ProductListCollectionViewCellDelegate {
 class ProductListCollectionViewCell: UICollectionViewCell {
     
     var section = Int()
+    
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var productImage:UIImageView!
     @IBOutlet weak var productPrice:UILabel!
     @IBOutlet weak var productName:UILabel!

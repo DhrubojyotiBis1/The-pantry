@@ -63,6 +63,10 @@ extension YourCartViewController : UITableViewDelegate,UITableViewDataSource{
 extension YourCartViewController:YourCartTableViewCellDelegate{
     func removedButtonClicked(atRow row: Int) {
         //function is called when remove button of a cell is pressed
+        //remove the data from the array of th product class at row
+        numberOfRowsInTableView -= 1
+        //reload lable view
+        self.yourCartTableView.reloadData()
     }
 }
 

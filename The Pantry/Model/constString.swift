@@ -16,6 +16,7 @@ struct segueId{
     static let HomeVCId = "goToHomeVC"
     static let yourCartVC = "goToyourCartVC"
     static let productListVC = "goToProductListVC"
+    static let productDescriptionVCId = "goToProductDescriptionVC"
 }
 
 struct registeAndLoginPram {

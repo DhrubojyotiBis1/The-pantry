@@ -86,7 +86,7 @@ extension HomeViewController{
         }
     }
     private func getProdctListDetails(withProductCatagory productCatagory:String){
-        if(self.didGotCartDetails){
+        if(/*self.didGotCartDetails*/ true){
             //got the cart details hence can add move the user to product list VC
             Networking().getListOfProducts(forCatagory: productCatagory){isSucess in
                 SVProgressHUD.dismiss()

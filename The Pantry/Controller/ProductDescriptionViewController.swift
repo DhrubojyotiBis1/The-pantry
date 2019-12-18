@@ -20,6 +20,10 @@ class ProductDescriptionViewController: UIViewController {
         // Do any additional setup after loading the view.
         self.setUp()
     }
+    
+    @IBAction func backButtonPressed(_ sender:UIButton){
+        self.dismiss(animated: true, completion: nil)
+    }
 
 }
 
@@ -53,8 +57,11 @@ extension ProductDescriptionViewController:UICollectionViewDataSource, UICollect
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = self.productDescriptionCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier.productDescriptionCollectionViewCellID, for: indexPath) as! ProductDesctiptionCollectionViewCell
         
+        cell.activityIndicator.startAnimating()
         
-        //show the product images
+        //if there is image in the uiimage array for the index path then show that
+        //else download image using the url from the array of the product details class and store it in a different [uiimage]
+        //stop the activity indicator
         
         return cell
     }
