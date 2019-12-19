@@ -10,12 +10,16 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     
+    @IBOutlet weak var userName:UILabel!
+    @IBOutlet weak var userEmail:UILabel!
     var stringUrlForSelectedPage:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        self.setup()
+        
     }
     
     @IBAction func changePasswordButtonPressed(_ sender: UIButton) {
@@ -23,6 +27,8 @@ class ProfileViewController: UIViewController {
     }
     
     @IBAction func logoutButtonPressed(_ sender: Any) {
+        save().removeCredentials()
+        performSegue(withIdentifier: segueId.loginVCId, sender: nil)
     }
     
     @IBAction func editButtonPressed(_ sender: UIButton) {
@@ -46,10 +52,25 @@ class ProfileViewController: UIViewController {
         }
     }
     
+    @IBAction func backButtonPressed(_ sender :UIButton){
+        self.dismiss(animated: true, completion: nil)
+    }
+    
 }
 
 
 extension ProfileViewController{
+    
+    private func setup(){
+        let credentials = save().getCredentials()
+        let firstName = credentials[credential.firstName]
+        let lastName = credentials[credential.lastName]
+        let email = credentials[credential.email]
+        
+        self.userName.text = "\(firstName!) \(lastName!)"
+        self.userEmail.text = email!
+    }
+    
     private func getTheUrl(fromButtonTag buttonTage:Int){
         if(buttonTage == 1){
             self.stringUrlForSelectedPage = webPageURL.privacyPolicy

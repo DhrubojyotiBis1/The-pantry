@@ -27,7 +27,7 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         //if user is going to the register VC
-        if self.destinationSegueId == segueId.registrationVCId{
+        if self.destinationSegueId == segueId.loginVCId{
             performSegue(withIdentifier: self.destinationSegueId, sender: nil)
         }
     }
@@ -71,7 +71,7 @@ extension ViewController{
             self.destinationSegueId = segueId.HomeVCId
         }else{
             // go to Register VC
-            self.destinationSegueId = segueId.registrationVCId
+            self.destinationSegueId = segueId.loginVCId
         }
     }
     

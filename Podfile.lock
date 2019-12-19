@@ -1,12 +1,14 @@
 PODS:
   - Alamofire (4.9.1)
   - DotsLoading (1.0.0)
+  - razorpay-pod (1.1.4)
   - SVProgressHUD (2.2.5)
   - SwiftyJSON (5.0.0)
 
 DEPENDENCIES:
   - Alamofire
   - DotsLoading
+  - razorpay-pod (~> 1.1.4)
   - SVProgressHUD
   - SwiftyJSON
 
@@ -14,15 +16,17 @@ SPEC REPOS:
   trunk:
     - Alamofire
     - DotsLoading
+    - razorpay-pod
     - SVProgressHUD
     - SwiftyJSON
 
 SPEC CHECKSUMS:
   Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
   DotsLoading: 1721e46a85d2424e5febbe705fb9e8b23cfea2db
+  razorpay-pod: 592624080178be4c6121216508e7857fc245f4b8
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
-PODFILE CHECKSUM: 1a70fd0a871f5daa976f72c6b2007e5f853eaecb
+PODFILE CHECKSUM: bbaf1197ac2f917eac2674917dda6d3ec8fa0e4c
 
 COCOAPODS: 1.8.4

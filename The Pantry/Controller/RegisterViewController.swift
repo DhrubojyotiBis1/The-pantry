@@ -40,6 +40,10 @@ class RegisterViewController: UIViewController {
             //send the images to the home VC
         }
     }
+    
+    @IBAction func alreadyhaveAnAcountButtonPressed(_ sender:UIButton){
+        self.dismiss(animated: true, completion: nil)
+    }
 }
 
 //MARK:- Networking stuff

@@ -8,10 +8,15 @@
 
 import UIKit
 
+protocol popUpPopUpViewControllerDelegate {
+    func popUpButtonTaped(withTag tag:Int)
+}
+
 class PopUpViewController: UIViewController {
     
     @IBOutlet weak var popView:UIView!
     @IBOutlet weak var popUpContenorView:UIView!
+    var delegate:popUpPopUpViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,7 +24,23 @@ class PopUpViewController: UIViewController {
         // Do any additional setup after loading the view.
         self.setup()
     }
+    
+    @IBAction func popUpButtonPressed(_ sender:UIButton){
+       
+        self.dismiss(animated: true) {
+             self.delegate?.popUpButtonTaped(withTag: sender.tag)
+        }
+    }
+    
 
+    
+
+}
+
+extension PopUpViewController:popUpPopUpViewControllerDelegate{
+    func popUpButtonTaped(withTag tag:Int){
+        
+    }
 }
 
 //ALL private functions

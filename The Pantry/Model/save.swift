@@ -33,4 +33,11 @@ public class save{
         creadential[credential.token] =  UserDefaults.standard.string(forKey: credential.token)
         return creadential
     }
+    
+    func removeCredentials(){
+         UserDefaults.standard.removeObject(forKey: credential.firstName)
+         UserDefaults.standard.removeObject(forKey: credential.lastName)
+         UserDefaults.standard.removeObject(forKey: credential.email)
+         UserDefaults.standard.removeObject(forKey: credential.token)
+    }
 }

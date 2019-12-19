@@ -19,6 +19,8 @@ struct segueId{
     static let productDescriptionVCId = "goToProductDescriptionVC"
     static let loginWithPhoneNumberVCId = "goToLoginWithPhoneNumberPageVC"
     static let otpvaruficationVCId = "goToOtpVarificationVC"
+    static let threeDotPopVCId = "goToThreeDotPopUpVC"
+    static let profileVCId = "goToProfileVC"
 }
 
 struct registeAndLoginPram {
@@ -92,4 +94,23 @@ struct smsGateWayConstants {
     static let international = "0"
     static let usa = "1"
     static let lengthOfOtp = "6"
+}
+
+
+struct razorPayCredentials {
+    static let key = "rzp_test_ay6pKD7fpHpMCF"
+    static let amaount = "amount"
+    static let currency = "currency"
+    static let description = "description"
+    static let orderId = "order_id"
+    static let imageUrl = "image"
+    static let name = "name"
+    static let contactProfile = "prefill"
+    static let colourTheme = "theme"
+}
+
+struct razorPayConstant {
+    static let currency = "INR"
+    static let purchaseDescription = "purchase description"
+    static let theme = ["color": "#528FF0"]
 }

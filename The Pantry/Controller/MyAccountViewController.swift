@@ -35,6 +35,10 @@ class MyAccountViewController: UIViewController {
             //Handel the error
         }
     }
+    
+    @IBAction func backButtonPressed(_ sender:UIButton){
+        self.dismiss(animated: true, completion: nil)
+    }
 }
 
 //MARK:- Networking stuff

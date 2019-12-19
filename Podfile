@@ -9,4 +9,5 @@ target 'The Pantry' do
     pod 'Alamofire'
     pod 'SwiftyJSON'
     pod 'SVProgressHUD'
+    pod 'razorpay-pod', '~> 1.1.4'
 end

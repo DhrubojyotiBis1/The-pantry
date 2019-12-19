@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		6F25998323AA4472003C6B60 /* EnterMoblieNumberController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F25998223AA4472003C6B60 /* EnterMoblieNumberController.swift */; };
 		6F25998523AA4504003C6B60 /* LoginWithOtpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F25998423AA4504003C6B60 /* LoginWithOtpViewController.swift */; };
+		6F25998723AA9CED003C6B60 /* CheckOutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F25998623AA9CED003C6B60 /* CheckOutViewController.swift */; };
 		6F44365123A3768300F6BED2 /* PopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F44365023A3768300F6BED2 /* PopUpViewController.swift */; };
 		6F44365323A380AC00F6BED2 /* ProductListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F44365223A380AC00F6BED2 /* ProductListCollectionViewCell.swift */; };
 		6F4DAC7F239F76F2000E66CD /* MyAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F4DAC7E239F76F2000E66CD /* MyAccountViewController.swift */; };
@@ -42,6 +43,7 @@
 		3A320FAEC629FFF472A5C9AC /* Pods-The Pantry.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Pantry.release.xcconfig"; path = "Target Support Files/Pods-The Pantry/Pods-The Pantry.release.xcconfig"; sourceTree = "<group>"; };
 		6F25998223AA4472003C6B60 /* EnterMoblieNumberController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterMoblieNumberController.swift; sourceTree = "<group>"; };
 		6F25998423AA4504003C6B60 /* LoginWithOtpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginWithOtpViewController.swift; sourceTree = "<group>"; };
+		6F25998623AA9CED003C6B60 /* CheckOutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckOutViewController.swift; sourceTree = "<group>"; };
 		6F44365023A3768300F6BED2 /* PopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpViewController.swift; sourceTree = "<group>"; };
 		6F44365223A380AC00F6BED2 /* ProductListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListCollectionViewCell.swift; sourceTree = "<group>"; };
 		6F4DAC7E239F76F2000E66CD /* MyAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAccountViewController.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				6F5318C123AA30F50015B580 /* OtpVarificationViewController.swift */,
 				6F25998223AA4472003C6B60 /* EnterMoblieNumberController.swift */,
 				6F25998423AA4504003C6B60 /* LoginWithOtpViewController.swift */,
+				6F25998623AA9CED003C6B60 /* CheckOutViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -314,6 +317,7 @@
 			files = (
 				6FA83262239EE3D600DEC90E /* constString.swift in Sources */,
 				6FEE1733239F0ABD002079FC /* url.swift in Sources */,
+				6F25998723AA9CED003C6B60 /* CheckOutViewController.swift in Sources */,
 				6F928CFA23A3B48F00A821A9 /* YourCartTableViewCell.swift in Sources */,
 				6F4DAC7F239F76F2000E66CD /* MyAccountViewController.swift in Sources */,
 				6F25998523AA4504003C6B60 /* LoginWithOtpViewController.swift in Sources */,

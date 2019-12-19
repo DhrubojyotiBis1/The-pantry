@@ -32,6 +32,7 @@ class YourCartViewController: UIViewController {
     
     @IBAction func checkOutButtonPressed(){
         //go to the payment page use the payment gatway
+        performSegue(withIdentifier: "test", sender: nil)
         print("pay")
     }
 

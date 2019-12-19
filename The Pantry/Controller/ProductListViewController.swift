@@ -26,14 +26,26 @@ class ProductListViewController: UIViewController {
     }
     
     
-    @IBAction func backButtonPressed(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
         //update the surver about the changes in the cart
         //Networking().updateCartDetais(withToken: <#T##String#>, cartDetails: <#T##String#>, completion: <#T##(Bool) -> ()#>)
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == segueId.threeDotPopVCId{
+            let destination = segue.destination as! PopUpViewController
+            destination.delegate = self
+        }
+    }
+    
+    @IBAction func threeDotPopUpButtonTapped(_ sender:UIButton){
+        self.performSegue(withIdentifier: segueId.threeDotPopVCId, sender: nil)
+    }
+    
+    @IBAction func backButtonPressed(_ sender: UIButton) {
+        self.dismiss(animated: true, completion: nil)
     }
     
 
@@ -82,6 +94,24 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
     }
     
     
+}
+
+
+extension ProductListViewController:popUpPopUpViewControllerDelegate{
+    func popUpButtonTaped(withTag tag: Int) {
+        switch tag {
+        case 0:
+            //refresh
+            break
+        case 1:
+            //clear cart
+            break
+        case 2:
+            performSegue(withIdentifier: segueId.profileVCId, sender: nil)
+        default:
+            break
+        }
+    }
 }
 
 //Deligate of productListCollectionView Cell
