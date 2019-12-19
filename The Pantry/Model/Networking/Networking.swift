@@ -197,22 +197,31 @@ public class Networking{
     
     
     //to get the product details
-    func getListOfProducts(forCatagory catagory:String,completion:@escaping (_ result : Bool/*,productList: [productDetals] */)->()){
+    func getListOfProducts(forCatagory catagory:String,completion:@escaping (_ result : Bool,_ productList: [product])->()){
         
         let pram = [productCatagory.productCatagoryPram : catagory]
         Alamofire.request(url.productListURL ,method: .post , parameters : pram).responseJSON { (response) in
+            var products = [product]()
             if response.result.isSuccess{
               //Got the product detals
-                //let userJSON : JSON = JSON(response.result.value!)
+                let userJSON : JSON = JSON(response.result.value!)
                 //par's the userJSON
                 //make a class name product details along with urls
                 //store each product in product details class arry
                 //send the arry back
-                print(response.result.value!)
-                completion(true)
+                print(userJSON)
+                for i in 0..<userJSON.count{
+                    let name = userJSON[i]["name"].string!
+                    let sellingPrice = userJSON[i]["selling_price"].string!
+                    let productId = "\(userJSON[i]["id"])"
+                    let productDescription =  userJSON[i]["description"].string!
+                    let newproduct = product(name: name, sellingPrice: sellingPrice,productId: productId,productDescription:productDescription)
+                    products.append(newproduct)
+                }
+                completion(true,products)
             }else{
                 //fail to get the product details
-                completion(false)
+                completion(false,products)
             }
         }
     }
@@ -349,6 +358,24 @@ public class Networking{
             }
         }
         
+    }
+    
+    
+    //for getting the product description
+    func getProductDescription(fromProductId productId:String){
+        let param = ["pid":productId]
+        
+        
+        Alamofire.request(url.productDescriptionURl,method: .get ,parameters : param).responseString { (response) in
+            if response.result.isSuccess{
+              //networking done
+                //if response.result.value!.cout is 16 then the massage is send
+                 print(response.result.value!)
+            }else{
+                //fail to do networking
+                print(response.error?.localizedDescription as Any)
+            }
+        }
     }
     
 }

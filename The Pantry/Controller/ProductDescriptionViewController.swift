@@ -13,6 +13,7 @@ class ProductDescriptionViewController: UIViewController {
     @IBOutlet weak var productDescescriptionTableView:UITableView!
     @IBOutlet weak var productDescriptionCollectionView:UICollectionView!
     @IBOutlet weak var pageController:UIPageControl!
+    var selectedProduct = product()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +38,7 @@ extension ProductDescriptionViewController : UITableViewDataSource , UITableView
         let cell = self.productDescescriptionTableView.dequeueReusableCell(withIdentifier: cellIdentifier.productDescrptionCellID, for: indexPath) as! ProductDescriptionTableViewCell
         
         //store the description in the cell lable
+        cell.productDescription.text = selectedProduct.productDescription
         
         return cell
     }

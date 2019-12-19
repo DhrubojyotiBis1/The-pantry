@@ -10,17 +10,18 @@ import UIKit
 
 class ProductListViewController: UIViewController {
     
-    let numberOfSectionInCollectionView = 5
+    var availableProducts = [product]()
     @IBOutlet weak var navigationBarView: UIView!
     @IBOutlet weak var productListCollectionView:UICollectionView!
     @IBOutlet weak var viewCartView:UIView!
+    var selectedProductAt = Int()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        print(availableProducts)
         // Do any additional setup after loading the view.
         self.setup()
-        
         //if something is asready present in the cart the show the view cart option with correct values
         //else hide view cart option
     }
@@ -37,6 +38,9 @@ class ProductListViewController: UIViewController {
         if segue.identifier == segueId.threeDotPopVCId{
             let destination = segue.destination as! PopUpViewController
             destination.delegate = self
+        }else if segue.identifier == segueId.productDescriptionVCId {
+            let destination = segue.destination as! ProductDescriptionViewController
+            destination.selectedProduct = availableProducts[self.selectedProductAt]
         }
     }
     
@@ -55,11 +59,18 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
     
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return self.numberOfSectionInCollectionView
+        if((self.availableProducts.count%2)==0){
+            //even
+            return (self.availableProducts.count/2)
+        }else{
+            //odd
+            let numberOfsection = (self.availableProducts.count/2) + 1
+            return numberOfsection
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
+       return 2
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -73,15 +84,21 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
         cell.activityIndicator.startAnimating()
         
         
+        
         //if there is image in the uiimage array for the index path the show that
         //else download image using the url from the array of the product details class and store it in a different [uiimage]
         //stop the activity indicator
         
         
         //general information of the product
-        cell.productName.text = "Rice"
-        cell.productPrice.text = "₹200.0"
-        self.makeCardView(fromViews: cell.cellView, isViewNavigationBar: false)
+        let row = 2*indexPath.section + indexPath.row
+        if(row>=self.availableProducts.count){
+            cell.isHidden = true
+        }else{
+            cell.productName.text = self.availableProducts[row].name
+            cell.productPrice.text = self.availableProducts[row].sellingPrice
+            self.makeCardView(fromViews: cell.cellView, isViewNavigationBar: false)
+        }
         
         return cell
         
@@ -90,10 +107,10 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         //go to the product description View cntroller
         //pass the general infornamtion of the product to next VC
+        let row = 2*indexPath.section + indexPath.row
+        self.selectedProductAt = row
         performSegue(withIdentifier: segueId.productDescriptionVCId, sender: nil)
     }
-    
-    
 }
 
 

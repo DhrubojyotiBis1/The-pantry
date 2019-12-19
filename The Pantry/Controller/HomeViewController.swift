@@ -15,6 +15,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var adsCollectionView: UICollectionView!
     @IBOutlet var conteverView: [UIView]!
     @IBOutlet weak var topView: UIView!
+    var products = [product]()
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -27,6 +28,13 @@ class HomeViewController: UIViewController {
         SVProgressHUD.show()
         let productCatagory = self.getProductCatagory(fromTag: sender.tag)
         self.getProdctListDetails(withProductCatagory: productCatagory)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == segueId.productListVC{
+            let destination = segue.destination as! ProductListViewController
+            destination.availableProducts = self.products
+        }
     }
     
 
@@ -88,11 +96,12 @@ extension HomeViewController{
     private func getProdctListDetails(withProductCatagory productCatagory:String){
         if(/*self.didGotCartDetails*/ true){
             //got the cart details hence can add move the user to product list VC
-            Networking().getListOfProducts(forCatagory: productCatagory){isSucess in
+            Networking().getListOfProducts(forCatagory: productCatagory){isSucess,productList  in
                 SVProgressHUD.dismiss()
                 if(isSucess){
                     //got the product list details
                     //move the user to the next VC
+                    self.products = productList
                     self.performSegue(withIdentifier: segueId.productListVC, sender: nil)
                 }else{
                 //show the error that happend with a popup
