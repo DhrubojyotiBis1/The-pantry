@@ -12,26 +12,29 @@ import SVProgressHUD
 
 class CheckOutViewController: UIViewController {
     
-    var razorPay:Razorpay?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        
-    }
+    var razorPay:Razorpay!
+    let newViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "test")
     
-    @IBAction func payButtonPressed(_ sender:UIButton){
-        self.showPaymentForm()
-        
-    }
-    @IBAction func backButtonPressed(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+    @IBAction func PayButtonPressed(_ sender:UIButton){
+        SVProgressHUD.show()
+        self.present(newViewController, animated: true) {
+            self.showPaymentForm()
+        }
     }
 }
 
+extension CheckOutViewController:RazorpayPaymentCompletionProtocol{
+    func onPaymentError(_ code: Int32, description str: String) {
+        print("ops \(str)")
+    }
+    
+    func onPaymentSuccess(_ payment_id: String) {
+        print("done \(payment_id)")
+    }
+    
+    
+}
 
-//MARK:- networking
 extension CheckOutViewController{
     private func showPaymentForm(){
         razorPay = Razorpay.initWithKey(razorPayCredentials.key, andDelegate: self)
@@ -43,37 +46,12 @@ extension CheckOutViewController{
             razorPayCredentials.imageUrl: "ss",
             razorPayCredentials.name: "Test",
             razorPayCredentials.contactProfile: [
-                        "contact": "9797979797",
+                        "contact": "8961388276",
                         "email": "foo@bar.com"
                     ],
             razorPayCredentials.colourTheme: razorPayConstant.theme
                 ]
-        
-        self.razorPay?.open(options)
+        razorPay.open(options, display: newViewController)
+        SVProgressHUD.dismiss()
     }
-    
-    func getTopMostViewController() -> UIViewController? {
-        var topMostViewController = UIApplication.shared.keyWindow?.rootViewController
-
-        while let presentedViewController = topMostViewController?.presentedViewController {
-            topMostViewController = presentedViewController
-        }
-
-        return topMostViewController
-    }
-
-}
-
-extension CheckOutViewController:RazorpayPaymentCompletionProtocol{
-    func onPaymentError(_ code: Int32, description str: String) {
-        SVProgressHUD.showError(withStatus: "Payment Failed")
-        
-        print("code: \(code)")
-    }
-    
-    func onPaymentSuccess(_ payment_id: String) {
-        SVProgressHUD.showSuccess(withStatus: "Payment Completed")
-    }
-    
-    
 }

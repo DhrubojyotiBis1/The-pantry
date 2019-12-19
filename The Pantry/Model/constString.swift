@@ -21,6 +21,8 @@ struct segueId{
     static let otpvaruficationVCId = "goToOtpVarificationVC"
     static let threeDotPopVCId = "goToThreeDotPopUpVC"
     static let profileVCId = "goToProfileVC"
+    static let checkOutVCId = "goToCheckOutVC"
+    static let razorPayVCId = "goToRazorPayVC"
 }
 
 struct registeAndLoginPram {

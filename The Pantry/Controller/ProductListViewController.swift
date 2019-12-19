@@ -15,6 +15,7 @@ class ProductListViewController: UIViewController {
     @IBOutlet weak var productListCollectionView:UICollectionView!
     @IBOutlet weak var viewCartView:UIView!
     var selectedProductAt = Int()
+    var itemAddedToCart = [Int:Int]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,8 +80,16 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
         cell.delegate = self
         
         //setting row and section no. to get which add button pressed later
+        let row = 2*indexPath.section + indexPath.row
+        if(itemAddedToCart[row] == nil){
+            cell.productSubtractButton.isHidden = true
+        }else{
+            cell.productSubtractButton.isHidden = false
+            cell.numOfItemSelected.text = "\(itemAddedToCart[row])"
+        }
         cell.section = indexPath.section
         cell.productAddButton.tag = indexPath.row
+        cell.productSubtractButton.tag = indexPath.row
         cell.activityIndicator.startAnimating()
         
         
@@ -91,7 +100,6 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
         
         
         //general information of the product
-        let row = 2*indexPath.section + indexPath.row
         if(row>=self.availableProducts.count){
             cell.isHidden = true
         }else{
@@ -133,11 +141,21 @@ extension ProductListViewController:popUpPopUpViewControllerDelegate{
 
 //Deligate of productListCollectionView Cell
 extension ProductListViewController:ProductListCollectionViewCellDelegate{
+    func cellRemoveBUttonPressed(havingTag tag: [Int]) {
+        print(tag)
+    }
+    
     func cellAddButton(haveTag tag: [Int]) {
         //function called when add button of the cell is taped
         //create a array of the product class
         //add the item to the array of product class
-       print(tag)
+        if(itemAddedToCart[(2*tag[0] + tag[1])] == nil){
+            self.itemAddedToCart[(2*tag[0] + tag[1])] = 1
+        }else{
+            itemAddedToCart[(2*tag[0] + tag[1])]! += 1
+        }
+        let indepath = IndexPath(row: tag[1], section: tag[0])
+        self.productListCollectionView.reloadItems(at: [indepath])
         self.viewCartView.isHidden = false
     }
     

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class YourCartViewController: UIViewController {
+class YourCartViewController:UIViewController{
     
     var numberOfRowsInTableView = 2
     @IBOutlet weak var yourCartTableView:UITableView!
@@ -32,8 +32,6 @@ class YourCartViewController: UIViewController {
     
     @IBAction func checkOutButtonPressed(){
         //go to the payment page use the payment gatway
-        performSegue(withIdentifier: "test", sender: nil)
-        print("pay")
     }
 
 }
@@ -74,4 +72,3 @@ extension YourCartViewController:YourCartTableViewCellDelegate{
 extension YourCartTableViewCell{
     //All private functions
 }
-
