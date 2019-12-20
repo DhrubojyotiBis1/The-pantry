@@ -66,7 +66,7 @@ extension ViewController{
     //decides which VC to go
     private func decideDestinationSegueID(){
         let savedCredentials = save().getCredentials()
-        if(savedCredentials[credential.token] != nil){
+        if(savedCredentials[saveCredential.token] != nil){
             //go to home VC
             self.destinationSegueId = segueId.HomeVCId
         }else{

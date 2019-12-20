@@ -248,8 +248,9 @@ public class Networking{
     }
     
     //to update the cart
-    func updateCartDetais(withToken token:String,cartDetails details:String,completion:@escaping (_ result:Bool)->()){
-        let pram = [userCart.token : token,userCart.details:details] 
+    func updateCartDetais(withToken token:String,cartDetails details:[selectedProduct],completion:@escaping (_ result:Bool)->()){
+        let detailsJson = createJSON(fromSelectedProducts: details).getCreatedJSOn()
+        let pram:[String:Any] = [userCart.token : token,userCart.details:detailsJson]
         Alamofire.request(url.updateCartURL,method: .post ,parameters : pram).responseJSON { (response) in
             if response.result.isSuccess{
               //Got the cart detals
@@ -374,6 +375,37 @@ public class Networking{
             }else{
                 //fail to do networking
                 print(response.error?.localizedDescription as Any)
+            }
+        }
+    }
+    
+    func doPreOrder(withselectedProducts selectedProducts:[selectedProduct],token:String,completion:@escaping (_ result :Bool,_ preOrderResponce:preOrderResponce)->()){
+        let orderJson = createJSON(fromSelectedProducts: selectedProducts).getCreatedJSOn()
+        let param:[String:Any] = [preOrderKey.token:token,preOrderKey.itemOrdered:orderJson]
+        Alamofire.request(url.prepareOrderURL,method: .post ,parameters : param).responseJSON { (response) in
+            if response.result.isSuccess{
+              //networking done
+                let responce = JSON(response.result.value!)
+                print(responce)
+                if(responce[preOrderResponseKey.razorPayOrderId].string != nil){
+                    let amount = Double(responce[preOrderResponseKey.amount].int!)
+                    let razorPayKey = responce[preOrderResponseKey.razorPaykey].string!
+                    let orderId = responce[preOrderResponseKey.razorPayOrderId].string!
+                    let customerEmail = responce[preOrderResponseKey.customerEmail].string!
+                    
+                    let preOrderResponse = preOrderResponce(totalAmoutToBePaid:amount , customerEmail: customerEmail, key: razorPayKey, razorPayOrderId: orderId,massage: preOrderResponseKey.sucessMassage)
+                    completion(true,preOrderResponse)
+                }
+                else{
+                    let preOrderResponse = preOrderResponce(totalAmoutToBePaid: nil, customerEmail: nil, key: nil, razorPayOrderId: nil, massage: "preOrder not Dode")
+                    completion(false,preOrderResponse)
+                }
+                
+            }else{
+                //fail to do networking
+                print(response.error?.localizedDescription as Any)
+                let preOrderResponse = preOrderResponce(totalAmoutToBePaid: nil, customerEmail: nil, key: nil, razorPayOrderId: nil, massage: "Network error")
+                completion(false, preOrderResponse)
             }
         }
     }

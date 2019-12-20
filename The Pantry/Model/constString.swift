@@ -100,7 +100,6 @@ struct smsGateWayConstants {
 
 
 struct razorPayCredentials {
-    static let key = "rzp_test_ay6pKD7fpHpMCF"
     static let amaount = "amount"
     static let currency = "currency"
     static let description = "description"
@@ -115,4 +114,17 @@ struct razorPayConstant {
     static let currency = "INR"
     static let purchaseDescription = "purchase description"
     static let theme = ["color": "#528FF0"]
+}
+
+struct preOrderKey {
+    static let token = "token"
+    static let itemOrdered = "orderItems"
+}
+
+struct preOrderResponseKey {
+    static let amount = "amount"
+    static let razorPaykey = "key"
+    static let customerEmail = "customer_email"
+    static let razorPayOrderId = "razorpay_order_id"
+    static let sucessMassage = "success"
 }

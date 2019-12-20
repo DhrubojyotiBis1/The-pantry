@@ -57,7 +57,7 @@ extension ChangePasswordViewController{
 //MARK:- All private functions
 extension ChangePasswordViewController{
     private func getEmailAndToken(fromCredentials credentials:[String:String]){
-        self.token = credentials[credential.token]!
-        self.email = credentials[credential.email]!
+        self.token = credentials[saveCredential.token]!
+        self.email = credentials[saveCredential.email]!
     }
 }

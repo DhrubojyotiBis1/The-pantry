@@ -9,35 +9,76 @@
 import UIKit
 
 
-struct credential{
+struct saveCredential{
     static let firstName = "firstName"
     static let lastName = "lastName"
     static let email = "email"
     static let token = "token"
+    static let cartDetails = "CartDetails"
 }
 
 public class save{
     
     func saveCredentials(withFirstName firstName:String,lastName:String,email:String,token:String){
-        UserDefaults.standard.set(firstName, forKey: credential.firstName)
-        UserDefaults.standard.set(lastName, forKey: credential.lastName)
-        UserDefaults.standard.set(email, forKey: credential.email)
-        UserDefaults.standard.set(token, forKey: credential.token)
+        UserDefaults.standard.set(firstName, forKey: saveCredential.firstName)
+        UserDefaults.standard.set(lastName, forKey: saveCredential.lastName)
+        UserDefaults.standard.set(email, forKey: saveCredential.email)
+        UserDefaults.standard.set(token, forKey: saveCredential.token)
+    }
+    
+    func saveCartDetais(withDetails details:[selectedProduct]){
+        UserDefaults.standard.setStructArray(details, forKey: saveCredential.cartDetails)
+    }
+    
+    func getCartDetails() -> [selectedProduct]? {
+        let productAlreadyAddedToCart: [selectedProduct] = UserDefaults.standard.structArrayData(selectedProduct.self, forKey: saveCredential.cartDetails)
+        
+        
+        return productAlreadyAddedToCart
     }
     
     func getCredentials()->[String:String]{
         var creadential = [String:String]()
-        creadential[credential.firstName] =  UserDefaults.standard.string(forKey: credential.firstName)
-        creadential[credential.lastName] = UserDefaults.standard.string(forKey: credential.lastName)
-        creadential[credential.email] =  UserDefaults.standard.string(forKey: credential.email)
-        creadential[credential.token] =  UserDefaults.standard.string(forKey: credential.token)
+        creadential[saveCredential.firstName] =  UserDefaults.standard.string(forKey: saveCredential.firstName)
+        creadential[saveCredential.lastName] = UserDefaults.standard.string(forKey: saveCredential.lastName)
+        creadential[saveCredential.email] =  UserDefaults.standard.string(forKey: saveCredential.email)
+        creadential[saveCredential.token] =  UserDefaults.standard.string(forKey: saveCredential.token)
         return creadential
     }
     
     func removeCredentials(){
-         UserDefaults.standard.removeObject(forKey: credential.firstName)
-         UserDefaults.standard.removeObject(forKey: credential.lastName)
-         UserDefaults.standard.removeObject(forKey: credential.email)
-         UserDefaults.standard.removeObject(forKey: credential.token)
+         UserDefaults.standard.removeObject(forKey: saveCredential.firstName)
+         UserDefaults.standard.removeObject(forKey: saveCredential.lastName)
+         UserDefaults.standard.removeObject(forKey: saveCredential.email)
+         UserDefaults.standard.removeObject(forKey: saveCredential.token)
+    }
+}
+
+extension UserDefaults {
+    open func setStruct<T: Codable>(_ value: T?, forKey defaultName: String){
+        let data = try? JSONEncoder().encode(value)
+        set(data, forKey: defaultName)
+    }
+    
+    open func structData<T>(_ type: T.Type, forKey defaultName: String) -> T? where T : Decodable {
+        guard let encodedData = data(forKey: defaultName) else {
+            return nil
+        }
+        
+        return try! JSONDecoder().decode(type, from: encodedData)
+    }
+    
+    open func setStructArray<T: Codable>(_ value: [T], forKey defaultName: String){
+        let data = value.map { try? JSONEncoder().encode($0) }
+        
+        set(data, forKey: defaultName)
+    }
+    
+    open func structArrayData<T>(_ type: T.Type, forKey defaultName: String) -> [T] where T : Decodable {
+        guard let encodedData = array(forKey: defaultName) as? [Data] else {
+            return []
+        }
+        
+        return encodedData.map { try! JSONDecoder().decode(type, from: $0) }
     }
 }

@@ -63,9 +63,9 @@ extension ProfileViewController{
     
     private func setup(){
         let credentials = save().getCredentials()
-        let firstName = credentials[credential.firstName]
-        let lastName = credentials[credential.lastName]
-        let email = credentials[credential.email]
+        let firstName = credentials[saveCredential.firstName]
+        let lastName = credentials[saveCredential.lastName]
+        let email = credentials[saveCredential.email]
         
         self.userName.text = "\(firstName!) \(lastName!)"
         self.userEmail.text = email!

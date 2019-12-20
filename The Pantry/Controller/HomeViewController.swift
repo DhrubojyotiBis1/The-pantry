@@ -22,6 +22,8 @@ class HomeViewController: UIViewController {
         // Do any additional setup after loading the view.
         self.setup()
         self.getCartDetails()
+        
+        print(save().getCartDetails() as Any)
     }
     
     @IBAction func catagoryButtonPressed(_ sender: UIButton) {
@@ -94,7 +96,7 @@ extension HomeViewController{
         }
     }
     private func getProdctListDetails(withProductCatagory productCatagory:String){
-        if(/*self.didGotCartDetails*/ true){
+        if(self.didGotCartDetails){
             //got the cart details hence can add move the user to product list VC
             Networking().getListOfProducts(forCatagory: productCatagory){isSucess,productList  in
                 SVProgressHUD.dismiss()

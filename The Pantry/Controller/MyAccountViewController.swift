@@ -63,11 +63,11 @@ extension MyAccountViewController{
 extension MyAccountViewController{
     private func addTextIntextField(usingCredentials credentials:[String:String]){
         //setting the credentials to the textField
-        self.firstName.text = credentials[credential.firstName]
-        self.lastName.text = credentials[credential.lastName]
+        self.firstName.text = credentials[saveCredential.firstName]
+        self.lastName.text = credentials[saveCredential.lastName]
         
         //geting the token fand email from saved credentials
-        self.email = credentials[credential.email]!
-        self.token = credentials[credential.token]!
+        self.email = credentials[saveCredential.email]!
+        self.token = credentials[saveCredential.token]!
     }
 }

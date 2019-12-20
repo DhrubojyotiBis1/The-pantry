@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct product {
+struct product:Codable {
     var name = String()
     var sellingPrice = String()
     var productId = String()
