@@ -10,6 +10,11 @@ import UIKit
 import Razorpay
 import SVProgressHUD
 
+struct razorPaySucessResponseKey {
+    static let orderId = AnyHashable("razorpay_order_id")
+    static let signature = AnyHashable("razorpay_signature")
+}
+
 protocol CheckOutViewControllerProtcol {
     func didPaymentCmplete(withsStatus status:Bool)
 }
@@ -41,11 +46,13 @@ class CheckOutViewController: UIViewController {
 extension CheckOutViewController{
     private func doPreOrder(){
         let userCredentials = save().getCredentials()
+        print(userCredentials)
         
         Networking().doPreOrder(withselectedProducts: self.selectedProducts, token: userCredentials[saveCredential.token]!) { (result,preOrderResponse) in
             if(result){
                 self.present(self.newViewController, animated: true) {
                     self.preOrderResponse = preOrderResponse
+                    print("preOrderResponse",self.preOrderResponse)
                     self.showPaymentForm()
                 }
             }else{
@@ -57,15 +64,29 @@ extension CheckOutViewController{
     }
 }
 
-extension CheckOutViewController:RazorpayPaymentCompletionProtocol{
-    func onPaymentError(_ code: Int32, description str: String) {
-        print("ops \(str)")
+extension CheckOutViewController:RazorpayPaymentCompletionProtocolWithData{
+    func onPaymentSuccess(_ payment_id: String, andData response: [AnyHashable : Any]?) {
+        let resopayPaymentId = response![razorPaySucessResponseKey.orderId] as! String
+        let razorPaySignature = response![razorPaySucessResponseKey.signature] as! String
+        
+        print("resopayPaymentId",resopayPaymentId)
+        print("razorPaySignature",razorPaySignature)
+        
+        let usercredential = save().getCredentials()
+        let token = usercredential[saveCredential.token]!
+        Networking().checkTransactionId(withRazorPayPaymentId: resopayPaymentId, razorPaySignature: razorPaySignature, andToken: token) { (result, massage) in
+            if(result){
+                //transaction done
+            }else{
+                //transaction failes
+            }
+        }
     }
     
-    func onPaymentSuccess(_ payment_id: String) {
-        //All the transaction api to check if transaction is completed or not
-        print("done \(payment_id)")
+    func onPaymentError(_ code: Int32, description str: String, andData response: [AnyHashable : Any]?) {
+        print("nope")
     }
+    
 }
 
 
@@ -78,7 +99,7 @@ extension CheckOutViewController:CheckOutViewControllerProtcol{
 
 extension CheckOutViewController{
     private func showPaymentForm(){
-        razorPay = Razorpay.initWithKey(self.preOrderResponse.key!, andDelegate: self)
+        razorPay = Razorpay.initWithKey(self.preOrderResponse.key!, andDelegateWithData: self)
         let options: [String:Any] = [
             razorPayCredentials.amaount: self.preOrderResponse.totalAmoutToBePaid!, //This is in currency subunits. 100 = 100 paise= INR 1.
             razorPayCredentials.currency: razorPayConstant.currency,//We support more that 92 international currencies.
@@ -92,6 +113,9 @@ extension CheckOutViewController{
                     ],
             razorPayCredentials.colourTheme: razorPayConstant.theme
                 ]
+        
+        print("razorPayDict",options)
+        
         razorPay.open(options, display: newViewController)
         SVProgressHUD.dismiss()
     }

@@ -404,7 +404,7 @@ public class Networking{
             if response.result.isSuccess{
               //networking done
                 let responce = JSON(response.result.value!)
-                print(responce)
+                print("responce \(responce)")
                 if(responce[preOrderResponseKey.razorPayOrderId].string != nil){
                     let amount = Double(responce[preOrderResponseKey.amount].int!)
                     let razorPayKey = responce[preOrderResponseKey.razorPaykey].string!
@@ -426,6 +426,23 @@ public class Networking{
                 completion(false, preOrderResponse)
             }
         }
+    }
+    
+    func checkTransactionId(withRazorPayPaymentId paymentId:String,razorPaySignature signature :String,andToken token:String,completion:@escaping(_ result:Bool,_ massage:String?)->()){
+        
+        let param:[String:String] = [razorPayTransactionkey.token:token,razorPayTransactionkey.signature:signature,razorPayTransactionkey.paymentId:paymentId]
+        
+        Alamofire.request(url.transactionStatus,method: .post ,parameters : param).responseJSON { (response) in
+                   if response.result.isSuccess{
+                     //networking done
+                       //if response.result.value!.cout is 16 then the massage is send
+                        print("response",response.result.value!)
+                   }else{
+                       //fail to do networking
+                       print(response.error?.localizedDescription as Any)
+                   }
+               }
+        
     }
     
 }

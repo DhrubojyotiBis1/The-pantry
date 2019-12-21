@@ -40,11 +40,6 @@ class ProductListViewController: UIViewController{
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        /*if(!self.didSavingComplete){
-            let selectedProducts = getSelectedProduct()
-            save().saveCartDetais(withDetails: selectedProducts)
-        }*/
-        
     }
     
     
@@ -162,10 +157,6 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
 extension ProductListViewController:popUpPopUpViewControllerDelegate{
     func popUpButtonTaped(withTag tag: Int) {
         switch tag {
-        case 0:
-            //refresh
-            self.productListCollectionView.reloadData()
-            break
         case 1:
             //clear cart
             self.clearCartPressed()
@@ -199,7 +190,7 @@ extension ProductListViewController:ProductListCollectionViewCellDelegate{
         
         self.numberOfItemAdded -= 1
         if(totalPrice != 0){
-            self.totalPrice -= Double(self.selectedProducts[i].product.sellingPrice)!
+            self.totalPrice -= Double(justSelectedProduct.sellingPrice)!
         }
         
         let indepath = IndexPath(row: section, section: row)
@@ -235,9 +226,7 @@ extension ProductListViewController:ProductListCollectionViewCellDelegate{
         }
         
         self.numberOfItemAdded += 1
-        self.totalPrice += Double(self.selectedProducts[i].product.sellingPrice)!
-        
-        print("totaol \( Double(self.selectedProducts[i].product.sellingPrice)!)")
+        self.totalPrice += Double(justSelectedProduct.sellingPrice)!
         
         let indepath = IndexPath(row: section, section: row)
         self.productListCollectionView.reloadItems(at: [indepath])
@@ -315,7 +304,9 @@ extension ProductListViewController{
     }
     
     private func clearCartPressed(){
-        
+        self.selectedProducts.removeAll()
+        save().saveCartDetais(withDetails: self.selectedProducts)
+        self.getStarted()
         self.productListCollectionView.reloadData()
     }
 }

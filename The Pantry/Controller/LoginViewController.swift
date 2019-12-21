@@ -19,12 +19,12 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
+        self.setup()
+        print("whats going on ")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        setup()
     }
     
     
@@ -33,6 +33,9 @@ class LoginViewController: UIViewController {
         self.neworking()
     }
  
+    @IBAction func dontHaveAccountButtonPressed(_ sender : UIButton){
+        self.performSegue(withIdentifier: segueId.enterMobileNumberVcId, sender: nil)
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == segueId.HomeVCId){
@@ -68,10 +71,20 @@ extension LoginViewController{
         //adding tap gesture to the view
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
         self.loginView.addGestureRecognizer(tapGesture)
+        self.makeCardView(forButton: self.registerButton)
     }
     
     @objc private func onTap(){
         self.email.endEditing(true)
         self.password.endEditing(true)
+    }
+    
+    private func makeCardView(forButton button:UIButton){
+        //setting the card view for the top view
+        button.layer.masksToBounds = false
+        button.layer.shadowColor = UIColor.gray.cgColor
+        button.layer.shadowOffset = CGSize(width: 0, height: 4.5)
+        button.layer.shadowOpacity = 0.4
+        button.layer.cornerRadius = 10
     }
 }

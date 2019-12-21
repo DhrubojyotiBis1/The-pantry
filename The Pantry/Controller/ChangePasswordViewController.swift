@@ -32,6 +32,10 @@ class ChangePasswordViewController: UIViewController {
             //show a popup that confirm password and new password doesnot matches 
         }
     }
+    
+    @IBAction func backButtonPressed(_ sender:UIButton){
+        self.dismiss(animated: true, completion: nil)
+    }
 }
 
 //MARK:- Networking stuff

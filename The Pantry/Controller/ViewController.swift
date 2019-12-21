@@ -119,7 +119,7 @@ extension ViewController{
     
     //Creating loading animation
     private func createAnimatorDotView()->DotsLoadingView{
-        let dotColors = [UIColor.black, UIColor.black, UIColor.black, UIColor.white]
+        let dotColors = [UIColor.green, UIColor.green, UIColor.green, UIColor.white]
         let loadingView = DotsLoadingView(colors: dotColors)
         return loadingView
     }

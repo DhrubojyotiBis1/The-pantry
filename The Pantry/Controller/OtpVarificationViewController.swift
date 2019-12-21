@@ -11,14 +11,13 @@ import UIKit
 class OtpVarificationViewController: UIViewController {
     
     var phoneNumber = String()
+    @IBOutlet var contentView: UIView!
     
     @IBOutlet weak var phoneNumberLable : UILabel!
     @IBOutlet weak var firstNumberInOtpTextField:UITextField!
     @IBOutlet weak var secondNumberInOtpTextField:UITextField!
     @IBOutlet weak var thirdNumberInOtpTextField:UITextField!
     @IBOutlet weak var fourthNumberInOtpTextField:UITextField!
-    @IBOutlet weak var fifthNumberInOtpTextField:UITextField!
-    @IBOutlet weak var sixthNumberInOtpTextField:UITextField!
     @IBOutlet weak var continueButton:UIButton!
 
     override func viewDidLoad() {
@@ -51,10 +50,8 @@ extension OtpVarificationViewController{
         let second = self.secondNumberInOtpTextField.text!
         let third = self.thirdNumberInOtpTextField.text!
         let fourth = self.fourthNumberInOtpTextField.text!
-        let fifth = self.fifthNumberInOtpTextField.text!
-        let sixth = self.sixthNumberInOtpTextField.text!
         
-        let otp = first + second + third + fourth + fifth + sixth
+        let otp = first + second + third + fourth
         Networking().otpVarification(withOtp: otp, andPhoneNumber: self.phoneNumber) { (result, massage) in
             if(result){
                 print("otp varification done")
@@ -110,8 +107,16 @@ extension OtpVarificationViewController{
         self.secondNumberInOtpTextField.addTarget(self, action: #selector(textFiledDidChanged(textField:)), for: .editingChanged)
         self.thirdNumberInOtpTextField.addTarget(self, action: #selector(textFiledDidChanged(textField:)), for: .editingChanged)
         self.fourthNumberInOtpTextField.addTarget(self, action: #selector(textFiledDidChanged(textField:)), for: .editingChanged)
-        self.fifthNumberInOtpTextField.addTarget(self, action: #selector(textFiledDidChanged(textField:)), for: .editingChanged)
-        self.sixthNumberInOtpTextField.addTarget(self, action: #selector(textFiledDidChanged(textField:)), for: .editingChanged)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
+        self.contentView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func onTap(){
+        self.firstNumberInOtpTextField.endEditing(true)
+        self.secondNumberInOtpTextField.endEditing(true)
+        self.thirdNumberInOtpTextField.endEditing(true)
+        self.fourthNumberInOtpTextField.endEditing(true)
     }
     
     @objc private func textFiledDidChanged(textField:UITextView){
@@ -129,13 +134,7 @@ extension OtpVarificationViewController{
                 self.fourthNumberInOtpTextField.becomeFirstResponder()
                 break
             case self.fourthNumberInOtpTextField:
-                self.fifthNumberInOtpTextField.becomeFirstResponder()
-                break
-            case self.fifthNumberInOtpTextField:
-                self.sixthNumberInOtpTextField.becomeFirstResponder()
-                break
-            case self.sixthNumberInOtpTextField:
-                self.sixthNumberInOtpTextField.resignFirstResponder()
+                self.fourthNumberInOtpTextField.resignFirstResponder()
                 break
             default:
                 break

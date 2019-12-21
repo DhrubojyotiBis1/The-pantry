@@ -42,6 +42,9 @@ class HomeViewController: UIViewController {
         }else if segue.identifier == segueId.yourCartVC{
             let destination = segue.destination as! YourCartViewController
             destination.delegate = self
+        }else if segue.identifier == segueId.threeDotPopVCId{
+            let destiination = segue.destination as! PopUpViewController
+            destiination.delegate = self
         }
     }
     
@@ -113,6 +116,12 @@ extension HomeViewController{
         }
     }
     
+    private func clearCart(){
+        self.itemInCart.removeAll()
+        save().saveCartDetais(withDetails: self.itemInCart)
+        self.setupForViewCartView()
+    }
+    
 }
 
 //MARK:- Networking stuff
@@ -178,6 +187,18 @@ extension HomeViewController:YourCartViewControllerProtocol,ProductListViewContr
 
 extension HomeViewController:popUpPopUpViewControllerDelegate{
     func popUpButtonTaped(withTag tag: Int) {
-        
+        switch tag {
+        case 1:
+            //clear cart
+            //remove all data and save
+            self.clearCart()
+            break
+        case 2:
+            //go to Profile VC
+            performSegue(withIdentifier: segueId.profileVCId, sender: nil)
+            break
+        default:
+            break
+        }
     }
 }

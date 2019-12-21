@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class EnterMoblieNumberController: UIViewController {
     
@@ -15,6 +16,7 @@ class EnterMoblieNumberController: UIViewController {
     
     @IBOutlet weak var nextButton:UIButton!
     @IBOutlet weak var mobileNumbertextField:UITextField!
+    @IBOutlet weak var contentView:UIView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,10 +29,21 @@ class EnterMoblieNumberController: UIViewController {
         if(self.mobileNumbertextField.text?.count == 10){
             //10 digit entered
             self.neworking()
+            self.performSegue(withIdentifier: segueId.otpvaruficationVCId, sender: nil)
         }else{
-            //10 digit not entered show the error to the user
+            //10 digit not entered show the error to the user"
+            if(mobileNumbertextField.text?.count == 0){
+                SVProgressHUD.showError(withStatus: massage.moblieNumberCountErrorMassage)
+            }else{
+                SVProgressHUD.showError(withStatus: massage.enterMobileNumber)
+            }
         }
     }
+    
+    @IBAction func alreadyHaveAnAccountButtonPressed(_ sender:UIButton){
+        dismiss(animated: true, completion: nil)
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
@@ -54,7 +67,7 @@ extension EnterMoblieNumberController{
         self.phoneNumber = self.countryCode + self.mobileNumbertextField.text!
         Networking().getOtp(withPhoneNumber: phoneNumber) { (result,type) in
             if(result){
-                self.performSegue(withIdentifier: segueId.otpvaruficationVCId, sender: nil)
+                
             }else{
                 if(type == "error"){
                     //error due to invaild mobile number
@@ -76,6 +89,14 @@ extension EnterMoblieNumberController{
     
     private func setup(){
         self.makeCardView(forButton: self.nextButton)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
+        self.contentView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func onTap(){
+        self.mobileNumbertextField.endEditing(true)
+        SVProgressHUD.dismiss()
     }
     
     private func makeCardView(forButton button:UIButton){

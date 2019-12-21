@@ -28,6 +28,7 @@ class ProfileViewController: UIViewController {
     
     @IBAction func logoutButtonPressed(_ sender: Any) {
         save().removeCredentials()
+        save().removeItemAddedToCart()
         performSegue(withIdentifier: segueId.loginVCId, sender: nil)
     }
     

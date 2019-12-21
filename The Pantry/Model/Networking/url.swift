@@ -23,4 +23,5 @@ public struct url{
     static let sendTransactionalAndPromotionalMassageURL = "http://www.mysmscenter.com/api/sendhttp.php?"
     static let productDescriptionURl = "https://btoscecom.herokuapp.com/api/get_homescreen.php?"
     static let prepareOrderURL = "https://btoscecom.herokuapp.com/api/prepare_order.php?"
+    static let transactionStatus = "https://btoscecom.herokuapp.com/api/transactionStatus.php?"
 }

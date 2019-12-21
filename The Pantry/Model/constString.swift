@@ -23,6 +23,7 @@ struct segueId{
     static let profileVCId = "goToProfileVC"
     static let checkOutVCId = "goToCheckOutVC"
     static let razorPayVCId = "goToRazorPayVC"
+    static let enterMobileNumberVcId = "goToEnterMobileNumberVC"
 }
 
 struct registeAndLoginPram {
@@ -95,7 +96,7 @@ struct smsGateWayConstants {
     static let india = "91"
     static let international = "0"
     static let usa = "1"
-    static let lengthOfOtp = "6"
+    static let lengthOfOtp = "4"
 }
 
 
@@ -129,10 +130,22 @@ struct preOrderResponseKey {
     static let sucessMassage = "success"
 }
 
+struct razorPayTransactionkey {
+    static let token = "token"
+    static let signature = "razorpay_signature"
+    static let paymentId = "razorpay_payment_id"
+}
+
 struct productkey{
     static let name = "name"
     static let productId = "id"
     static let productDescription = "description"
     static let category = "category"
     static let sellingPrice = "selling_price"
+}
+
+
+struct massage {
+    static let moblieNumberCountErrorMassage = "Enter correct mobile number"
+    static let enterMobileNumber = "Enter mobile number"
 }
