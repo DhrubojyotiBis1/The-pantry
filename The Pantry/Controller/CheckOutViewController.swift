@@ -18,14 +18,13 @@ protocol CheckOutViewControllerProtcol {
 class CheckOutViewController: UIViewController {
     
     var selectedProducts = [selectedProduct]()
-    var preOrderResponse = preOrderResponce()
-    var delegate:CheckOutViewControllerProtcol?
+    var preOrderResponse:preOrderResponce!
     var razorPay:Razorpay!
     let newViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "test")
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(self.selectedProducts)
+        self.setUp()
     }
     
     @IBAction func PayButtonPressed(_ sender:UIButton){
@@ -34,8 +33,6 @@ class CheckOutViewController: UIViewController {
     }
     
     @IBAction func backButtonPressed(_ sender: UIButton) {
-        save().saveCartDetais(withDetails: self.selectedProducts)
-        delegate?.didPaymentCmplete(withsStatus: false)
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -44,10 +41,10 @@ class CheckOutViewController: UIViewController {
 extension CheckOutViewController{
     private func doPreOrder(){
         let userCredentials = save().getCredentials()
+        
         Networking().doPreOrder(withselectedProducts: self.selectedProducts, token: userCredentials[saveCredential.token]!) { (result,preOrderResponse) in
             if(result){
                 self.present(self.newViewController, animated: true) {
-                    SVProgressHUD.dismiss()
                     self.preOrderResponse = preOrderResponse
                     self.showPaymentForm()
                 }
@@ -56,22 +53,19 @@ extension CheckOutViewController{
                 print("Some Error has orrured")
             }
         }
+        
     }
 }
 
 extension CheckOutViewController:RazorpayPaymentCompletionProtocol{
     func onPaymentError(_ code: Int32, description str: String) {
-        
         print("ops \(str)")
     }
     
     func onPaymentSuccess(_ payment_id: String) {
         //All the transaction api to check if transaction is completed or not
-        delegate?.didPaymentCmplete(withsStatus: true)
         print("done \(payment_id)")
     }
-    
-    
 }
 
 
@@ -100,5 +94,11 @@ extension CheckOutViewController{
                 ]
         razorPay.open(options, display: newViewController)
         SVProgressHUD.dismiss()
+    }
+    
+    private func setUp(){
+        if let selectedProduct = save().getCartDetails(){
+            self.selectedProducts = selectedProduct
+        }
     }
 }

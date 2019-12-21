@@ -10,20 +10,22 @@ import UIKit
 import SVProgressHUD
 
 class HomeViewController: UIViewController {
-
-    var didGotCartDetails = Bool()
     @IBOutlet weak var adsCollectionView: UICollectionView!
     @IBOutlet var conteverView: [UIView]!
     @IBOutlet weak var topView: UIView!
+    @IBOutlet weak var viewCartView:UIView!
+    @IBOutlet weak var numberOfItemInCartLabel:UILabel!
+    @IBOutlet weak var totalPricelabel:UILabel!
+    var numberOfItemInCart = 0
+    var totalPrice = Double()
+    
+    var itemInCart = [selectedProduct]()
     var products = [product]()
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         self.setup()
-        self.getCartDetails()
-        
-        print(save().getCartDetails() as Any)
     }
     
     @IBAction func catagoryButtonPressed(_ sender: UIButton) {
@@ -36,6 +38,10 @@ class HomeViewController: UIViewController {
         if segue.identifier == segueId.productListVC{
             let destination = segue.destination as! ProductListViewController
             destination.availableProducts = self.products
+            destination.delegate = self
+        }else if segue.identifier == segueId.yourCartVC{
+            let destination = segue.destination as! YourCartViewController
+            destination.delegate = self
         }
     }
     
@@ -64,6 +70,34 @@ extension HomeViewController{
             self.conteverView[i].layer.shadowOffset = CGSize(width: 0, height: 2)
             self.conteverView[i].layer.shadowOpacity = 0.4
         }
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
+        self.viewCartView.addGestureRecognizer(tapGesture)
+        self.setupForViewCartView()
+    }
+    
+    @objc func onTap(){
+        performSegue(withIdentifier: segueId.yourCartVC, sender: nil)
+    }
+    
+    private func setupForViewCartView(){
+        
+        if let selectedProduct = save().getCartDetails(){
+            self.itemInCart = selectedProduct
+        }
+        
+        self.numberOfItemInCart = 0
+        self.totalPrice = 0
+        if(self.itemInCart.count == 0){
+            self.viewCartView.isHidden = true
+        }else{
+             self.viewCartView.isHidden = false
+        }
+        for i in 0..<self.itemInCart.count{
+            self.numberOfItemInCart += self.itemInCart[i].quantity
+            self.totalPrice += Double(itemInCart[i].product!.sellingPrice)! * Double(itemInCart[i].quantity)
+        }
+        self.numberOfItemInCartLabel.text! = "\(numberOfItemInCart)"+"Item"
+        self.totalPricelabel.text = "₹"+"\(self.totalPrice)"
     }
     
     private func getProductCatagory(fromTag tag:Int)->String{
@@ -83,20 +117,7 @@ extension HomeViewController{
 
 //MARK:- Networking stuff
 extension HomeViewController{
-    private func getCartDetails(){
-        let userCredentials = save().getCredentials()
-        Networking().getUserCartDetails(withUserToken: userCredentials[responceKey.token]!) { (isSucess) in
-            if(isSucess){
-                //got the cart Details
-                self.didGotCartDetails = true
-            }else{
-                //failed to get the cart details
-                self.didGotCartDetails = false
-            }
-        }
-    }
     private func getProdctListDetails(withProductCatagory productCatagory:String){
-        if(self.didGotCartDetails){
             //got the cart details hence can add move the user to product list VC
             Networking().getListOfProducts(forCatagory: productCatagory){isSucess,productList  in
                 SVProgressHUD.dismiss()
@@ -108,14 +129,8 @@ extension HomeViewController{
                 }else{
                 //show the error that happend with a popup
                     print("error in getting product details")
-                    
                 }
             }
-        }else{
-            //failed to get the cart details
-            SVProgressHUD.dismiss()
-            print("faild to get cart detais")
-        }
     }
 }
 
@@ -147,6 +162,22 @@ extension HomeViewController:UICollectionViewDelegate,UICollectionViewDataSource
         
         targetContentOffset.pointee = offSet
         
+        
+    }
+}
+
+extension HomeViewController:YourCartViewControllerProtocol,ProductListViewControllerProtocol{
+    func didComeFromProductListViewController(value: Bool) {
+        self.setupForViewCartView()
+    }
+    
+    func didComeFromYourCart(value: Bool) {
+        self.setupForViewCartView()
+    }
+}
+
+extension HomeViewController:popUpPopUpViewControllerDelegate{
+    func popUpButtonTaped(withTag tag: Int) {
         
     }
 }

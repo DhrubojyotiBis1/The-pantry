@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-struct createJsonKey {
+struct cartDetailsKey {
     static let productId = "product_id"
     static let quantity = "quantity"
 }
@@ -24,10 +24,13 @@ class createJSON{
         var jsonObject = [Any]() //= JSON([["productId":"productId","quantity":3]])
         
         for productSelected in self.selectedproducts {
-            let tempDict:[String : Any] = [createJsonKey.productId:productSelected.product.productId , createJsonKey.quantity : productSelected.quantity]
+            let tempDict:[String : Any] = [cartDetailsKey.productId:productSelected.product.productId,cartDetailsKey.quantity:productSelected.quantity]
             
             jsonObject.append(tempDict)
         }
+        
+        //let jsonData = try! JSONSerialization.data(withJSONObject: jsonObject)
+        //let jsonString = NSString(data: jsonData, encoding: String.Encoding.utf8.rawValue)
         
         return (JSON(jsonObject))
     }

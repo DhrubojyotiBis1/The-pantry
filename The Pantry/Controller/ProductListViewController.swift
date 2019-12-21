@@ -8,7 +8,11 @@
 
 import UIKit
 
-class ProductListViewController: UIViewController {
+protocol  ProductListViewControllerProtocol{
+    func didComeFromProductListViewController(value:Bool)
+}
+
+class ProductListViewController: UIViewController{
     
     var availableProducts = [product]()
     @IBOutlet weak var navigationBarView: UIView!
@@ -17,16 +21,15 @@ class ProductListViewController: UIViewController {
     @IBOutlet weak var numberOfItemAddedLabel:UILabel!
     @IBOutlet weak var totalPriceLabel:UILabel!
     
-    var didSavingComplete = false
-    var numberOfItemAdded:Int = 0
-    var totalPrice:Double = 0
-    var selectedProductAt = Int()
-    var itemAddedToCart = [Int:Int]()
+    var delegate:ProductListViewControllerProtocol?
+    var totalPrice = Double()
+    var selectedProducts = [selectedProduct]()
+    var numberOfItemAdded = Int()
+    var isfirstTime = true
+    var rowForSeceltedproductToSeeDescription = Int()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        print(availableProducts)
         // Do any additional setup after loading the view.
         self.setup()
         //if something is asready present in the cart the show the view cart option with correct values
@@ -35,14 +38,12 @@ class ProductListViewController: UIViewController {
     
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(true)
-        //update the surver about the changes in the cart
-        //Networking().updateCartDetais(withToken: <#T##String#>, cartDetails: <#T##String#>, completion: <#T##(Bool) -> ()#>)
+        super.viewWillDisappear(animated)
         
-        if(!self.didSavingComplete){
+        /*if(!self.didSavingComplete){
             let selectedProducts = getSelectedProduct()
             save().saveCartDetais(withDetails: selectedProducts)
-        }
+        }*/
         
     }
     
@@ -53,14 +54,11 @@ class ProductListViewController: UIViewController {
             destination.delegate = self
         }else if segue.identifier == segueId.productDescriptionVCId {
             let destination = segue.destination as! ProductDescriptionViewController
-            destination.selectedProduct = availableProducts[self.selectedProductAt]
+            destination.selectedProduct = self.selectedProducts[rowForSeceltedproductToSeeDescription].product
         }else if segue.identifier == segueId.yourCartVC{
-            self.didSavingComplete = true
             let destination = segue.destination as! YourCartViewController
-            destination.products = self.availableProducts
-            destination.iteamAddedInCart = self.itemAddedToCart
-            destination.totalPrice = self.totalPrice
             destination.delegate = self
+
         }
     }
     
@@ -69,6 +67,7 @@ class ProductListViewController: UIViewController {
     }
     
     @IBAction func backButtonPressed(_ sender: UIButton) {
+        self.delegate?.didComeFromProductListViewController(value: true)
         self.dismiss(animated: true, completion: nil)
     }
 
@@ -95,33 +94,34 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = self.productListCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier.productListCellID, for: indexPath) as! ProductListCollectionViewCell
         
+        
         cell.delegate = self
-        
-        //setting row and section no. to get which add button pressed later
-        let row = 2*indexPath.section + indexPath.row
-        if(itemAddedToCart[row] == nil){
-            cell.productSubtractButton.isHidden = true
-            cell.numOfItemSelected.text = "0"
-        }else if (itemAddedToCart[row]! == 0){
-             cell.productSubtractButton.isHidden = true
-             cell.numOfItemSelected.text = "\(itemAddedToCart[row]!)"
-        }else{
-            cell.productSubtractButton.isHidden = false
-            cell.numOfItemSelected.text = "\(itemAddedToCart[row]!)"
-        }
-        
-        
-        self.totalPriceLabel.text! = "₹"+"\(self.totalPrice)"
-        self.numberOfItemAddedLabel.text! = "\(self.numberOfItemAdded)" + "Item"
-        cell.section = indexPath.section
+        cell.activityIndicator.startAnimating()
+        cell.productSubtractButton.isHidden = true
+        cell.numOfItemSelected.text = "0"
+        self.viewCartView.isHidden = true
         cell.productAddButton.tag = indexPath.row
         cell.productSubtractButton.tag = indexPath.row
-        cell.activityIndicator.startAnimating()
+        cell.section = indexPath.section
+        cell.isHidden = false
         
-        if(totalPrice == 0.0){
-            self.viewCartView.isHidden = true
-        }else{
-            self.viewCartView.isHidden = false
+        let row = 2*indexPath.section + indexPath.row
+        
+        
+        //setting row and section no. to get which add button pressed later
+        if(row >= 0 && row < availableProducts.count){
+            if(self.selectedProducts.count > 0){
+                for i in 0..<self.selectedProducts.count{
+                    if(self.selectedProducts[i].product.productId ==  self.availableProducts[row].productId){
+                        cell.numOfItemSelected.text = "\(self.selectedProducts[i].quantity)"
+                        cell.productSubtractButton.isHidden = false
+                        if(isfirstTime){
+                            self.totalPrice += Double(self.selectedProducts[i].quantity) *  Double(self.selectedProducts[i].product.sellingPrice)!
+                            self.numberOfItemAdded += self.selectedProducts[i].quantity
+                        }
+                    }
+                }
+            }
         }
         
         
@@ -129,9 +129,15 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
         //else download image using the url from the array of the product details class and store it in a different [uiimage]
         //stop the activity indicator
         
+         self.numberOfItemAddedLabel.text = "\(self.numberOfItemAdded)" + "Item"
+         self.totalPriceLabel.text = "₹" + "\(self.totalPrice)"
+        
+        if(self.totalPrice > 0){
+            self.viewCartView.isHidden = false
+        }
         
         //general information of the product
-        if(row>=self.availableProducts.count){
+        if(row >= availableProducts.count){
             cell.isHidden = true
         }else{
             cell.productName.text = self.availableProducts[row].name
@@ -147,8 +153,8 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
         //go to the product description View cntroller
         //pass the general infornamtion of the product to next VC
         let row = 2*indexPath.section + indexPath.row
-        self.selectedProductAt = row
         performSegue(withIdentifier: segueId.productDescriptionVCId, sender: nil)
+        self.rowForSeceltedproductToSeeDescription = row
     }
 }
 
@@ -175,45 +181,78 @@ extension ProductListViewController:popUpPopUpViewControllerDelegate{
 //Deligate of productListCollectionView Cell
 extension ProductListViewController:ProductListCollectionViewCellDelegate{
     func cellRemoveBUttonPressed(havingTag tag: [Int]) {
-        let i = (2*tag[0] + tag[1])
-        if(itemAddedToCart[i] == 0){
-            self.itemAddedToCart[i] = 0
-        }else{
-            itemAddedToCart[i]! -= 1
+        
+        self.isfirstTime = false
+        let row = tag[0]
+        let section = tag[1]
+        let i = (2*row + section)
+        let justSelectedProduct = availableProducts[i]
+        for j in 0..<self.selectedProducts.count{
+            if(selectedProducts[j].product.productId == justSelectedProduct.productId ){
+                self.selectedProducts[j].quantity -= 1
+                if(selectedProducts[j].quantity == 0){
+                    self.selectedProducts.remove(at: j)
+                    break
+                }
+            }
         }
-        self.totalPrice -= Double(self.availableProducts[i].sellingPrice)!
+        
         self.numberOfItemAdded -= 1
-        let indepath = IndexPath(row: tag[1], section: tag[0])
+        if(totalPrice != 0){
+            self.totalPrice -= Double(self.selectedProducts[i].product.sellingPrice)!
+        }
+        
+        let indepath = IndexPath(row: section, section: row)
         self.productListCollectionView.reloadItems(at: [indepath])
+        
+        save().saveCartDetais(withDetails: self.selectedProducts)
+        
     }
     
     func cellAddButton(haveTag tag: [Int]) {
         //function called when add button of the cell is taped
         //create a array of the product class
         //add the item to the array of product class
-        let i = (2*tag[0] + tag[1])
-        if(itemAddedToCart[i] == nil){
-            self.itemAddedToCart[i] = 1
-        }else{
-            itemAddedToCart[i]! += 1
+        
+        self.isfirstTime = false
+        let row = tag[0]
+        let section = tag[1]
+        
+        let i = (2*row + section)
+        var doneWithSelectedProduct = false
+        let justSelectedProduct = availableProducts[i]
+        for j in 0..<self.selectedProducts.count{
+            if(selectedProducts[j].product.productId == justSelectedProduct.productId ){
+                self.selectedProducts[j].quantity += 1
+                doneWithSelectedProduct = true
+            }
         }
-        self.totalPrice += Double(self.availableProducts[i].sellingPrice)!
+        
+        if(!doneWithSelectedProduct){
+            let quantity = 1
+            let justSelectedProduct = selectedProduct(product: justSelectedProduct, quantity: quantity)
+            self.selectedProducts.append(justSelectedProduct)
+        }
+        
         self.numberOfItemAdded += 1
-        let indepath = IndexPath(row: tag[1], section: tag[0])
+        self.totalPrice += Double(self.selectedProducts[i].product.sellingPrice)!
+        
+        print("totaol \( Double(self.selectedProducts[i].product.sellingPrice)!)")
+        
+        let indepath = IndexPath(row: section, section: row)
         self.productListCollectionView.reloadItems(at: [indepath])
+        
+        save().saveCartDetais(withDetails: self.selectedProducts)
+        
     }
-    
 }
 
 
 extension ProductListViewController:YourCartViewControllerProtocol{
-    
-    func itemRemainingInCart(item: [Int : Int],totalPrice:Double,numberOfItemInCart:Int) {
-        print("yes")
-        self.itemAddedToCart = item
-        self.totalPrice = totalPrice
-        self.numberOfItemAdded = numberOfItemInCart
+    func didComeFromYourCart(value: Bool) {
+        self.getStarted()
         self.productListCollectionView.reloadData()
+        
     }
 }
 
@@ -231,11 +270,24 @@ extension ProductListViewController{
         //making the navigation bar a card view
         self.makeCardView(fromViews: self.navigationBarView, isViewNavigationBar: true)
         
-        
-        self.viewCartView.isHidden = true
-        
+        self.getStarted()
+                
         //adding tap gesture to the view cart view
         self.addGestureRecognization()
+
+    }
+    
+    private func getStarted(){
+        self.viewCartView.isHidden = true
+        if let selectedProduct = save().getCartDetails(){
+            self.selectedProducts = selectedProduct
+        }
+        
+        self.isfirstTime = true
+        
+        self.numberOfItemAdded = 0
+        self.totalPrice = 0
+
     }
     
     private func makeCardView(fromViews view:UIView,isViewNavigationBar :Bool){
@@ -263,24 +315,7 @@ extension ProductListViewController{
     }
     
     private func clearCartPressed(){
-        self.itemAddedToCart.removeAll()
-        self.numberOfItemAdded = 0
-        self.totalPrice = 0
+        
         self.productListCollectionView.reloadData()
     }
-    
-    
-    private func getSelectedProduct()->[selectedProduct]{
-        var selectedProducts = [selectedProduct]()
-        for (key,quantity) in self.itemAddedToCart {
-            var productDetals = selectedProduct()
-            productDetals.product = self.availableProducts[key]
-            productDetals.quantity = quantity
-            selectedProducts.append(productDetals)
-        }
-        
-        return selectedProducts
-        
-    }
-    
 }

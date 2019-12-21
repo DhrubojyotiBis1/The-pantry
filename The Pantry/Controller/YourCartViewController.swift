@@ -9,78 +9,48 @@
 import UIKit
 
 protocol YourCartViewControllerProtocol {
-    func itemRemainingInCart(item : [Int:Int],totalPrice:Double,numberOfItemInCart:Int)
+    func didComeFromYourCart(value : Bool)
 }
 
 class YourCartViewController:UIViewController{
     
     @IBOutlet weak var yourCartTableView:UITableView!
     @IBOutlet weak var checkOutButton:UIButton!
-    var iteamAddedInCart = [Int:Int]()
-    var products = [product]()
-    var numberOfItem = [Int]()
-    var selectedProductAt = [Int]()
-    var totalPrice = Double()
-    var delegate:YourCartViewControllerProtocol?
-    var selectedProducts = [selectedProduct]()
-    var numberOfItemInCart = Int()
-    var didSavingComplete = false
 
+    
+    var selectedProducts = [selectedProduct]()
+    var totalPrice = Double()
+    var numberOfItemAdded = Int()
+    var delegate:YourCartViewControllerProtocol?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        self.yourCartTableView.dataSource = self
-        self.yourCartTableView.delegate = self
-        for (key, value) in iteamAddedInCart{
-            self.numberOfItem.append(value)
-            self.selectedProductAt.append(key)
-        }
-        self.checkOutButton.setTitle("CHECKOUT(₹\(self.totalPrice))", for: UIControl.State.normal)
+        self.setUp()
+        
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(true)
-        //update the server about the changes in the cart
-        //Networking().updateCartDetais(withToken: <#T##String#>, cartDetails: <#T##String#>, completion: <#T##(Bool) -> ()#>)
-        if(!didSavingComplete){
-            if(self.selectedProducts.count > 0){
-                save().saveCartDetais(withDetails: selectedProducts)
-            }
-        }
-    }
+
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
-        
-        for (_ , value) in self.iteamAddedInCart{
-            numberOfItemInCart += value
-        }
-        
-        
-        delegate?.itemRemainingInCart(item: self.iteamAddedInCart, totalPrice: self.totalPrice, numberOfItemInCart: numberOfItemInCart)
+    
+        self.delegate?.didComeFromYourCart(value: true)
         self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func checkOutButtonPressed(){
         //go to the payment page use the payment gatway
-        self.selectedProducts = getSelectedProduct()
+
         self.performSegue(withIdentifier: segueId.checkOutVCId, sender: nil)
     }
     
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == segueId.checkOutVCId {
-            let destination = segue.destination as! CheckOutViewController
-            destination.selectedProducts = self.selectedProducts
-            self.didSavingComplete = true
-        }
-    }
 
 }
 
 //Extention for table view
 extension YourCartViewController : UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.iteamAddedInCart.count
+        return self.selectedProducts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -89,12 +59,17 @@ extension YourCartViewController : UITableViewDelegate,UITableViewDataSource{
         cell.removeButton.tag = indexPath.row
         
         //Product added to cart details
+        var sellingPrice = ""
+        var numberOfProduct = 0
         
-        let sellingPrice = self.products[self.selectedProductAt[indexPath.row]].sellingPrice
-        let productName = self.products[self.selectedProductAt[indexPath.row]].name
-        let numberOfProduct = self.numberOfItem[indexPath.row]
-        cell.productName.text = productName
+        sellingPrice = self.selectedProducts[indexPath.row].product.sellingPrice
+        numberOfProduct = self.selectedProducts[indexPath.row].quantity
+        
+        
+        cell.productName.text = self.selectedProducts[indexPath.row].product.name
         cell.price.text = "₹\(sellingPrice)x\(numberOfProduct)"
+
+        
         
         //setting the delegate to self
         cell.delegate = self
@@ -108,52 +83,57 @@ extension YourCartViewController:YourCartTableViewCellDelegate{
     func removedButtonClicked(atRow row: Int) {
         //function is called when remove button of a cell is pressed
         //remove the data from the array of th product class at row
-        let removedDataKey = self.selectedProductAt[row]
-        self.iteamAddedInCart.removeValue(forKey: removedDataKey)
         
-        self.totalPrice -= (Double(self.products[selectedProductAt[row]].sellingPrice)!)*Double(numberOfItem[row])
+        self.selectedProducts.remove(at: row)
         
-        self.selectedProductAt.remove(at: row)
-        self.numberOfItem.remove(at: row)
-        //reload lable view
+        save().saveCartDetais(withDetails: self.selectedProducts)
         self.yourCartTableView.reloadData()
-        self.checkOutButton.setTitle("CHECKOUT(₹\(self.totalPrice))", for: UIControl.State.normal)
-        if(totalPrice == 0){
-            self.checkOutButton.isEnabled = false
-        }
     }
 }
 
-extension YourCartViewController{
-    func itemRemainingInCart(item : [Int:Int],totalPrice:Double,numberOfItemInCart:Int){}
-}
+
 
 extension YourCartViewController{
     //All private functions
     
-    private func getSelectedProduct()->[selectedProduct]{
+    private func setUp(){
+        self.yourCartTableView.dataSource = self
+        self.yourCartTableView.delegate = self
+        
+        if let selectedProduct = save().getCartDetails(){
+            self.selectedProducts = selectedProduct
+        }
+        
+        self.getTotalPriceAndNumberofItemInCart()
+        
+        self.checkOutButton.setTitle("CHECKOUT(₹\(self.totalPrice))", for: UIControl.State.normal)
+
+    }
+    
+    /*private func getSelectedProduct()->[selectedProduct]{
         var selectedProducts = [selectedProduct]()
         for (key,quantity) in self.iteamAddedInCart {
-            var productDetals = selectedProduct()
-            productDetals.product = self.products[key]
-            productDetals.quantity = quantity
-            print(quantity)
-            selectedProducts.append(productDetals)
+            if(quantity != 0){
+                var productDetals = selectedProduct()
+                //productDetals.product = self.products[key]
+                productDetals.quantity = quantity
+                selectedProducts.append(productDetals)
+            }
         }
         
         return selectedProducts
-        
+    }*/
+    
+    private func getTotalPriceAndNumberofItemInCart(){
+        for i in 0..<self.selectedProducts.count{
+            self.totalPrice += Double(self.selectedProducts[i].quantity) *  Double(self.selectedProducts[i].product.sellingPrice)!
+            self.numberOfItemAdded += self.selectedProducts[i].quantity
+        }
     }
 }
 
 extension YourCartViewController:CheckOutViewControllerProtcol{
     func didPaymentCmplete(withsStatus status: Bool) {
-        if(status){
-            self.iteamAddedInCart.removeAll()
-            self.totalPrice = 0
-            self.numberOfItemInCart = 0
-        }else{
-            
-        }
+        
     }
 }

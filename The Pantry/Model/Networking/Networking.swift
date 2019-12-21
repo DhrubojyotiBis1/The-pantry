@@ -227,39 +227,47 @@ public class Networking{
     }
     
     //to get the user cart details
-    func getUserCartDetails(withUserToken token:String,completion:@escaping (_ result:Bool/*,cartdetails:userCartdetails */)->()){
+    func getUserCartDetails(withUserToken token:String,completion:@escaping (_ result:Bool,_ cartdetails:[cartProduct]?)->()){
         let pram = [responceKey.token : token]
         Alamofire.request(url.cartDetailsURL, parameters : pram).responseJSON { (response) in
             if response.result.isSuccess{
               //Got the cart detals
-                let userJSON : JSON = JSON(response.result.value!)
+                let cartProductDetails : JSON = JSON(response.result.value!)
                 //par's the userJSON
                 //make a class name product details
                 //store each product in product details class arry
                 //send the arry back
                 //handel the token expired error
-                print(userJSON)
-                completion(true)
+                print(cartProductDetails)
+                var productInCart = [cartProduct]()
+                for i in 0..<cartProductDetails.count{
+                    let productId = cartProductDetails[i][cartDetailsKey.productId].string!
+                    let quantity = cartProductDetails[i][cartDetailsKey.quantity].int!
+                    let productDetails = cartProduct(quantity: quantity, productID: productId)
+                    productInCart.append(productDetails)
+                }
+                completion(true,productInCart)
             }else{
                 //fail to get the cart details
-                completion(false)
+               completion(false,nil)
             }
         }
     }
     
     //to update the cart
-    func updateCartDetais(withToken token:String,cartDetails details:[selectedProduct],completion:@escaping (_ result:Bool)->()){
+    func updateCartDetais(withToken token:String,cartDetails details:[selectedProduct]){
         let detailsJson = createJSON(fromSelectedProducts: details).getCreatedJSOn()
+        print("fuck \(detailsJson)")
         let pram:[String:Any] = [userCart.token : token,userCart.details:detailsJson]
         Alamofire.request(url.updateCartURL,method: .post ,parameters : pram).responseJSON { (response) in
             if response.result.isSuccess{
               //Got the cart detals
                 let userJSON : JSON = JSON(response.result.value!)
                 print(userJSON)
-                completion(true)
+                //completion(true)
             }else{
                 //fail to get the cart details
-                completion(false)
+                //completion(false)
             }
         }
     }
@@ -363,17 +371,27 @@ public class Networking{
     
     
     //for getting the product description
-    func getProductDescription(fromProductId productId:String){
+    func getProductDetails(fromProductId productId:String,completion:@escaping (_ resul:Bool,_ productDetails:product?)->()){
         let param = ["pid":productId]
         
         
-        Alamofire.request(url.productDescriptionURl,method: .get ,parameters : param).responseString { (response) in
+        Alamofire.request(url.productDescriptionURl,method: .get ,parameters : param).responseJSON { (response) in
             if response.result.isSuccess{
               //networking done
                 //if response.result.value!.cout is 16 then the massage is send
-                 print(response.result.value!)
+                let productDetails:JSON = JSON(response.result.value!)
+                let name = productDetails[productkey.name].string!
+                let sellingPrice = productDetails[productkey.sellingPrice].string!
+                let description = productDetails[productkey.productDescription].string!
+                let productId = "\(productDetails[productkey.productId].int!)"
+                
+                let cartProduct = product(name: name, sellingPrice: sellingPrice, productId: productId, productDescription: description)
+                
+                completion(true,cartProduct)
+                
             }else{
                 //fail to do networking
+                completion(false,nil)
                 print(response.error?.localizedDescription as Any)
             }
         }

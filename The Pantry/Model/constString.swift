@@ -128,3 +128,11 @@ struct preOrderResponseKey {
     static let razorPayOrderId = "razorpay_order_id"
     static let sucessMassage = "success"
 }
+
+struct productkey{
+    static let name = "name"
+    static let productId = "id"
+    static let productDescription = "description"
+    static let category = "category"
+    static let sellingPrice = "selling_price"
+}

@@ -1045,6 +1045,9 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fCO-Lb-IrP">
                                                 <rect key="frame" x="30" y="0.0" width="24" height="22"/>
                                                 <state key="normal" image="dotMenu"/>
+                                                <connections>
+                                                    <segue destination="Nay-lB-3L2" kind="show" id="DdY-3M-kmg"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
@@ -1330,10 +1333,14 @@
                     <navigationItem key="navigationItem" id="bfj-Oj-bIV"/>
                     <connections>
                         <outlet property="adsCollectionView" destination="BBb-fq-Aae" id="gZN-wz-Kli"/>
+                        <outlet property="numberOfItemInCartLabel" destination="mLc-Zg-LGg" id="ysJ-UZ-A62"/>
                         <outlet property="topView" destination="tEK-V2-xCD" id="n6y-Vu-Qyo"/>
+                        <outlet property="totalPricelabel" destination="0Mu-jc-U0c" id="fhv-ab-0NG"/>
+                        <outlet property="viewCartView" destination="Hfo-Zi-Xwg" id="ydm-PE-zOX"/>
                         <outletCollection property="conteverView" destination="rxH-za-XVH" collectionClass="NSMutableArray" id="nCZ-k8-iRi"/>
                         <outletCollection property="conteverView" destination="D6y-t1-fw5" collectionClass="NSMutableArray" id="7xm-c3-H0j"/>
                         <segue destination="asv-TC-XqK" kind="showDetail" identifier="goToProductListVC" id="CGs-oh-68N"/>
+                        <segue destination="lan-tR-3io" kind="show" identifier="goToyourCartVC" id="bM1-so-pLB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bqw-vN-MJV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2384,6 +2391,8 @@
         <image name="veg" width="48" height="48"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="bM1-so-pLB"/>
+        <segue reference="DdY-3M-kmg"/>
         <segue reference="zNA-fP-hne"/>
         <segue reference="QBv-ON-yLf"/>
     </inferredMetricsTieBreakers>

@@ -12,15 +12,23 @@ import DotsLoading
 class ViewController: UIViewController {
     
     var destinationSegueId = String()
+    var process = Bool()
+    var animator:DotsLoadingView!
+    var itemInCart = [selectedProduct]()
+    var numberOfProductInCart = Int()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
+         animator = createAnimatorDotView()
+        self.addConstrain(toAnimator: animator)
+        animator.show()
+        
         self.decideDestinationSegueID()
         //doing the networking i.e downloading image if user is going to Home VC
         if self.destinationSegueId == segueId.HomeVCId{
             self.neworking()
+            self.getCartDetails()
         }
     }
     
@@ -35,6 +43,7 @@ class ViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == segueId.HomeVCId){
             //send the images to the Home VC
+            save().saveCartDetais(withDetails: self.itemInCart)
         }
     }
 }
@@ -42,9 +51,6 @@ class ViewController: UIViewController {
 //MARK:- Networking stuff
 extension ViewController{
     private func neworking() {
-        let animator = createAnimatorDotView()
-        self.addConstrain(toAnimator: animator)
-        animator.show()
             Networking().downloadImage(havingUrls: nil) { (result) in
                 if(result){
                     //Pass the image array to the home VC
@@ -53,9 +59,45 @@ extension ViewController{
                     //handel the error
                     print("Image download fails")
                 }
-                animator.stop()
                 //going to home VC
-                self.performSegue(withIdentifier: self.destinationSegueId, sender: nil)
+                if(self.process){
+                    self.animator.stop()
+                    self.performSegue(withIdentifier: self.destinationSegueId, sender: nil)
+                }else{
+                    self.process = true
+                }
+            }
+    }
+    
+    private func getCartDetails(){
+            let userCredential = save().getCredentials()
+            if let token = userCredential[saveCredential.token]{
+                Networking().getUserCartDetails(withUserToken: token) { (result,productsInCart)  in
+                    if(productsInCart != nil){
+                        if(productsInCart?.count == 0){
+                            self.checkProcessForCartItemDownload()
+                        }else{
+                            self.numberOfProductInCart = (productsInCart!.count - 1)
+                        }
+                        for i in 0..<productsInCart!.count{
+                            let productId = productsInCart![i].productID
+                            let quantity = productsInCart![i].quantity
+                            Networking().getProductDetails(fromProductId: productId) { (result, products) in
+                                if(result){
+                                    let cartItem = selectedProduct(product: products, quantity: quantity)
+                                    self.itemInCart.append(cartItem)
+                                    if(self.numberOfProductInCart == 0){
+                                        self.checkProcessForCartItemDownload()
+                                    }else{
+                                        self.numberOfProductInCart -= 1
+                                    }
+                                }else{
+                                    print("look in View Controller")
+                                }
+                            }
+                        }
+                    }
+                }
             }
     }
 }
@@ -90,5 +132,18 @@ extension ViewController{
         animator.translatesAutoresizingMaskIntoConstraints = false
         animator.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -60).isActive = true
         animator.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
+    }
+    
+    private func setUp(){
+        self.process = false
+    }
+    
+    private func checkProcessForCartItemDownload(){
+        if(self.process){
+            self.animator.stop()
+            self.performSegue(withIdentifier: self.destinationSegueId, sender: nil)
+        }else{
+            self.process = true
+        }
     }
 }
