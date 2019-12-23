@@ -46,8 +46,6 @@ class CheckOutViewController: UIViewController {
 extension CheckOutViewController{
     private func doPreOrder(){
         let userCredentials = save().getCredentials()
-        print(userCredentials)
-        
         Networking().doPreOrder(withselectedProducts: self.selectedProducts, token: userCredentials[saveCredential.token]!) { (result,preOrderResponse) in
             if(result){
                 self.present(self.newViewController, animated: true) {
@@ -66,15 +64,12 @@ extension CheckOutViewController{
 
 extension CheckOutViewController:RazorpayPaymentCompletionProtocolWithData{
     func onPaymentSuccess(_ payment_id: String, andData response: [AnyHashable : Any]?) {
-        let resopayPaymentId = response![razorPaySucessResponseKey.orderId] as! String
+        let resopayOrderId = response![razorPaySucessResponseKey.orderId] as! String
         let razorPaySignature = response![razorPaySucessResponseKey.signature] as! String
-        
-        print("resopayPaymentId",resopayPaymentId)
-        print("razorPaySignature",razorPaySignature)
         
         let usercredential = save().getCredentials()
         let token = usercredential[saveCredential.token]!
-        Networking().checkTransactionId(withRazorPayPaymentId: resopayPaymentId, razorPaySignature: razorPaySignature, andToken: token) { (result, massage) in
+        Networking().checkTransactionStatus(withRazorPayPaymentId: payment_id, razorPayOrderId: resopayOrderId, razorPaySignature: razorPaySignature, andToken: token) { (result, massage) in
             if(result){
                 //transaction done
             }else{

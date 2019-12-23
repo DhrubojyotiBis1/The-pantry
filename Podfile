@@ -10,4 +10,5 @@ target 'The Pantry' do
     pod 'SwiftyJSON'
     pod 'SVProgressHUD'
     pod 'razorpay-pod', '~> 1.1.4'
+    pod 'Toast-Swift'
 end

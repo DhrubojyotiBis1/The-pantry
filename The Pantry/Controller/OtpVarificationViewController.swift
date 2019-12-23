@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Toast_Swift
 class OtpVarificationViewController: UIViewController {
     
     var phoneNumber = String()
@@ -58,15 +58,16 @@ extension OtpVarificationViewController{
                 //check it the user is existing user or not
                 //if not then send to register page
                 //else send to home VC
+                self.performSegue(withIdentifier: segueId.registrationVCId, sender: nil)
             }else{
                 if(massage == "otp_not_verified"){
                     //error deu to wrong otp entered
                     //show th error massage to user
-                    print(1)
+                    self.view.makeToast("otp_not_verified", duration: 3, position: .bottom, completion: nil)
                 }else if massage == "otp_expired"{
                     //error due to experied otp
                     //show th error massage to user
-                    print(2)
+                    self.view.makeToast("otp_not_verified", duration: 3, position: .bottom, completion: nil)
                 }else{
                     //netwok error
                     print("Network not present")

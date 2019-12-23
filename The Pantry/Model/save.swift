@@ -31,7 +31,7 @@ public class save{
     }
     
     func getCartDetails() -> [selectedProduct]? {
-        let productAlreadyAddedToCart: [selectedProduct] = UserDefaults.standard.structArrayData(selectedProduct.self, forKey: saveCredential.cartDetails) as!  [selectedProduct]
+        let productAlreadyAddedToCart: [selectedProduct] = UserDefaults.standard.structArrayData(selectedProduct.self, forKey: saveCredential.cartDetails)
         
         
         return productAlreadyAddedToCart
@@ -47,10 +47,10 @@ public class save{
     }
     
     func removeCredentials(){
+         UserDefaults.standard.removeObject(forKey: saveCredential.token)
          UserDefaults.standard.removeObject(forKey: saveCredential.firstName)
          UserDefaults.standard.removeObject(forKey: saveCredential.lastName)
          UserDefaults.standard.removeObject(forKey: saveCredential.email)
-         UserDefaults.standard.removeObject(forKey: saveCredential.token)
     }
     
     func removeItemAddedToCart(){

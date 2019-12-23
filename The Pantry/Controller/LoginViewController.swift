@@ -20,7 +20,6 @@ class LoginViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         self.setup()
-        print("whats going on ")
     }
     
     override func viewWillAppear(_ animated: Bool) {

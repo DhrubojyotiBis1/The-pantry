@@ -31,6 +31,11 @@ class YourCartViewController:UIViewController{
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        delegate?.didComeFromYourCart(value: true)
+    }
+    
 
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
     
@@ -85,8 +90,9 @@ extension YourCartViewController:YourCartTableViewCellDelegate{
         //remove the data from the array of th product class at row
         
         self.selectedProducts.remove(at: row)
-        
+        self.totalPrice = 0
         save().saveCartDetais(withDetails: self.selectedProducts)
+        self.changeUiIfNeeded()
         self.yourCartTableView.reloadData()
     }
 }
@@ -99,15 +105,16 @@ extension YourCartViewController{
     private func setUp(){
         self.yourCartTableView.dataSource = self
         self.yourCartTableView.delegate = self
-        
+        self.changeUiIfNeeded()
+    }
+    
+    private func changeUiIfNeeded(){
         if let selectedProduct = save().getCartDetails(){
             self.selectedProducts = selectedProduct
         }
-        
         self.getTotalPriceAndNumberofItemInCart()
         
         self.checkOutButton.setTitle("CHECKOUT(₹\(self.totalPrice))", for: UIControl.State.normal)
-
     }
     
     /*private func getSelectedProduct()->[selectedProduct]{

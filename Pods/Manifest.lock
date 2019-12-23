@@ -4,6 +4,7 @@ PODS:
   - razorpay-pod (1.1.4)
   - SVProgressHUD (2.2.5)
   - SwiftyJSON (5.0.0)
+  - Toast-Swift (5.0.0)
 
 DEPENDENCIES:
   - Alamofire
@@ -11,6 +12,7 @@ DEPENDENCIES:
   - razorpay-pod (~> 1.1.4)
   - SVProgressHUD
   - SwiftyJSON
+  - Toast-Swift
 
 SPEC REPOS:
   trunk:
@@ -19,6 +21,7 @@ SPEC REPOS:
     - razorpay-pod
     - SVProgressHUD
     - SwiftyJSON
+    - Toast-Swift
 
 SPEC CHECKSUMS:
   Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
@@ -26,7 +29,8 @@ SPEC CHECKSUMS:
   razorpay-pod: 592624080178be4c6121216508e7857fc245f4b8
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
+  Toast-Swift: 36f4720243c8582c2be243a60a51e193c761f541
 
-PODFILE CHECKSUM: bbaf1197ac2f917eac2674917dda6d3ec8fa0e4c
+PODFILE CHECKSUM: d0bcd8ae1c41cf5d467dadd714892296bf097f1e
 
 COCOAPODS: 1.8.4

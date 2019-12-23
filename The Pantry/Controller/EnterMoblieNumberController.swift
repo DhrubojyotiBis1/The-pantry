@@ -8,6 +8,7 @@
 
 import UIKit
 import SVProgressHUD
+import Toast_Swift
 
 class EnterMoblieNumberController: UIViewController {
     
@@ -33,9 +34,9 @@ class EnterMoblieNumberController: UIViewController {
         }else{
             //10 digit not entered show the error to the user"
             if(mobileNumbertextField.text?.count == 0){
-                SVProgressHUD.showError(withStatus: massage.moblieNumberCountErrorMassage)
+                self.view.makeToast(massage.enterMobileNumber, duration: massage.duration, position: .center)
             }else{
-                SVProgressHUD.showError(withStatus: massage.enterMobileNumber)
+                self.view.makeToast(massage.moblieNumberCountErrorMassage, duration: massage.duration, position: .center)
             }
         }
     }

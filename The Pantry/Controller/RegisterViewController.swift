@@ -49,7 +49,7 @@ class RegisterViewController: UIViewController {
 //MARK:- Networking stuff
 extension RegisterViewController{
     private func neworking() {
-        Networking().checkRegistration(withFirstName: firstName.text!, lastName: lastName.text!, email: email.text!, password: password.text!){success in
+        Networking().checkRegistration(withFirstName: firstName.text!, lastName: lastName.text!, email: email.text!, password: password.text!){success,massage in
             SVProgressHUD.dismiss()
             if(success){
                 print("Done registration")
@@ -58,6 +58,10 @@ extension RegisterViewController{
             }else{
                 print("Failed")
                 //show the alart that the registration is failed
+                let VC = ViewController()
+                VC.showMassage(withMassage: massage!, havingMassageType: .error, toViewController: self) {
+                    print(massage as Any)
+                }
             }
             
         }
@@ -73,6 +77,9 @@ extension RegisterViewController{
         //adding tab gesture feature to the register view
         let tabGesture = UITapGestureRecognizer(target: self, action: #selector(onTab))
         self.registerView.addGestureRecognizer(tabGesture)
+        
+        let VC = ViewController()
+        VC.makeCardView(forButton: self.registerButton)
     }
     
     @objc private func onTab(){

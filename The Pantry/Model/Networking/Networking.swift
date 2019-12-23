@@ -13,7 +13,7 @@ import SwiftyJSON
 public class Networking{
     
     //For Registration
-    func checkRegistration(withFirstName firstname:String,lastName:String,email:String,password:String,completion: @escaping (_ result:Bool) -> ()){
+    func checkRegistration(withFirstName firstname:String,lastName:String,email:String,password:String,completion: @escaping (_ result:Bool,_ massage:String?) -> ()){
         let pram = [registeAndLoginPram.firstName:firstname,  registeAndLoginPram.lastName:lastName, registeAndLoginPram.password:password, registeAndLoginPram.email:email]
         
         Alamofire.request(url.registerURL ,method: .post , parameters : pram).responseJSON { (response) in
@@ -28,20 +28,20 @@ public class Networking{
                         if(result){
                             //saveing the credentials
                             save().saveCredentials(withFirstName: firstname, lastName: lastName, email: email, token: token)
-                                completion(true)
+                            completion(true,userJSON["message"].string!)
                             
                         }else{
                             //Registration complete but not getting token "Something went wrong"
-                            completion(false)
+                            completion(false,userJSON["message"].string! )
                         }
                     }
                 }else{
                     //registration failed as already register
-                    completion(false)
+                    completion(false,userJSON["message"].string! )
                 }
             }else{
                 //Registration is failed
-                completion(false)
+                completion(false,nil)
             }
         }
     }
@@ -404,7 +404,7 @@ public class Networking{
             if response.result.isSuccess{
               //networking done
                 let responce = JSON(response.result.value!)
-                print("responce \(responce)")
+                //print("responce \(responce)")
                 if(responce[preOrderResponseKey.razorPayOrderId].string != nil){
                     let amount = Double(responce[preOrderResponseKey.amount].int!)
                     let razorPayKey = responce[preOrderResponseKey.razorPaykey].string!
@@ -428,9 +428,9 @@ public class Networking{
         }
     }
     
-    func checkTransactionId(withRazorPayPaymentId paymentId:String,razorPaySignature signature :String,andToken token:String,completion:@escaping(_ result:Bool,_ massage:String?)->()){
+    func checkTransactionStatus(withRazorPayPaymentId paymentId:String,razorPayOrderId orderId : String,razorPaySignature signature :String,andToken token:String,completion:@escaping(_ result:Bool,_ massage:String?)->()){
         
-        let param:[String:String] = [razorPayTransactionkey.token:token,razorPayTransactionkey.signature:signature,razorPayTransactionkey.paymentId:paymentId]
+        let param:[String:String] = [razorPayTransactionkey.token:token,razorPayTransactionkey.signature:signature,razorPayTransactionkey.paymentId:paymentId,razorPayTransactionkey.razorPayOrderId:orderId]
         
         Alamofire.request(url.transactionStatus,method: .post ,parameters : param).responseJSON { (response) in
                    if response.result.isSuccess{

@@ -134,6 +134,7 @@ struct razorPayTransactionkey {
     static let token = "token"
     static let signature = "razorpay_signature"
     static let paymentId = "razorpay_payment_id"
+    static let razorPayOrderId = "razorpay_order_id"
 }
 
 struct productkey{
@@ -148,4 +149,6 @@ struct productkey{
 struct massage {
     static let moblieNumberCountErrorMassage = "Enter correct mobile number"
     static let enterMobileNumber = "Enter mobile number"
+    static let duration:Double = 2
+    static let wrongOtp = "OTP Entered is not valid"
 }

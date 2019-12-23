@@ -9,6 +9,11 @@
 import UIKit
 import DotsLoading
 
+enum massageType {
+    case error
+    case success
+}
+
 class ViewController: UIViewController {
     
     var destinationSegueId = String()
@@ -96,6 +101,9 @@ extension ViewController{
                                 }
                             }
                         }
+                    }else{
+                        save().removeItemAddedToCart()
+                        self.checkProcessForCartItemDownload()
                     }
                 }
             }
@@ -145,5 +153,32 @@ extension ViewController{
         }else{
             self.process = true
         }
+    }
+    
+    func makeCardView(forButton button:UIButton){
+           //setting the card view for the top view
+           button.layer.masksToBounds = false
+           button.layer.shadowColor = UIColor.gray.cgColor
+           button.layer.shadowOffset = CGSize(width: 0, height: 4.5)
+           button.layer.shadowOpacity = 0.4
+           button.layer.cornerRadius = 10
+       }
+    
+    func showMassage(withMassage massage:String,havingMassageType massageType:massageType,toViewController viewController:UIViewController,completion:@escaping () -> ()){
+        var alert:UIAlertController!
+        var alertAction:UIAlertAction!
+        if(massageType == .error){
+             alert = UIAlertController(title: "Error", message: massage, preferredStyle: .alert)
+        }else{
+            alert = UIAlertController(title: "Sucess", message: massage, preferredStyle: .alert)
+        }
+        
+        alertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert!.addAction(alertAction!)
+        
+        viewController.present(alert, animated: true) {
+            completion()
+        }
+
     }
 }

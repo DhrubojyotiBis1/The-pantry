@@ -241,7 +241,6 @@ extension ProductListViewController:YourCartViewControllerProtocol{
     func didComeFromYourCart(value: Bool) {
         self.getStarted()
         self.productListCollectionView.reloadData()
-        
     }
 }
 
@@ -267,15 +266,14 @@ extension ProductListViewController{
     }
     
     private func getStarted(){
+        self.numberOfItemAdded = 0
+        self.totalPrice = 0
         self.viewCartView.isHidden = true
         if let selectedProduct = save().getCartDetails(){
             self.selectedProducts = selectedProduct
         }
         
         self.isfirstTime = true
-        
-        self.numberOfItemAdded = 0
-        self.totalPrice = 0
 
     }
     
