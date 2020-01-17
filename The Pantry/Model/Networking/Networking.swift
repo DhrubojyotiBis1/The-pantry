@@ -445,6 +445,23 @@ public class Networking{
         
     }
     
+    //for getting product catagories
+    func getCatgories(withToken token:String){
+        
+        let param = [responceKey.token : token]
+        
+        Alamofire.request(url.catagoryURl,method: .get ,parameters : param).responseJSON { (response) in
+            if response.result.isSuccess{
+              //networking done
+                //if response.result.value!.cout is 16 then the massage is send
+                 print("response",response.result.value!)
+            }else{
+                //fail to do networking
+                print(response.error?.localizedDescription as Any)
+            }
+        }
+        
+    }
 }
 
 //For private functions
