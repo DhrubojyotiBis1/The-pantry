@@ -18,6 +18,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var totalPricelabel:UILabel!
     var numberOfItemInCart = 0
     var totalPrice = Double()
+    var transection = slideMenuAnimation()
     
     var itemInCart = [selectedProduct]()
     var products = [product]()
@@ -32,6 +33,17 @@ class HomeViewController: UIViewController {
         SVProgressHUD.show()
         let productCatagory = self.getProductCatagory(fromTag: sender.tag)
         self.getProdctListDetails(withProductCatagory: productCatagory)
+    }
+    
+    @IBAction func menuButtonTapped(_ sender:UIButton){
+        
+        //show the slide menu
+        guard let menu = storyboard?.instantiateViewController(identifier: "menuVC") else{return}
+        
+        menu.modalPresentationStyle = .overCurrentContext
+        menu.transitioningDelegate = self
+        
+        present(menu, animated: true, completion: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -49,6 +61,18 @@ class HomeViewController: UIViewController {
     }
     
 
+}
+
+extension HomeViewController : UIViewControllerTransitioningDelegate{
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        self.transection.isPresenting = true
+        return self.transection
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        self.transection.isPresenting = false
+        return self.transection
+    }
 }
 
 extension HomeViewController{

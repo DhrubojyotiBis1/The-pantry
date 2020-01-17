@@ -972,6 +972,9 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sAM-po-YD4">
                                                 <rect key="frame" x="0.0" y="0.0" width="24" height="22"/>
                                                 <state key="normal" image="menu"/>
+                                                <connections>
+                                                    <action selector="menuButtonTapped:" destination="YfH-Cc-Wmb" eventType="touchUpInside" id="Dh6-zB-ibO"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fCO-Lb-IrP">
                                                 <rect key="frame" x="30" y="0.0" width="24" height="22"/>
@@ -1787,6 +1790,52 @@
             </objects>
             <point key="canvasLocation" x="5689" y="2535"/>
         </scene>
+        <!--Menu View Controller-->
+        <scene sceneID="6xl-7N-CwX">
+            <objects>
+                <viewController storyboardIdentifier="menuVC" id="tA8-VI-zyS" customClass="MenuViewController" customModule="The_Pantry" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="to7-pv-VfC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YyI-cU-5aH">
+                                <rect key="frame" x="0.0" y="0.0" width="300" height="667"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NVT-Vz-Cfe">
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="1000"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="300" id="kwz-ei-H2j"/>
+                                            <constraint firstAttribute="height" constant="1000" id="xCa-Kg-zix"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="NVT-Vz-Cfe" firstAttribute="width" secondItem="YyI-cU-5aH" secondAttribute="width" id="4Ti-Ej-kQQ"/>
+                                    <constraint firstAttribute="trailing" secondItem="NVT-Vz-Cfe" secondAttribute="trailing" id="HQb-bd-KFC"/>
+                                    <constraint firstItem="NVT-Vz-Cfe" firstAttribute="leading" secondItem="YyI-cU-5aH" secondAttribute="leading" id="sFa-Cz-OP9"/>
+                                    <constraint firstItem="NVT-Vz-Cfe" firstAttribute="top" secondItem="YyI-cU-5aH" secondAttribute="top" id="unb-uj-Hut"/>
+                                    <constraint firstAttribute="bottom" secondItem="NVT-Vz-Cfe" secondAttribute="bottom" id="xe2-Do-kgL"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="YyI-cU-5aH" firstAttribute="top" secondItem="Yod-aO-OVo" secondAttribute="top" id="0rO-iF-M1w"/>
+                            <constraint firstItem="YyI-cU-5aH" firstAttribute="leading" secondItem="Yod-aO-OVo" secondAttribute="leading" id="8ap-dk-L6K"/>
+                            <constraint firstItem="YyI-cU-5aH" firstAttribute="bottom" secondItem="Yod-aO-OVo" secondAttribute="bottom" id="QIZ-bA-Mrq"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Yod-aO-OVo"/>
+                    </view>
+                    <connections>
+                        <outlet property="contentView" destination="to7-pv-VfC" id="x00-Uz-vk8"/>
+                        <outlet property="scrollableView" destination="NVT-Vz-Cfe" id="DVg-wl-0aE"/>
+                        <outlet property="width" destination="kwz-ei-H2j" id="d00-mS-gOp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="b02-s8-eTE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4673" y="3303"/>
+        </scene>
         <!--Your Cart View Controller-->
         <scene sceneID="Cs8-Kg-idc">
             <objects>
@@ -1980,7 +2029,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Sz-IN-jKl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4673" y="3303"/>
+            <point key="canvasLocation" x="5612" y="3302.698650674663"/>
         </scene>
         <!--Check Out View Controller-->
         <scene sceneID="eDb-j1-Slr">
@@ -2293,7 +2342,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1n3-4y-fyU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5770" y="3303"/>
+            <point key="canvasLocation" x="6708" y="3302.698650674663"/>
         </scene>
     </scenes>
     <resources>
@@ -2314,10 +2363,10 @@
         <image name="veg" width="48" height="48"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="408-V4-S0H"/>
+        <segue reference="bM1-so-pLB"/>
         <segue reference="bad-x7-UcN"/>
         <segue reference="zNA-fP-hne"/>
-        <segue reference="UfU-kb-QFa"/>
+        <segue reference="uT9-kQ-yHz"/>
         <segue reference="h3S-jA-geP"/>
     </inferredMetricsTieBreakers>
 </document>
