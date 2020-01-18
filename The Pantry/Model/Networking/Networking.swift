@@ -397,9 +397,12 @@ public class Networking{
         }
     }
     
-    func doPreOrder(withselectedProducts selectedProducts:[selectedProduct],token:String,completion:@escaping (_ result :Bool,_ preOrderResponce:preOrderResponce)->()){
+    func doPreOrder(withselectedProducts selectedProducts:[selectedProduct],token:String,PhoneNumber :String , billingAddress1 :String,billingAddress2 : String,billingCity : String,billingPin:String , billingState:String , billingCountry:String, shipingAddress1 :String,shipingAddress2 : String,shipingCity : String,shipingPin:String , shipingState:String , shipingCountry:String,completion:@escaping (_ result :Bool,_ preOrderResponce:preOrderResponce)->()){
+        
+        
         let orderJson = createJSON(fromSelectedProducts: selectedProducts).getCreatedJSOn()
-        let param:[String:Any] = [preOrderKey.token:token,preOrderKey.itemOrdered:orderJson]
+        let param:[String:Any] = [preOrderKey.token:token,preOrderKey.itemOrdered:orderJson,preOrderKey.phoneNumber : PhoneNumber,preOrderKey.billingAddress1:billingAddress1,preOrderKey.billingAddress2:billingAddress2,preOrderKey.billingCity:billingCity,preOrderKey.billingPin : billingPin , preOrderKey.billingState : billingState,preOrderKey.billingCountry : billingCountry,preOrderKey.shipingAddress1:shipingAddress1,preOrderKey.shipingAddress2:shipingAddress2,preOrderKey.shipingCity:shipingCity,preOrderKey.shipingPin : shipingPin , preOrderKey.shipingState : shipingState,preOrderKey.shipingCountry : shipingCountry]
+        
         Alamofire.request(url.prepareOrderURL,method: .post ,parameters : param).responseJSON { (response) in
             if response.result.isSuccess{
               //networking done
@@ -453,13 +456,29 @@ public class Networking{
         Alamofire.request(url.catagoryURl,method: .get ,parameters : param).responseJSON { (response) in
             if response.result.isSuccess{
               //networking done
-                //if response.result.value!.cout is 16 then the massage is send
                  print("response",response.result.value!)
             }else{
                 //fail to do networking
                 print(response.error?.localizedDescription as Any)
             }
         }
+        
+    }
+    
+    func getTransactionHistory(withToken token:String){
+        
+        let param = [responceKey.token : token]
+        
+        Alamofire.request(url.transactionHistoryURL,method: .get ,parameters : param).responseJSON { (response) in
+            if response.result.isSuccess{
+                 //networking done
+                 print("response",response.result.value!)
+            }else{
+                //fail to do networking
+                print(response.error?.localizedDescription as Any)
+            }
+        }
+
         
     }
 }

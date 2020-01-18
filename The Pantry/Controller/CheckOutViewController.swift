@@ -46,7 +46,10 @@ class CheckOutViewController: UIViewController {
 extension CheckOutViewController{
     private func doPreOrder(){
         let userCredentials = save().getCredentials()
-        Networking().doPreOrder(withselectedProducts: self.selectedProducts, token: userCredentials[saveCredential.token]!) { (result,preOrderResponse) in
+        let token = userCredentials[responceKey.token]!
+        Networking().doPreOrder(withselectedProducts: self.selectedProducts, token: token, PhoneNumber: "8961388276", billingAddress1: "gsdjgfjh", billingAddress2:  "gsdjgfjh", billingCity:  "gsdjgfjh", billingPin:  "gsdjgfjh", billingState:  "gsdjgfjh", billingCountry:  "gsdjgfjh", shipingAddress1:  "gsdjgfjh", shipingAddress2:  "gsdjgfjh", shipingCity:  "gsdjgfjh", shipingPin:  "gsdjgfjh", shipingState:  "gsdjgfjh", shipingCountry:  "gsdjgfjh") { (result, preOrderResponse) in
+            
+            
             if(result){
                 self.present(self.newViewController, animated: true) {
                     self.preOrderResponse = preOrderResponse

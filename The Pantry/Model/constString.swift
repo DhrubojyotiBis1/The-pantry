@@ -120,6 +120,19 @@ struct razorPayConstant {
 struct preOrderKey {
     static let token = "token"
     static let itemOrdered = "orderItems"
+    static let phoneNumber = "phone"
+    static let billingAddress1 = "baddress1"
+    static let billingAddress2 = "baddress2"
+    static let billingCity = "bcity"
+    static let billingPin = "bpin"
+    static let billingState = "bstate"
+    static let billingCountry = "bcountry"
+    static let shipingAddress1 = "saddress1"
+    static let shipingAddress2 = "saddress2"
+    static let shipingCity = "scity"
+    static let shipingPin = "spin"
+    static let shipingState = "sstate"
+    static let shipingCountry = "scountry"
 }
 
 struct preOrderResponseKey {
