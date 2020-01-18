@@ -13,13 +13,18 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var adsCollectionView: UICollectionView!
     @IBOutlet var conteverView: [UIView]!
     @IBOutlet weak var topView: UIView!
-    @IBOutlet weak var viewCartView:UIView!
+    @IBOutlet weak var trailingConstrain: NSLayoutConstraint!
+    @IBOutlet weak var viewBottomConstrain: NSLayoutConstraint!
+    @IBOutlet weak var viewTopConstrain: NSLayoutConstraint!
+    @IBOutlet weak var viewLeadingConstrain: NSLayoutConstraint!
+    @IBOutlet weak var mainView:UIView!
+    @IBOutlet weak var backgroundView:UIView!
+    /*    @IBOutlet weak var viewCartView:UIView!
     @IBOutlet weak var numberOfItemInCartLabel:UILabel!
-    @IBOutlet weak var totalPricelabel:UILabel!
+    @IBOutlet weak var totalPricelabel:UILabel!*/
     var numberOfItemInCart = 0
     var totalPrice = Double()
     var transection = slideMenuAnimation()
-    
     var itemInCart = [selectedProduct]()
     var products = [product]()
     override func viewDidLoad() {
@@ -37,11 +42,15 @@ class HomeViewController: UIViewController {
     
     @IBAction func menuButtonTapped(_ sender:UIButton){
         
+        self.changeContrain(isMenuShown: true)
+        
         //show the slide menu
-        guard let menu = storyboard?.instantiateViewController(identifier: "menuVC") else{return}
+        guard let menu = storyboard?.instantiateViewController(identifier: "menuVC") as? MenuViewController else{return}
         
         menu.modalPresentationStyle = .overCurrentContext
         menu.transitioningDelegate = self
+        
+        menu.delegate = self
         
         present(menu, animated: true, completion: nil)
     }
@@ -97,8 +106,6 @@ extension HomeViewController{
             self.conteverView[i].layer.shadowOffset = CGSize(width: 0, height: 2)
             self.conteverView[i].layer.shadowOpacity = 0.4
         }
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
-        self.viewCartView.addGestureRecognizer(tapGesture)
         self.setupForViewCartView()
     }
     
@@ -115,16 +122,16 @@ extension HomeViewController{
         self.numberOfItemInCart = 0
         self.totalPrice = 0
         if(self.itemInCart.count == 0){
-            self.viewCartView.isHidden = true
+            //self.viewCartView.isHidden = true
         }else{
-             self.viewCartView.isHidden = false
+             //self.viewCartView.isHidden = false
         }
         for i in 0..<self.itemInCart.count{
             self.numberOfItemInCart += self.itemInCart[i].quantity
             self.totalPrice += Double(itemInCart[i].product!.sellingPrice)! * Double(itemInCart[i].quantity)
         }
-        self.numberOfItemInCartLabel.text! = "\(numberOfItemInCart)"+"Item"
-        self.totalPricelabel.text = "₹"+"\(self.totalPrice)"
+        //self.numberOfItemInCartLabel.text! = "\(numberOfItemInCart)"+"Item"
+        //self.totalPricelabel.text = "₹"+"\(self.totalPrice)"
     }
     
     private func getProductCatagory(fromTag tag:Int)->String{
@@ -171,7 +178,7 @@ extension HomeViewController{
 //For the ads collection View
 extension HomeViewController:UICollectionViewDelegate,UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
+        return 5
     }
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -199,6 +206,41 @@ extension HomeViewController:UICollectionViewDelegate,UICollectionViewDataSource
     }
 }
 
+extension HomeViewController{
+    private func changeContrain(isMenuShown:Bool){
+        
+        if isMenuShown {
+            self.mainView.layer.cornerRadius = 10
+            self.backgroundView.backgroundColor = UIColor(red: 120/255, green: 202/255, blue: 40/255, alpha: 0.9)
+            self.viewBottomConstrain.constant = self.viewBottomConstrain.constant + self.view.bounds.width*0.06
+            
+            self.viewTopConstrain.constant = self.viewTopConstrain.constant + self.view.bounds.width*0.06
+            
+            self.viewLeadingConstrain.constant = self.viewTopConstrain.constant + self.view.bounds.width*0.6
+            
+            self.trailingConstrain.constant -= self.view.bounds.width*0.6
+        }else{
+            
+            self.mainView.layer.cornerRadius = 0
+            self.backgroundView.backgroundColor = UIColor.systemBackground
+            
+            self.viewBottomConstrain.constant = 0
+            
+            self.viewTopConstrain.constant = 8
+            
+            self.viewLeadingConstrain.constant = 0
+            
+            self.trailingConstrain.constant = 0
+        }
+        
+        UIView.animate(withDuration: 0.2, delay: 0.0, options: .curveEaseIn, animations: {
+            self.view.layoutIfNeeded()
+        }) { (animationComplete) in
+            print("The animation is complete!")
+        }
+    }
+}
+
 extension HomeViewController:YourCartViewControllerProtocol,ProductListViewControllerProtocol{
     func didComeFromProductListViewController(value: Bool) {
         self.setupForViewCartView()
@@ -209,7 +251,11 @@ extension HomeViewController:YourCartViewControllerProtocol,ProductListViewContr
     }
 }
 
-extension HomeViewController:popUpPopUpViewControllerDelegate{
+extension HomeViewController:popUpPopUpViewControllerDelegate,MenuViewControllerProtocol{
+    func didMenuDismis() {
+        self.changeContrain(isMenuShown: false)
+    }
+    
     func popUpButtonTaped(withTag tag: Int) {
         switch tag {
         case 1:

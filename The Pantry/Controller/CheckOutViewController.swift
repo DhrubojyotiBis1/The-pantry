@@ -37,10 +37,6 @@ class CheckOutViewController: UIViewController {
         self.doPreOrder()
     }
     
-    @IBAction func backButtonPressed(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
 }
 
 extension CheckOutViewController{

@@ -257,7 +257,6 @@ public class Networking{
     //to update the cart
     func updateCartDetais(withToken token:String,cartDetails details:[selectedProduct]){
         let detailsJson = createJSON(fromSelectedProducts: details).getCreatedJSOn()
-        print("fuck \(detailsJson)")
         let pram:[String:Any] = [userCart.token : token,userCart.details:detailsJson]
         Alamofire.request(url.updateCartURL,method: .post ,parameters : pram).responseJSON { (response) in
             if response.result.isSuccess{

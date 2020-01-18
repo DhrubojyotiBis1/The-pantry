@@ -110,16 +110,16 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
                     if(self.selectedProducts[i].product.productId ==  self.availableProducts[row].productId){
                         cell.numOfItemSelected.text = "\(self.selectedProducts[i].quantity)"
                         cell.productSubtractButton.isHidden = false
-                        if(isfirstTime){
-                            self.totalPrice += Double(self.selectedProducts[i].quantity) *  Double(self.selectedProducts[i].product.sellingPrice)!
-                            self.numberOfItemAdded += self.selectedProducts[i].quantity
-                        }
+                    }
+                    if(isfirstTime){
+                        self.totalPrice += Double(self.selectedProducts[i].quantity) *  Double(self.selectedProducts[i].product.sellingPrice)!
+                        self.numberOfItemAdded += self.selectedProducts[i].quantity
                     }
                 }
             }
         }
         
-        
+        self.isfirstTime = false
         //if there is image in the uiimage array for the index path the show that
         //else download image using the url from the array of the product details class and store it in a different [uiimage]
         //stop the activity indicator
