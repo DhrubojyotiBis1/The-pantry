@@ -9,7 +9,8 @@
 import UIKit
 
 protocol MenuViewControllerProtocol {
-    func didMenuDismis()
+    func didMenuDismis(withOption option:Int?)
+    func selectedMenu(option:Int?)
 }
 
 class MenuViewController: UIViewController {
@@ -18,6 +19,7 @@ class MenuViewController: UIViewController {
     @IBOutlet weak var width: NSLayoutConstraint!
     @IBOutlet weak var contentView:UIView!
     @IBOutlet weak var scrollableView:UIView!
+    @IBOutlet  var menuOptionButtons:[UIButton]!
     
     var delegate:MenuViewControllerProtocol?
     
@@ -30,9 +32,12 @@ class MenuViewController: UIViewController {
     }
     
     @IBAction func backButtonPressed(_ sender:UIButton){
-        self.dismisView()
+        self.dismisView(withOption: nil)
     }
     
+    @IBAction func menuOptionSelected(_ sender:UIButton){
+        self.dismisView(withOption: sender.tag)
+    }
 
 }
 
@@ -57,17 +62,24 @@ extension MenuViewController{
     }
     
     @objc private func onScrollViewTap(){
-        self.dismisView()
+        self.dismisView(withOption: nil)
     }
     
     @objc private func onTap(){
-        self.dismisView()
+        self.dismisView(withOption: nil)
     }
     
-    private func dismisView(){
-        self.delegate?.didMenuDismis()
-        dismiss(animated: true) {
-            print("dismiss \(-1)")
+    private func dismisView(withOption option:Int?){
+        self.delegate?.didMenuDismis(withOption: option)
+        if option == nil {
+            dismiss(animated: true) {
+                print("dismiss \(option as Any)")
+            }
+        }else{
+            dismiss(animated: true) {
+                self.delegate?.selectedMenu(option: option)
+                 print("dismiss \(option as Any)")
+            }
         }
     }
     

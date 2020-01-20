@@ -9,8 +9,8 @@
 import Foundation
 
 public struct url{
-    static let registerURL = "https://btoscecom.herokuapp.com/api/register.php"
-    static let loginURL = "https://btoscecom.herokuapp.com/api/login.php"
+    static let registerURL = "http://api.gourmetatthepantry.com/api/register.php"
+    static let loginURL = "http://api.gourmetatthepantry.com/api/login.php"
     static let changeAccountDetailsURL = "https://btoscecom.herokuapp.com/api/update_acc.php/"
     static let changePasswordURL = "https://btoscecom.herokuapp.com/api/change_password.php"
     static let downloadImageURL = "https://btoscecom.herokuapp.com/api/get_homescreen.php/"
@@ -25,5 +25,5 @@ public struct url{
     static let prepareOrderURL = "https://btoscecom.herokuapp.com/api/prepare_order.php?"
     static let transactionStatus = "https://btoscecom.herokuapp.com/api/transactionStatus.php?"
     static let catagoryURl = "https://btoscecom.herokuapp.com/api/categories.php"
-    static let transactionHistoryURL = "https://btoscecom.herokuapp.com/api/history.php?"
+    static let transactionHistoryURL = "http://api.gourmetatthepantry.com/api/history.php?"
 }

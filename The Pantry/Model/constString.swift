@@ -63,9 +63,9 @@ struct userCart {
 }
 
 struct webPageURL {
-    static let FAQ = "https://www.google.com/"
-    static let privacyPolicy = "https://www.youtube.com/"
-    static let aboutUs = "http://stackoverflow.com/"
+    static let FAQ = "http://gourmetatthepantry.com/public/terms"
+    static let privacyPolicy = "http://gourmetatthepantry.com/public/privacy"
+    static let aboutUs = "http://gourmetatthepantry.com/public/disclaimer"
 }
 
 struct smsGateWay {
@@ -152,6 +152,7 @@ struct razorPayTransactionkey {
 }
 
 struct productkey{
+    static let productDetails = "product_details"
     static let name = "name"
     static let productId = "id"
     static let productDescription = "description"

@@ -8,6 +8,7 @@
 
 import UIKit
 import SVProgressHUD
+import SafariServices
 
 class HomeViewController: UIViewController {
     @IBOutlet weak var adsCollectionView: UICollectionView!
@@ -27,6 +28,7 @@ class HomeViewController: UIViewController {
     var transection = slideMenuAnimation()
     var itemInCart = [selectedProduct]()
     var products = [product]()
+    var stringUrlForSelectedPage:String?
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -239,6 +241,38 @@ extension HomeViewController{
             print("The animation is complete!")
         }
     }
+    
+    private func showWebView(){
+        //convert the string into url
+        if let selectedStringURlForWebPage = self.stringUrlForSelectedPage{
+            if let selectedUrlForWebPage = URL(string: selectedStringURlForWebPage){
+                self.showWebPage(withUrl: selectedUrlForWebPage)
+            }else{
+                //failed to conver it string to url
+                print("failed to conver it string to url")
+            }
+        }else{
+            //failed to get the urlString
+            print("failed to get the urlString")
+        }
+    }
+    
+    private func getTheUrl(fromButtonTag buttonTage:Int){
+        if(buttonTage == 1){
+            self.stringUrlForSelectedPage = webPageURL.privacyPolicy
+        }else if(buttonTage == 2){
+            self.stringUrlForSelectedPage = webPageURL.FAQ
+        }else{
+            self.stringUrlForSelectedPage = webPageURL.aboutUs
+        }
+    }
+    
+    private func showWebPage(withUrl url:URL){
+        let safariViewController = SFSafariViewController(url: url)
+        present(safariViewController, animated: true) {
+            print("Presented Safari VC")
+        }
+    }
 }
 
 extension HomeViewController:YourCartViewControllerProtocol,ProductListViewControllerProtocol{
@@ -252,7 +286,39 @@ extension HomeViewController:YourCartViewControllerProtocol,ProductListViewContr
 }
 
 extension HomeViewController:popUpPopUpViewControllerDelegate,MenuViewControllerProtocol{
-    func didMenuDismis() {
+    func selectedMenu(option: Int?) {
+        if let selectedOption = option{
+            switch selectedOption {
+            case 0:
+                //go to Profile VC
+                performSegue(withIdentifier: segueId.profileVCId, sender: nil)
+                break
+            case 1:
+                
+                break
+                
+            case 2:
+                
+                break
+                
+            case 3:
+                self.stringUrlForSelectedPage = webPageURL.privacyPolicy
+                self.showWebView()
+                break
+            case 4:
+                self.stringUrlForSelectedPage = webPageURL.FAQ
+                self.showWebView()
+                break
+            case 5:
+                self.stringUrlForSelectedPage = webPageURL.aboutUs
+                self.showWebView()
+                break
+            default:
+                break
+            }
+        }
+    }
+    func didMenuDismis(withOption option: Int?) {
         self.changeContrain(isMenuShown: false)
     }
     

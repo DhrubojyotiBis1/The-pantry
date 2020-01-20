@@ -37,20 +37,6 @@ class ProfileViewController: UIViewController {
     }
     
     @IBAction func staticWebPageButtonClicked(_ sender : UIButton){
-        self.getTheUrl(fromButtonTag: sender.tag)
-        
-        //convert the string into url
-        if let selectedStringURlForWebPage = self.stringUrlForSelectedPage{
-            if let selectedUrlForWebPage = URL(string: selectedStringURlForWebPage){
-                self.showWebPage(withUrl: selectedUrlForWebPage)
-            }else{
-                //failed to conver it string to url
-                print("failed to conver it string to url")
-            }
-        }else{
-            //failed to get the urlString
-            print("failed to get the urlString")
-        }
     }
     
     @IBAction func backButtonPressed(_ sender :UIButton){
@@ -70,22 +56,5 @@ extension ProfileViewController{
         
         self.userName.text = "\(firstName!) \(lastName!)"
         self.userEmail.text = email!
-    }
-    
-    private func getTheUrl(fromButtonTag buttonTage:Int){
-        if(buttonTage == 1){
-            self.stringUrlForSelectedPage = webPageURL.privacyPolicy
-        }else if(buttonTage == 2){
-            self.stringUrlForSelectedPage = webPageURL.FAQ
-        }else{
-            self.stringUrlForSelectedPage = webPageURL.aboutUs
-        }
-    }
-    
-    private func showWebPage(withUrl url:URL){
-        let safariViewController = SFSafariViewController(url: url)
-        present(safariViewController, animated: true) {
-            print("Presented Safari VC")
-        }
     }
 }

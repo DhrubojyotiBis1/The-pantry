@@ -379,10 +379,10 @@ public class Networking{
               //networking done
                 //if response.result.value!.cout is 16 then the massage is send
                 let productDetails:JSON = JSON(response.result.value!)
-                let name = productDetails[productkey.name].string!
-                let sellingPrice = productDetails[productkey.sellingPrice].string!
-                let description = productDetails[productkey.productDescription].string!
-                let productId = "\(productDetails[productkey.productId].int!)"
+                let name = productDetails[productkey.productDetails][productkey.name].string!
+                let sellingPrice = productDetails[productkey.productDetails][productkey.sellingPrice].string!
+                let description = productDetails[productkey.productDetails][productkey.productDescription].string!
+                let productId = "\(productDetails[productkey.productDetails][productkey.productId].int!)"
                 
                 let cartProduct = product(name: name, sellingPrice: sellingPrice, productId: productId, productDescription: description)
                 
@@ -471,7 +471,7 @@ public class Networking{
         Alamofire.request(url.transactionHistoryURL,method: .get ,parameters : param).responseJSON { (response) in
             if response.result.isSuccess{
                  //networking done
-                 print("response",response.result.value!)
+                 print("getTransactionHistory",response.result.value!)
             }else{
                 //fail to do networking
                 print(response.error?.localizedDescription as Any)

@@ -22,6 +22,8 @@ protocol CheckOutViewControllerProtcol {
 
 class CheckOutViewController: UIViewController {
     
+    @IBOutlet weak var topNavigationView:UIView!
+    
     var selectedProducts = [selectedProduct]()
     var preOrderResponse:preOrderResponce!
     var razorPay:Razorpay!
@@ -35,6 +37,10 @@ class CheckOutViewController: UIViewController {
     @IBAction func PayButtonPressed(_ sender:UIButton){
         SVProgressHUD.show()
         self.doPreOrder()
+    }
+    
+    @IBAction func backButtonPressed(_ sender:UIButton){
+        self.dismiss(animated: true, completion: nil)
     }
     
 }
@@ -118,5 +124,12 @@ extension CheckOutViewController{
         if let selectedProduct = save().getCartDetails(){
             self.selectedProducts = selectedProduct
         }
+        
+        //setting the card view for the top view
+        self.topNavigationView.layer.masksToBounds = false
+        self.topNavigationView.layer.shadowColor = UIColor.gray.cgColor
+        self.topNavigationView.layer.shadowOffset = CGSize(width: 0, height: 4.5)
+        self.topNavigationView.layer.shadowOpacity = 0.4
+        
     }
 }
