@@ -65,6 +65,10 @@ class ProductListViewController: UIViewController{
         self.delegate?.didComeFromProductListViewController(value: true)
         self.dismiss(animated: true, completion: nil)
     }
+    
+    @IBAction func viewTransactionButtonPressed(_ sender:UIButton){
+        performSegue(withIdentifier: segueId.transactionVCId, sender: nil)
+    }
 
 }
 

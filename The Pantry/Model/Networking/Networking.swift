@@ -379,6 +379,7 @@ public class Networking{
               //networking done
                 //if response.result.value!.cout is 16 then the massage is send
                 let productDetails:JSON = JSON(response.result.value!)
+                print(productDetails)
                 let name = productDetails[productkey.productDetails][productkey.name].string!
                 let sellingPrice = productDetails[productkey.productDetails][productkey.sellingPrice].string!
                 let description = productDetails[productkey.productDetails][productkey.productDescription].string!
@@ -478,7 +479,12 @@ public class Networking{
                     for i in 0..<transactionHistoryJSON.count{
                         let orderDate = transactionHistoryJSON[i][transactionKey.orderDate].string!.split(separator: " ")
                         let orderID = transactionHistoryJSON[i][transactionKey.orderId].int!
-                        let isPaymentSucess = transactionHistoryJSON[i][transactionKey.isSucess].int!
+                        let isPaymentSucess:Int!
+                        if let sucess = transactionHistoryJSON[i][transactionKey.isSucess].int{
+                            isPaymentSucess = sucess
+                        }else{
+                            isPaymentSucess = 0
+                        }
                         let transactionOrder = order(orderDate: "\(orderDate[0])", orderId: orderID, isOrderSuccess: isPaymentSucess)
                         transactionHistory.append(transactionOrder)
                     }

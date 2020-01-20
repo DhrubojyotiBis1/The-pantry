@@ -116,7 +116,7 @@ struct razorPayCredentials {
 struct razorPayConstant {
     static let currency = "INR"
     static let purchaseDescription = "purchase description"
-    static let theme = ["color": "#528FF0"]
+    static let theme = ["color": "#78CA28"]
 }
 
 struct preOrderKey {
