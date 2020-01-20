@@ -406,7 +406,7 @@ public class Networking{
             if response.result.isSuccess{
               //networking done
                 let responce = JSON(response.result.value!)
-                //print("responce \(responce)")
+                print("doPreOrder \(responce)")
                 if(responce[preOrderResponseKey.razorPayOrderId].string != nil){
                     let amount = Double(responce[preOrderResponseKey.amount].int!)
                     let razorPayKey = responce[preOrderResponseKey.razorPaykey].string!
@@ -464,17 +464,32 @@ public class Networking{
         
     }
     
-    func getTransactionHistory(withToken token:String){
+    func getTransactionHistory(withToken token:String,completion:@escaping(_ result:Int, _ transactionHistory:[order]?)->()){
         
         let param = [responceKey.token : token]
         
         Alamofire.request(url.transactionHistoryURL,method: .get ,parameters : param).responseJSON { (response) in
             if response.result.isSuccess{
                  //networking done
-                 print("getTransactionHistory",response.result.value!)
+                print("getTransactionHistory",response.result.value!)
+                let transactionHistoryJSON = JSON(response.result.value!)
+                if transactionHistoryJSON.count > 0{
+                    var transactionHistory = [order]()
+                    for i in 0..<transactionHistoryJSON.count{
+                        let orderDate = transactionHistoryJSON[i][transactionKey.orderDate].string!.split(separator: " ")
+                        let orderID = transactionHistoryJSON[i][transactionKey.orderId].int!
+                        let isPaymentSucess = transactionHistoryJSON[i][transactionKey.isSucess].int!
+                        let transactionOrder = order(orderDate: "\(orderDate[0])", orderId: orderID, isOrderSuccess: isPaymentSucess)
+                        transactionHistory.append(transactionOrder)
+                    }
+                    completion(1,transactionHistory)
+                    return
+                }
+                completion(-1,nil)
             }else{
                 //fail to do networking
                 print(response.error?.localizedDescription as Any)
+                completion(0,nil)
             }
         }
 

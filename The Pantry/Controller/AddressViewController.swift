@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Toast_Swift
 
 class AddressViewController: UIViewController {
     
@@ -19,6 +20,7 @@ class AddressViewController: UIViewController {
     @IBOutlet weak var addBillingAddresslable:UILabel!
     @IBOutlet var addBillingAddressTextFields: [UITextField]!
     
+    var allAdress = [String]()
     let addressViewHigntConstrainValue:CGFloat = 350
     let scrollViewBottomContrainValue:CGFloat = 30
 
@@ -44,6 +46,28 @@ class AddressViewController: UIViewController {
     }
     
     @IBAction func PayButtonPressed(_ sender:UIButton){
+        self.allAdress.removeAll()
+        if checkBoxButton.isSelected{
+            for i in 0..<self.addBillingAddressTextFields.count{
+                if(self.addBillingAddressTextFields[i].text == ""){
+                    self.view.makeToast(massage.allFieldsRequired, duration: massage.duration, position: .top)
+                    print(massage.allFieldsRequired)
+                    return
+                }
+                allAdress.append(addBillingAddressTextFields[i].text!)
+            }
+        }else{
+            for i in 0..<6{
+                if(self.addBillingAddressTextFields[i].text == ""){
+                    self.view.makeToast(massage.allFieldsRequired, duration: massage.duration, position: .top)
+                    print(massage.allFieldsRequired)
+                    return
+                }
+                allAdress.append(addBillingAddressTextFields[i].text!)
+            }
+        }
+        
+        print(allAdress.count)
         performSegue(withIdentifier: segueId.checkOutVCId, sender: nil)
     }
     
@@ -79,7 +103,7 @@ extension AddressViewController{
            self.addBillingAddresslable.isHidden = !option
            self.addBillingAddresslable.isEnabled = option
            
-           for i in 0..<6 {
+        for i in 6..<self.addBillingAddressTextFields.count {
                self.addBillingAddressTextFields[i].isHidden = !option
                self.addBillingAddressTextFields[i].isEnabled = option
            }

@@ -97,7 +97,7 @@ extension HomeViewController{
         //setting the card view for the top view
         self.topView.layer.masksToBounds = false
         self.topView.layer.shadowColor = UIColor.gray.cgColor
-        self.topView.layer.shadowOffset = CGSize(width: 0, height: 4.5)
+        self.topView.layer.shadowOffset = CGSize(width: 0, height: 3)
         self.topView.layer.shadowOpacity = 0.4
         
         //setting the card view for the contenor view
@@ -294,7 +294,7 @@ extension HomeViewController:popUpPopUpViewControllerDelegate,MenuViewController
                 performSegue(withIdentifier: segueId.profileVCId, sender: nil)
                 break
             case 1:
-                
+                performSegue(withIdentifier: segueId.transactionVCId, sender: nil)
                 break
                 
             case 2:

@@ -25,6 +25,7 @@ struct segueId{
     static let razorPayVCId = "goToRazorPayVC"
     static let enterMobileNumberVcId = "goToEnterMobileNumberVC"
     static let addressVC = "goToAddressVC"
+    static let transactionVCId = "goToTransactionVC"
 }
 
 struct registeAndLoginPram {
@@ -166,4 +167,13 @@ struct massage {
     static let enterMobileNumber = "Enter mobile number"
     static let duration:Double = 2
     static let wrongOtp = "OTP Entered is not valid"
+    static let allFieldsRequired = "All fields are requireq!"
+    static let noDataInHistory = "No Data in History!"
+    static let somethingWentWrong = "Something went wrong!"
+}
+
+struct transactionKey {
+    static let orderDate = "updated_at"
+    static let isSucess = "success"
+    static let orderId = "id"
 }
