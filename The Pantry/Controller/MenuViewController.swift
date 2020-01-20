@@ -20,6 +20,7 @@ class MenuViewController: UIViewController {
     @IBOutlet weak var contentView:UIView!
     @IBOutlet weak var scrollableView:UIView!
     @IBOutlet  var menuOptionButtons:[UIButton]!
+    @IBOutlet  var menuLableViews:[UIView]!
     
     var delegate:MenuViewControllerProtocol?
     
@@ -57,12 +58,60 @@ extension MenuViewController{
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
         self.contentView.addGestureRecognizer(tapGesture)
         
-        let tapGestureForScrollableView = UITapGestureRecognizer(target: self, action: #selector(onScrollViewTap))
-        self.scrollableView.addGestureRecognizer(tapGestureForScrollableView)
+        for i in 0..<self.menuLableViews.count{
+            
+            var tapGesture:UIGestureRecognizer!
+            
+            if i == 0{
+                 tapGesture = UITapGestureRecognizer(target: self, action: #selector(onProfileViewTap))
+            }else if i == 1{
+                 tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTransactionViewTap))
+                
+            }else if i == 2{
+                
+                 tapGesture = UITapGestureRecognizer(target: self, action: #selector(onShareTap))
+                
+            }else if i == 3{
+                
+                 tapGesture = UITapGestureRecognizer(target: self, action: #selector(onPrivacyViewTap))
+                
+            }else if i == 4{
+                
+                 tapGesture = UITapGestureRecognizer(target: self, action: #selector(onFAQViewTap))
+                
+            }else{
+                
+                 tapGesture = UITapGestureRecognizer(target: self, action: #selector(onAboutUsViewTap))
+                
+            }
+            self.menuLableViews[i].addGestureRecognizer(tapGesture)
+            
+        }
+        
     }
     
-    @objc private func onScrollViewTap(){
-        self.dismisView(withOption: nil)
+    @objc private func onProfileViewTap(){
+        self.dismisView(withOption: 0)
+    }
+    
+    @objc private func onTransactionViewTap(){
+        self.dismisView(withOption: 1)
+    }
+    
+    @objc private func onShareTap(){
+        self.dismisView(withOption: 2)
+    }
+    
+    @objc private func onPrivacyViewTap(){
+        self.dismisView(withOption: 3)
+    }
+    
+    @objc private func onFAQViewTap(){
+        self.dismisView(withOption: 4)
+    }
+    
+    @objc private func onAboutUsViewTap(){
+       self.dismisView(withOption: 5)
     }
     
     @objc private func onTap(){

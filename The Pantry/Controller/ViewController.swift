@@ -8,6 +8,7 @@
 
 import UIKit
 import DotsLoading
+import SVProgressHUD
 
 enum massageType {
     case error
@@ -25,6 +26,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        SVProgressHUD.setForegroundColor(UIColor(red: 120/255, green: 202/255, blue: 40/255, alpha: 1))
          animator = createAnimatorDotView()
         self.addConstrain(toAnimator: animator)
         animator.show()

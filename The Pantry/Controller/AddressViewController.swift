@@ -67,12 +67,18 @@ class AddressViewController: UIViewController {
             }
         }
         
-        print(allAdress.count)
         performSegue(withIdentifier: segueId.checkOutVCId, sender: nil)
     }
     
     @IBAction func backButtonPressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == segueId.checkOutVCId{
+            let destination = segue.destination as! CheckOutViewController
+            destination.checkOutAddress = self.allAdress
+        }
     }
 
 }

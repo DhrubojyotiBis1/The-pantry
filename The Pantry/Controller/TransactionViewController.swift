@@ -72,7 +72,6 @@ extension TransactionViewController{
     }
     
     private func setup(){
-        SVProgressHUD.setForegroundColor(UIColor(red: 120/255, green: 202/255, blue: 40/255, alpha: 1))
         SVProgressHUD.show()
         
         self.transactionTableView.delegate = self

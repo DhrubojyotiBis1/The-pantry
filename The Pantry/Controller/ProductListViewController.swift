@@ -49,7 +49,7 @@ class ProductListViewController: UIViewController{
             destination.delegate = self
         }else if segue.identifier == segueId.productDescriptionVCId {
             let destination = segue.destination as! ProductDescriptionViewController
-            destination.selectedProduct = self.selectedProducts[rowForSeceltedproductToSeeDescription].product
+            destination.selectedProduct = self.availableProducts[rowForSeceltedproductToSeeDescription]
         }else if segue.identifier == segueId.yourCartVC{
             let destination = segue.destination as! YourCartViewController
             destination.delegate = self
@@ -147,9 +147,8 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         //go to the product description View cntroller
         //pass the general infornamtion of the product to next VC
-        let row = 2*indexPath.section + indexPath.row
+        self.rowForSeceltedproductToSeeDescription = 2*indexPath.section + indexPath.row
         performSegue(withIdentifier: segueId.productDescriptionVCId, sender: nil)
-        self.rowForSeceltedproductToSeeDescription = row
     }
 }
 

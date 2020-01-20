@@ -24,6 +24,7 @@ class CheckOutViewController: UIViewController {
     
     @IBOutlet weak var topNavigationView:UIView!
     
+    var checkOutAddress = [String]()
     var selectedProducts = [selectedProduct]()
     var preOrderResponse:preOrderResponce!
     var razorPay:Razorpay!
@@ -49,7 +50,105 @@ extension CheckOutViewController{
     private func doPreOrder(){
         let userCredentials = save().getCredentials()
         let token = userCredentials[responceKey.token]!
-        Networking().doPreOrder(withselectedProducts: self.selectedProducts, token: token, PhoneNumber: "8961388276", billingAddress1: "gsdjgfjh", billingAddress2:  "gsdjgfjh", billingCity:  "gsdjgfjh", billingPin:  "gsdjgfjh", billingState:  "gsdjgfjh", billingCountry:  "gsdjgfjh", shipingAddress1:  "gsdjgfjh", shipingAddress2:  "gsdjgfjh", shipingCity:  "gsdjgfjh", shipingPin:  "gsdjgfjh", shipingState:  "gsdjgfjh", shipingCountry:  "gsdjgfjh") { (result, preOrderResponse) in
+        var baddress1 = String()
+        var baddress2 = String()
+        var bcity = String()
+        var bpin = String()
+        var bstate = String()
+        var bcountry = String()
+        
+        var saddress1 = String()
+        var saddress2 = String()
+        var scity = String()
+        var spin = String()
+        var sstate = String()
+        var scountry = String()
+        
+        if self.checkOutAddress.count > 6 {
+            
+            for i in 0..<self.checkOutAddress.count{
+                switch i {
+                case 0:
+                    saddress1 = checkOutAddress[i]
+                    break
+                case 1:
+                    saddress2 = checkOutAddress[i]
+                    break
+                case 2:
+                    scity = checkOutAddress[i]
+                    break
+                case 3:
+                    spin = checkOutAddress[i]
+                    break
+                case 4:
+                    sstate = checkOutAddress[i]
+                    break
+                case 5:
+                    scountry = checkOutAddress[i]
+                    break
+                case 6:
+                    baddress1 = checkOutAddress[i]
+                    break
+                case 7:
+                    baddress2 = checkOutAddress[i]
+                    break
+                case 8:
+                    bcity = checkOutAddress[i]
+                    break
+                case 9:
+                    bpin = checkOutAddress[i]
+                    break
+                case 10:
+                    bstate = checkOutAddress[i]
+                    break
+                case 11:
+                    bcountry = checkOutAddress[i]
+                    break
+                default:
+                    break
+                }
+            }
+            
+        }else{
+            
+            for i in 0..<self.checkOutAddress.count{
+            switch i {
+            case 0:
+                saddress1 = checkOutAddress[i]
+                baddress1 = checkOutAddress[i]
+                break
+            case 1:
+                saddress2 = checkOutAddress[i]
+                baddress2 = checkOutAddress[i]
+                break
+            case 2:
+                scity = checkOutAddress[i]
+                bcity = checkOutAddress[i]
+                break
+            case 3:
+                spin = checkOutAddress[i]
+                bpin = checkOutAddress[i]
+                break
+            case 4:
+                sstate = checkOutAddress[i]
+                bstate = checkOutAddress[i]
+                break
+            case 5:
+                scountry = checkOutAddress[i]
+                bcountry = checkOutAddress[i]
+                break
+            default:
+                break
+                }
+            }
+            
+        }
+        
+        
+        
+        
+        
+        Networking().doPreOrder(withselectedProducts: self.selectedProducts, token: token, PhoneNumber: "8961388276", billingAddress1: baddress1, billingAddress2:  baddress2, billingCity:  bcity, billingPin:  bpin, billingState:  bstate, billingCountry:  bcountry, shipingAddress1:  saddress1, shipingAddress2:  saddress2, shipingCity:  scity, shipingPin: spin, shipingState:  sstate, shipingCountry:  scountry) { (result, preOrderResponse) in
             
             
             if(result){
