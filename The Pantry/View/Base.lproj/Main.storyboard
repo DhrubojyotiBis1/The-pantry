@@ -1017,7 +1017,7 @@
                                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="dRb-bB-6o3">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="102" height="166.5"/>
                                                                             </imageView>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aj Kya Banaoge?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eAT-eQ-Bwi">
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aj Kya Banaoge?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eAT-eQ-Bwi">
                                                                                 <rect key="frame" x="108" y="65.5" width="235" height="36"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="235" id="DuT-wQ-Cg4"/>
@@ -1183,6 +1183,7 @@
                     <connections>
                         <outlet property="adsCollectionView" destination="BBb-fq-Aae" id="gZN-wz-Kli"/>
                         <outlet property="backgroundView" destination="e5P-Zh-87I" id="sUS-PF-Mcv"/>
+                        <outlet property="dynamicHeadingLabel" destination="eAT-eQ-Bwi" id="bgU-mW-vBD"/>
                         <outlet property="mainView" destination="VBJ-Eo-6At" id="4Jl-xl-X32"/>
                         <outlet property="topView" destination="tEK-V2-xCD" id="n6y-Vu-Qyo"/>
                         <outlet property="trailingConstrain" destination="nUM-8c-PNh" id="u44-9P-pqg"/>
@@ -1372,14 +1373,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="45"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="7D2-K0-hbd">
-                                        <rect key="frame" x="313" y="8" width="54" height="22"/>
+                                        <rect key="frame" x="350.5" y="8" width="16.5" height="22"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ke9-Qp-fx4">
-                                                <rect key="frame" x="0.0" y="0.0" width="24" height="22"/>
-                                                <state key="normal" image="menu"/>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hzG-4s-Ckf">
-                                                <rect key="frame" x="30" y="0.0" width="24" height="22"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="16.5" height="22"/>
                                                 <state key="normal" image="dotMenu"/>
                                                 <connections>
                                                     <action selector="threeDotPopUpButtonTapped:" destination="asv-TC-XqK" eventType="touchUpInside" id="mm8-P3-nb7"/>
@@ -1388,7 +1385,6 @@
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="22" id="7ib-EY-Dhp"/>
-                                            <constraint firstItem="hzG-4s-Ckf" firstAttribute="width" secondItem="ke9-Qp-fx4" secondAttribute="width" id="OWC-Fr-dYU"/>
                                         </constraints>
                                     </stackView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pantry" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iV4-ch-hl4">
@@ -3361,9 +3357,9 @@
         <image name="veg" width="48" height="48"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="bM1-so-pLB"/>
+        <segue reference="408-V4-S0H"/>
         <segue reference="eSc-6H-kOn"/>
-        <segue reference="uT9-kQ-yHz"/>
+        <segue reference="UfU-kb-QFa"/>
         <segue reference="QBv-ON-yLf"/>
     </inferredMetricsTieBreakers>
 </document>

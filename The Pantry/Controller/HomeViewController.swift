@@ -20,9 +20,12 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var viewLeadingConstrain: NSLayoutConstraint!
     @IBOutlet weak var mainView:UIView!
     @IBOutlet weak var backgroundView:UIView!
+    @IBOutlet weak var dynamicHeadingLabel:UILabel!
     /*    @IBOutlet weak var viewCartView:UIView!
     @IBOutlet weak var numberOfItemInCartLabel:UILabel!
     @IBOutlet weak var totalPricelabel:UILabel!*/
+    var StringsForHeadting = ["Get our best deals!","Sale coming soon!","Deal of the day!","Aj Kya Banaoge?"]
+    var showingHeadingAtIndex = 0
     var numberOfItemInCart = 0
     var totalPrice = Double()
     var transection = slideMenuAnimation()
@@ -90,6 +93,8 @@ extension HomeViewController{
     //All private function extention
     private func setup(){
         
+        _ = Timer.scheduledTimer(timeInterval: 4, target: self, selector: #selector(self.runTimedCode), userInfo: nil, repeats: true)
+        
         //confinding to dataSource and deligate
         self.adsCollectionView.dataSource = self
         self.adsCollectionView.delegate = self
@@ -109,6 +114,15 @@ extension HomeViewController{
             self.conteverView[i].layer.shadowOpacity = 0.4
         }
         self.setupForViewCartView()
+    }
+    
+    @objc private func runTimedCode(){
+        dynamicHeadingLabel.fadeTransition(1)
+        self.dynamicHeadingLabel.text = self.StringsForHeadting[self.showingHeadingAtIndex]
+        showingHeadingAtIndex += 1
+        if showingHeadingAtIndex == StringsForHeadting.count{
+            self.showingHeadingAtIndex = 0
+        }
     }
     
     @objc func onTap(){
@@ -336,5 +350,16 @@ extension HomeViewController:popUpPopUpViewControllerDelegate,MenuViewController
         default:
             break
         }
+    }
+}
+
+extension UIView {
+    func fadeTransition(_ duration:CFTimeInterval) {
+        let animation = CATransition()
+        animation.timingFunction = CAMediaTimingFunction(name:
+            CAMediaTimingFunctionName.easeInEaseOut)
+        animation.type = CATransitionType.fade
+        animation.duration = duration
+        layer.add(animation, forKey: CATransitionType.fade.rawValue)
     }
 }
