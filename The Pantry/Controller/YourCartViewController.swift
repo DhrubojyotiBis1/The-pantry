@@ -16,6 +16,7 @@ class YourCartViewController:UIViewController{
     
     @IBOutlet weak var yourCartTableView:UITableView!
     @IBOutlet weak var checkOutButton:UIButton!
+    @IBOutlet weak var checkOutButtonView:UIView!
 
     
     var selectedProducts = [selectedProduct]()
@@ -46,7 +47,9 @@ class YourCartViewController:UIViewController{
     @IBAction func checkOutButtonPressed(){
         //go to the payment page use the payment gatway
 
-        self.performSegue(withIdentifier: segueId.addressVC, sender: nil)
+        if self.selectedProducts.count > 0{
+            self.performSegue(withIdentifier: segueId.addressVC, sender: nil)
+        }
     }
     
 
@@ -63,6 +66,9 @@ extension YourCartViewController : UITableViewDelegate,UITableViewDataSource{
         //setting the tag of each button equal to row
         cell.removeButton.tag = indexPath.row
         
+        cell.decreaseQuantityButton.tag = indexPath.row
+        cell.increaseQuantityButton.tag = indexPath.row
+        
         //Product added to cart details
         var sellingPrice = ""
         var numberOfProduct = 0
@@ -78,13 +84,22 @@ extension YourCartViewController : UITableViewDelegate,UITableViewDataSource{
         
         //setting the delegate to self
         cell.delegate = self
+        cell.quantityChangeDelegate = self
         
         return cell
     }
     
 }
 
-extension YourCartViewController:YourCartTableViewCellDelegate{
+extension YourCartViewController:YourCartTableViewCellDelegate,YourCartTableViewCellProtocol{
+    func decreaseQuantity(at indexPath: Int) {
+        print("Increase at \(indexPath)")
+    }
+    
+    func increaseQuantity(at indexPath: Int) {
+        print("Increase at \(indexPath)")
+    }
+    
     func removedButtonClicked(atRow row: Int) {
         //function is called when remove button of a cell is pressed
         //remove the data from the array of th product class at row
@@ -113,6 +128,12 @@ extension YourCartViewController{
             self.selectedProducts = selectedProduct
         }
         self.getTotalPriceAndNumberofItemInCart()
+        
+        if self.selectedProducts.count == 0{
+            self.checkOutButton.isHidden = true
+            self.checkOutButton.isEnabled = false
+            self.checkOutButtonView.isHidden = true
+        }
         
         self.checkOutButton.setTitle("CHECKOUT(₹\(self.totalPrice))", for: UIControl.State.normal)
     }

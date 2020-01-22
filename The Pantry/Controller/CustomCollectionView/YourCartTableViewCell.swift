@@ -11,13 +11,23 @@ protocol YourCartTableViewCellDelegate {
     func removedButtonClicked(atRow row:Int)
 }
 
+protocol YourCartTableViewCellProtocol {
+    func decreaseQuantity(at indexPath:Int)
+    func increaseQuantity(at indexPath:Int)
+}
 
 class YourCartTableViewCell: UITableViewCell {
     
     @IBOutlet weak var productName:UILabel!
     @IBOutlet weak var removeButton:UIButton!
     @IBOutlet weak var price:UILabel!
+    @IBOutlet weak var quantityLabel:UILabel!
+    @IBOutlet weak var increaseQuantityButton:UIButton!
+    @IBOutlet weak var decreaseQuantityButton:UIButton!
+    
     var delegate:YourCartTableViewCellDelegate?
+    var quantityChangeDelegate:YourCartTableViewCellProtocol?
+    
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -38,5 +48,12 @@ class YourCartTableViewCell: UITableViewCell {
         
     }
     
+    @IBAction func increaseQuantityButtonPressed(_ sender:UIButton){
+        self.quantityChangeDelegate?.decreaseQuantity(at: sender.tag)
+    }
+    
+    @IBAction func decreaseQuantityButtonPressed(_ sender:UIButton){
+        self.quantityChangeDelegate?.increaseQuantity(at: sender.tag)
+    }
 
 }

@@ -49,7 +49,8 @@ class ProductListViewController: UIViewController{
             destination.delegate = self
         }else if segue.identifier == segueId.productDescriptionVCId {
             let destination = segue.destination as! ProductDescriptionViewController
-            destination.selectedProduct = self.availableProducts[rowForSeceltedproductToSeeDescription]
+            destination.productForDescription = self.availableProducts[rowForSeceltedproductToSeeDescription]
+            destination.delegate = self
         }else if segue.identifier == segueId.yourCartVC{
             let destination = segue.destination as! YourCartViewController
             destination.delegate = self
@@ -242,6 +243,13 @@ extension ProductListViewController:ProductListCollectionViewCellDelegate{
 
 extension ProductListViewController:YourCartViewControllerProtocol{
     func didComeFromYourCart(value: Bool) {
+        self.getStarted()
+        self.productListCollectionView.reloadData()
+    }
+}
+
+extension ProductListViewController:ProductDescriptionProtocol{
+    func didProductDescriptionViewControllerDismiss() {
         self.getStarted()
         self.productListCollectionView.reloadData()
     }

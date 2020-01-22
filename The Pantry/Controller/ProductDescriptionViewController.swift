@@ -8,12 +8,30 @@
 
 import UIKit
 
+protocol ProductDescriptionProtocol {
+    func didProductDescriptionViewControllerDismiss()
+}
+
 class ProductDescriptionViewController: UIViewController {
     
     @IBOutlet weak var productDescescriptionTableView:UITableView!
     @IBOutlet weak var productDescriptionCollectionView:UICollectionView!
     @IBOutlet weak var pageController:UIPageControl!
-    var selectedProduct = product()
+    @IBOutlet weak var productNameLabel:UILabel!
+    @IBOutlet weak var productPriceLabel:UILabel!
+    @IBOutlet weak var numberOfQuantityAddedLabel:UILabel!
+    @IBOutlet var productQuantityChangeButton:[UIButton]!
+    @IBOutlet weak var initialProductQuantityChangeButton:UIButton!
+    @IBOutlet weak var viewCartView:UIView!
+    @IBOutlet weak var numberOfItemInCartLabel:UILabel!
+    @IBOutlet weak var totalPricelabel:UILabel!
+    
+    var productInCart = [selectedProduct]()
+    var productForDescription = product()
+    var isProductQuantityChangeButtonVisible = false
+    var numberOfItemInCart = 0
+    var totalPrice:Double = 0
+    var delegate:ProductDescriptionProtocol?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,8 +41,85 @@ class ProductDescriptionViewController: UIViewController {
     }
     
     @IBAction func backButtonPressed(_ sender:UIButton){
+        self.delegate?.didProductDescriptionViewControllerDismiss()
         self.dismiss(animated: true, completion: nil)
     }
+    
+    @IBAction func productQuantityChangeButtonPressed(_ sender:UIButton){
+        var isAdded = true
+
+        for i in 0..<self.productInCart.count{
+            if self.productInCart[i].product.productId == self.productForDescription.productId{
+                if sender.tag == 1{
+                    //add
+                    productInCart[i].quantity += 1
+                    totalPrice += Double(productInCart[i].product.sellingPrice)!
+                    self.numberOfItemInCart += 1
+                }else{
+                    //sub
+                    productInCart[i].quantity -= 1
+                    totalPrice -= Double(productInCart[i].product.sellingPrice)!
+                    self.numberOfItemInCart -= 1
+                }
+                
+                if productInCart[i].quantity == 0{
+                    isAdded = false
+                    self.productInCart.remove(at: i)
+                }else{
+                    self.numberOfQuantityAddedLabel.text = "\(self.productInCart[i].quantity)"
+                }
+            }
+        }
+        
+        self.numberOfItemInCartLabel.text = "\(self.numberOfItemInCart)" + "Item"
+        self.totalPricelabel.text = "₹" + "\(self.totalPrice)"
+        
+        if !isAdded {
+            if self.numberOfItemInCart == 0{
+                self.viewCartView.isHidden = true
+            }
+            self.isProductQuantityChangeButtonVisible = false
+            self.showProductQuantityChangeControllers(withOption: isProductQuantityChangeButtonVisible)
+        }else{
+            self.isProductQuantityChangeButtonVisible = true
+            self.showProductQuantityChangeControllers(withOption: isProductQuantityChangeButtonVisible)
+        }
+        
+        save().saveCartDetais(withDetails: self.productInCart)
+        
+    }
+    
+    @IBAction func initialProductQuantityChangeButtonPressed(_ sender:UIButton){
+        
+        
+        let quantity = 1
+        let newProduct = selectedProduct(product: self.productForDescription, quantity: quantity)
+        self.productInCart.append(newProduct)
+        self.isProductQuantityChangeButtonVisible = true
+        self.numberOfQuantityAddedLabel.text = "\(quantity)"
+        
+        
+        self.numberOfItemInCart += 1
+        self.totalPrice += Double(self.productForDescription.sellingPrice)!
+        
+        self.numberOfItemInCartLabel.text = "\(self.numberOfItemInCart)" + "Item"
+         self.totalPricelabel.text = "₹" + "\(self.totalPrice)"
+        
+        if(self.totalPrice > 0){
+            self.viewCartView.isHidden = false
+        }
+        
+        self.showProductQuantityChangeControllers(withOption: isProductQuantityChangeButtonVisible)
+        save().saveCartDetais(withDetails: self.productInCart)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == segueId.yourCartVC{
+            let destination = segue.destination as! YourCartViewController
+            destination.delegate = self
+        }
+    }
+    
 
 }
 
@@ -38,7 +133,7 @@ extension ProductDescriptionViewController : UITableViewDataSource , UITableView
         let cell = self.productDescescriptionTableView.dequeueReusableCell(withIdentifier: cellIdentifier.productDescrptionCellID, for: indexPath) as! ProductDescriptionTableViewCell
         
         //store the description in the cell lable
-        cell.productDescription.text = selectedProduct.productDescription
+        cell.productDescription.text = productForDescription.productDescription
         
         return cell
     }
@@ -122,5 +217,86 @@ extension ProductDescriptionViewController{
         //setting the initial value of page controller 
         self.pageController.numberOfPages = 3
         self.pageController.currentPage = 0
+        
+        //setting ProductName and ProductPrice
+        self.productNameLabel.text = self.productForDescription.name
+        self.productPriceLabel.text = self.productForDescription.sellingPrice
+        
+        self.setupForViewCartView()
+        
+        self.setupForQuantityChange()
+    }
+    
+    @objc private func onViewCartViewTapped(){
+        performSegue(withIdentifier: segueId.yourCartVC, sender: nil)
+    }
+    
+    private func setupForQuantityChange(){
+        
+        var numberOfQuantityAdded = 0
+        
+        for i in 0..<self.productInCart.count{
+            if self.productForDescription.productId == self.productInCart[i].product.productId{
+                numberOfQuantityAdded = Int(self.productInCart[i].quantity)
+                self.numberOfQuantityAddedLabel.text =  "\(numberOfQuantityAdded)"
+                self.isProductQuantityChangeButtonVisible = true
+                self.showProductQuantityChangeControllers(withOption: isProductQuantityChangeButtonVisible)
+            }
+        }
+        
+        if numberOfQuantityAdded == 0{
+            self.isProductQuantityChangeButtonVisible = false
+            self.showProductQuantityChangeControllers(withOption: self.isProductQuantityChangeButtonVisible)
+        }
+        
+    }
+    
+    private func setupForViewCartView(){
+        
+        //getting cart detalis
+        if let cartDetails = save().getCartDetails(){
+            self.productInCart = cartDetails
+        }
+        
+        self.numberOfItemInCart = 0
+        self.totalPrice = 0
+        if(self.productInCart.count == 0){
+            self.viewCartView.isHidden = true
+        }else{
+             self.viewCartView.isHidden = false
+        }
+        for i in 0..<self.productInCart.count{
+            self.numberOfItemInCart += self.productInCart[i].quantity
+            self.totalPrice += Double(productInCart[i].product!.sellingPrice)! * Double(productInCart[i].quantity)
+        }
+        self.numberOfItemInCartLabel.text! = "\(numberOfItemInCart)"+"Item"
+        self.totalPricelabel.text = "₹"+"\(self.totalPrice)"
+        
+        //adding tap gesture to viewCart view
+        let tapGestute = UITapGestureRecognizer(target: self, action: #selector(onViewCartViewTapped))
+        self.viewCartView.addGestureRecognizer(tapGestute)
+    }
+    
+    private func showProductQuantityChangeControllers(withOption option:Bool){
+        
+        self.initialProductQuantityChangeButton.isHidden = option
+        self.initialProductQuantityChangeButton.isEnabled  = !option
+        
+        self.numberOfQuantityAddedLabel.isEnabled = option
+        self.numberOfQuantityAddedLabel.isHidden = !option
+        
+        for i in 0..<self.productQuantityChangeButton.count{
+            self.productQuantityChangeButton[i].isEnabled = option
+            self.productQuantityChangeButton[i].isHidden = !option
+        }
+        
+    }
+    
+}
+
+extension ProductDescriptionViewController:YourCartViewControllerProtocol{
+    func didComeFromYourCart(value: Bool) {
+        self.setupForViewCartView()
+        self.setupForQuantityChange()
     }
 }

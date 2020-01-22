@@ -209,12 +209,12 @@ public class Networking{
                 //make a class name product details along with urls
                 //store each product in product details class arry
                 //send the arry back
-                print(userJSON)
+                print("getListOfProducts \(userJSON)")
                 for i in 0..<userJSON.count{
                     let name = userJSON[i]["name"].string!
-                    let sellingPrice = userJSON[i]["selling_price"].string!
-                    let productId = "\(userJSON[i]["id"])"
-                    let productDescription =  userJSON[i]["description"].string!
+                    let sellingPrice = userJSON[i]["selling price"].string!
+                    let productId = "\(userJSON[i]["pid"])"
+                    let productDescription =  ""//userJSON[i]["description"].string!
                     let newproduct = product(name: name, sellingPrice: sellingPrice,productId: productId,productDescription:productDescription)
                     products.append(newproduct)
                 }
