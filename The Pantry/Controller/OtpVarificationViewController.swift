@@ -39,6 +39,13 @@ class OtpVarificationViewController: UIViewController {
     @IBAction func didNotGetOtpButtonPressed(_ sender: UIButton) {
         self.networkingForResendingOtp()
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == segueId.registrationVCId{
+            let destination = segue.destination as! RegisterViewController
+            destination.mobileNumber = self.phoneNumber
+        }
+    }
 }
 
 

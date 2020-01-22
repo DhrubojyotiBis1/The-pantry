@@ -9,6 +9,7 @@
 import UIKit
 import Razorpay
 import SVProgressHUD
+import Toast_Swift
 
 struct razorPaySucessResponseKey {
     static let orderId = AnyHashable("razorpay_order_id")
@@ -23,7 +24,11 @@ protocol CheckOutViewControllerProtcol {
 class CheckOutViewController: UIViewController {
     
     @IBOutlet weak var topNavigationView:UIView!
+    @IBOutlet weak var coupon:UITextField!
+    @IBOutlet weak var contentView:UIView!
     
+    var isCouponApplied = false
+    var phoneNumber:String!
     var checkOutAddress = [String]()
     var selectedProducts = [selectedProduct]()
     var preOrderResponse:preOrderResponce!
@@ -35,7 +40,20 @@ class CheckOutViewController: UIViewController {
         self.setUp()
     }
     
+    @IBAction func applyCouponButtonPressed(_ sender:UIButton){
+        self.isCouponApplied = true
+        if self.coupon.text! == ""{
+            //show massage that coupon cannot be empty
+            self.view.makeToast("Coupon cannot be empty", duration: 2, position: .center, completion: nil)
+        }else{
+            SVProgressHUD.show()
+            self.doPreOrder()
+        }
+    }
+    
+    
     @IBAction func PayButtonPressed(_ sender:UIButton){
+        self.isCouponApplied = false
         SVProgressHUD.show()
         self.doPreOrder()
     }
@@ -49,7 +67,14 @@ class CheckOutViewController: UIViewController {
 extension CheckOutViewController{
     private func doPreOrder(){
         let userCredentials = save().getCredentials()
+        print(userCredentials)
         let token = userCredentials[responceKey.token]!
+        phoneNumber = userCredentials["phoneNumber"]!
+        var coupon:String? = self.coupon.text!
+        if !isCouponApplied{
+            coupon = nil
+        }
+        
         var baddress1 = String()
         var baddress2 = String()
         var bcity = String()
@@ -148,7 +173,7 @@ extension CheckOutViewController{
         
         
         
-        Networking().doPreOrder(withselectedProducts: self.selectedProducts, token: token, PhoneNumber: "8961388276", billingAddress1: baddress1, billingAddress2:  baddress2, billingCity:  bcity, billingPin:  bpin, billingState:  bstate, billingCountry:  bcountry, shipingAddress1:  saddress1, shipingAddress2:  saddress2, shipingCity:  scity, shipingPin: spin, shipingState:  sstate, shipingCountry:  scountry) { (result, preOrderResponse) in
+        Networking().doPreOrder(withselectedProducts: self.selectedProducts, token: token, PhoneNumber: phoneNumber, billingAddress1: baddress1, billingAddress2:  baddress2, billingCity:  bcity, billingPin:  bpin, billingState:  bstate, billingCountry:  bcountry, shipingAddress1:  saddress1, shipingAddress2:  saddress2, shipingCity:  scity, shipingPin: spin, shipingState:  sstate, shipingCountry:  scountry, coupon: coupon) { (result, preOrderResponse) in
             
             
             if(result){
@@ -159,7 +184,7 @@ extension CheckOutViewController{
                 }
             }else{
                 SVProgressHUD.dismiss()
-                print("Some Error has orrured")
+                self.show(massage: preOrderResponse.massage!, massageTitle: "Ops!", andAlertTitle: "OK")
             }
         }
         
@@ -207,7 +232,7 @@ extension CheckOutViewController{
             razorPayCredentials.imageUrl: "ss",
             razorPayCredentials.name: "Test",
             razorPayCredentials.contactProfile: [
-                        "contact": "8961388276",
+                        "contact": phoneNumber,
                         "email": self.preOrderResponse.customerEmail!
                     ],
             razorPayCredentials.colourTheme: razorPayConstant.theme
@@ -230,5 +255,23 @@ extension CheckOutViewController{
         self.topNavigationView.layer.shadowOffset = CGSize(width: 0, height: 4.5)
         self.topNavigationView.layer.shadowOpacity = 0.4
         
+        //adding tap gesture to the content View
+        let tapGesture = UITapGestureRecognizer(target: self, action:  #selector(onTap))
+        self.contentView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func onTap(){
+        self.coupon.endEditing(true)
+    }
+    
+    private func show(massage:String,massageTitle title:String,andAlertTitle alertTitle:String ){
+        let alertController = UIAlertController(title: title, message: massage, preferredStyle: .alert)
+        let alert = UIAlertAction(title: alertTitle, style: .destructive) { (alertAction) in
+        }
+       alert.setValue(UIColor(red: 120/255, green: 202/255, blue: 40/255, alpha: 1), forKey: "titleTextColor")
+        alertController.addAction(alert)
+        present(alertController, animated: true) {
+            self.coupon.text! = ""
+        }
     }
 }

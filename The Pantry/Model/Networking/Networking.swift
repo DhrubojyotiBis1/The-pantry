@@ -13,8 +13,8 @@ import SwiftyJSON
 public class Networking{
     
     //For Registration
-    func checkRegistration(withFirstName firstname:String,lastName:String,email:String,password:String,completion: @escaping (_ result:Bool,_ massage:String?) -> ()){
-        let pram = [registeAndLoginPram.firstName:firstname,  registeAndLoginPram.lastName:lastName, registeAndLoginPram.password:password, registeAndLoginPram.email:email]
+    func checkRegistration(withFirstName firstname:String,lastName:String,email:String,password:String,phoneNumber:String,completion: @escaping (_ result:Bool,_ massage:String?) -> ()){
+        let pram = [registeAndLoginPram.firstName:firstname,  registeAndLoginPram.lastName:lastName, registeAndLoginPram.password:password, registeAndLoginPram.email:email,registeAndLoginPram.phoneNumeber:phoneNumber]
         
         Alamofire.request(url.registerURL ,method: .post , parameters : pram).responseJSON { (response) in
             if response.result.isSuccess{
@@ -22,12 +22,12 @@ public class Networking{
                 //Handel the error casses
                 //Using the login to get the token
                 let userJSON : JSON = JSON(response.result.value!)
-                print(userJSON)
+                print("checkRegistration \(userJSON)")
                 if(userJSON["message"].string == "success"){
                     self.CheckforLogin(withEmail : email,andPassword :password, comingfromLoginVC: false){result , token in
                         if(result){
                             //saveing the credentials
-                            save().saveCredentials(withFirstName: firstname, lastName: lastName, email: email, token: token)
+                            save().saveCredentials(withFirstName: firstname, lastName: lastName, email: email, phoneNumber: phoneNumber, token: token)
                             completion(true,userJSON["message"].string!)
                             
                         }else{
@@ -55,10 +55,11 @@ public class Networking{
                 //No network issue
                 let userJSON : JSON = JSON(response.result.value!)
                 //checking if the login coming from loginVC or from registerVC to get the token
+                print("CheckforLogin \(userJSON)")
                 if(comingfromLoginVC){
                     //Checking if login is Successfull
                     if(userJSON[responceKey.token].string != nil){
-                        save().saveCredentials(withFirstName: userJSON[responceKey.firstName].string!, lastName: userJSON[responceKey.lastName].string!, email: email, token: userJSON[responceKey.token].string!)
+                        save().saveCredentials(withFirstName: userJSON[responceKey.firstName].string!, lastName: userJSON[responceKey.lastName].string!, email: email, phoneNumber: userJSON[responceKey.phoneNumber].string!, token: userJSON[responceKey.token].string!)
                         
                         //getting each urls from the json
                         let urls = self.getUrls(fromJson: userJSON)
@@ -397,11 +398,22 @@ public class Networking{
         }
     }
     
-    func doPreOrder(withselectedProducts selectedProducts:[selectedProduct],token:String,PhoneNumber :String , billingAddress1 :String,billingAddress2 : String,billingCity : String,billingPin:String , billingState:String , billingCountry:String, shipingAddress1 :String,shipingAddress2 : String,shipingCity : String,shipingPin:String , shipingState:String , shipingCountry:String,completion:@escaping (_ result :Bool,_ preOrderResponce:preOrderResponce)->()){
+    func doPreOrder(withselectedProducts selectedProducts:[selectedProduct],token:String,PhoneNumber :String , billingAddress1 :String,billingAddress2 : String,billingCity : String,billingPin:String , billingState:String , billingCountry:String, shipingAddress1 :String,shipingAddress2 : String,shipingCity : String,shipingPin:String , shipingState:String , shipingCountry:String,coupon:String?,completion:@escaping (_ result :Bool,_ preOrderResponce:preOrderResponce)->()){
         
         
         let orderJson = createJSON(fromSelectedProducts: selectedProducts).getCreatedJSOn()
-        let param:[String:Any] = [preOrderKey.token:token,preOrderKey.itemOrdered:orderJson,preOrderKey.phoneNumber : PhoneNumber,preOrderKey.billingAddress1:billingAddress1,preOrderKey.billingAddress2:billingAddress2,preOrderKey.billingCity:billingCity,preOrderKey.billingPin : billingPin , preOrderKey.billingState : billingState,preOrderKey.billingCountry : billingCountry,preOrderKey.shipingAddress1:shipingAddress1,preOrderKey.shipingAddress2:shipingAddress2,preOrderKey.shipingCity:shipingCity,preOrderKey.shipingPin : shipingPin , preOrderKey.shipingState : shipingState,preOrderKey.shipingCountry : shipingCountry]
+        
+        var param:[String:Any]!
+        
+        if coupon != nil{
+            param = [preOrderKey.coupon:coupon!,preOrderKey.token:token,preOrderKey.itemOrdered:orderJson,preOrderKey.phoneNumber : PhoneNumber,preOrderKey.billingAddress1:billingAddress1,preOrderKey.billingAddress2:billingAddress2,preOrderKey.billingCity:billingCity,preOrderKey.billingPin : billingPin , preOrderKey.billingState : billingState,preOrderKey.billingCountry : billingCountry,preOrderKey.shipingAddress1:shipingAddress1,preOrderKey.shipingAddress2:shipingAddress2,preOrderKey.shipingCity:shipingCity,preOrderKey.shipingPin : shipingPin , preOrderKey.shipingState : shipingState,preOrderKey.shipingCountry : shipingCountry]
+        }else{
+            
+            param = [preOrderKey.token:token,preOrderKey.itemOrdered:orderJson,preOrderKey.phoneNumber : PhoneNumber,preOrderKey.billingAddress1:billingAddress1,preOrderKey.billingAddress2:billingAddress2,preOrderKey.billingCity:billingCity,preOrderKey.billingPin : billingPin , preOrderKey.billingState : billingState,preOrderKey.billingCountry : billingCountry,preOrderKey.shipingAddress1:shipingAddress1,preOrderKey.shipingAddress2:shipingAddress2,preOrderKey.shipingCity:shipingCity,preOrderKey.shipingPin : shipingPin , preOrderKey.shipingState : shipingState,preOrderKey.shipingCountry : shipingCountry]
+            
+        }
+        
+        print("doPreOrder \(param)")
         
         Alamofire.request(url.prepareOrderURL,method: .post ,parameters : param).responseJSON { (response) in
             if response.result.isSuccess{
@@ -418,7 +430,7 @@ public class Networking{
                     completion(true,preOrderResponse)
                 }
                 else{
-                    let preOrderResponse = preOrderResponce(totalAmoutToBePaid: nil, customerEmail: nil, key: nil, razorPayOrderId: nil, massage: "preOrder not Dode")
+                    let preOrderResponse = preOrderResponce(totalAmoutToBePaid: nil, customerEmail: nil, key: nil, razorPayOrderId: nil, massage: responce["error"].string!)
                     completion(false,preOrderResponse)
                 }
                 

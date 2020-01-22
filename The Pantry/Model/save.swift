@@ -15,15 +15,17 @@ struct saveCredential{
     static let email = "email"
     static let token = "token"
     static let cartDetails = "CartDetails"
+    static let phoneNumber = "phoneNumber"
 }
 
 public class save{
     
-    func saveCredentials(withFirstName firstName:String,lastName:String,email:String,token:String){
+    func saveCredentials(withFirstName firstName:String,lastName:String,email:String,phoneNumber:String,token:String){
         UserDefaults.standard.set(firstName, forKey: saveCredential.firstName)
         UserDefaults.standard.set(lastName, forKey: saveCredential.lastName)
         UserDefaults.standard.set(email, forKey: saveCredential.email)
         UserDefaults.standard.set(token, forKey: saveCredential.token)
+        UserDefaults.standard.set(phoneNumber, forKey: saveCredential.phoneNumber)
     }
     
     func saveCartDetais(withDetails details:[selectedProduct]){
@@ -43,6 +45,8 @@ public class save{
         creadential[saveCredential.lastName] = UserDefaults.standard.string(forKey: saveCredential.lastName)
         creadential[saveCredential.email] =  UserDefaults.standard.string(forKey: saveCredential.email)
         creadential[saveCredential.token] =  UserDefaults.standard.string(forKey: saveCredential.token)
+        creadential[saveCredential.phoneNumber] =  UserDefaults.standard.string(forKey: saveCredential.phoneNumber)
+        
         return creadential
     }
     

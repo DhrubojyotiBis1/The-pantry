@@ -12,6 +12,7 @@ class ProfileViewController: UIViewController {
     
     @IBOutlet weak var userName:UILabel!
     @IBOutlet weak var userEmail:UILabel!
+    @IBOutlet weak var phoneNumber:UILabel!
     var stringUrlForSelectedPage:String?
     
     override func viewDidLoad() {
@@ -53,8 +54,10 @@ extension ProfileViewController{
         let firstName = credentials[saveCredential.firstName]
         let lastName = credentials[saveCredential.lastName]
         let email = credentials[saveCredential.email]
+        let phoneNUmber = credentials[saveCredential.phoneNumber]
         
         self.userName.text = "\(firstName!) \(lastName!)"
         self.userEmail.text = email!
+        self.phoneNumber.text = "+91 " + phoneNUmber!
     }
 }

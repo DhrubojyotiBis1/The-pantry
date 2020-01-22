@@ -18,6 +18,9 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var firstName: UITextField!
     @IBOutlet var registerView: UIView!
     @IBOutlet weak var registerButton: UIButton!
+    
+    var mobileNumber = String()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -49,7 +52,12 @@ class RegisterViewController: UIViewController {
 //MARK:- Networking stuff
 extension RegisterViewController{
     private func neworking() {
-        Networking().checkRegistration(withFirstName: firstName.text!, lastName: lastName.text!, email: email.text!, password: password.text!){success,massage in
+        
+        for _ in 0..<2{
+             mobileNumber.removeFirst()
+        }
+        
+        Networking().checkRegistration(withFirstName: firstName.text!, lastName: lastName.text!, email: email.text!, password: password.text!,phoneNumber : mobileNumber){success,massage in
             SVProgressHUD.dismiss()
             if(success){
                 print("Done registration")

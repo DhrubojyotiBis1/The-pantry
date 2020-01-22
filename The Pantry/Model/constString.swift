@@ -34,12 +34,14 @@ struct registeAndLoginPram {
     static let email = "email"
     static let password = "password"
     static let newPassword = "new_password"
+    static let phoneNumeber = "phone"
 }
 
 struct  responceKey {
     static let firstName = "firstname"
     static let lastName = "lastname"
     static let token = "token"
+    static let phoneNumber = "phone"
 }
 
 struct cellIdentifier {
@@ -120,6 +122,7 @@ struct razorPayConstant {
 }
 
 struct preOrderKey {
+    static let coupon = "coupon"
     static let token = "token"
     static let itemOrdered = "orderItems"
     static let phoneNumber = "phone"
