@@ -81,7 +81,7 @@ extension YourCartViewController : UITableViewDelegate,UITableViewDataSource{
         cell.price.text = "₹\(sellingPrice)x\(numberOfProduct)"
 
         
-        
+        cell.quantityLabel.text = "\(numberOfProduct)"
         //setting the delegate to self
         cell.delegate = self
         cell.quantityChangeDelegate = self
@@ -93,11 +93,24 @@ extension YourCartViewController : UITableViewDelegate,UITableViewDataSource{
 
 extension YourCartViewController:YourCartTableViewCellDelegate,YourCartTableViewCellProtocol{
     func decreaseQuantity(at indexPath: Int) {
-        print("Increase at \(indexPath)")
+        self.selectedProducts[indexPath].quantity -= 1
+        
+        if self.selectedProducts[indexPath].quantity == 0{
+            removedButtonClicked(atRow: indexPath)
+        }else{
+            self.totalPrice = 0
+            save().saveCartDetais(withDetails: self.selectedProducts)
+            self.changeUiIfNeeded()
+            self.yourCartTableView.reloadData()
+        }
     }
     
     func increaseQuantity(at indexPath: Int) {
-        print("Increase at \(indexPath)")
+        self.selectedProducts[indexPath].quantity += 1
+        save().saveCartDetais(withDetails: self.selectedProducts)
+        self.totalPrice = 0
+        self.changeUiIfNeeded()
+        self.yourCartTableView.reloadData()
     }
     
     func removedButtonClicked(atRow row: Int) {

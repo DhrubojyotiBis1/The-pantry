@@ -49,11 +49,11 @@ class YourCartTableViewCell: UITableViewCell {
     }
     
     @IBAction func increaseQuantityButtonPressed(_ sender:UIButton){
-        self.quantityChangeDelegate?.decreaseQuantity(at: sender.tag)
+        self.quantityChangeDelegate?.increaseQuantity(at: sender.tag)
     }
     
     @IBAction func decreaseQuantityButtonPressed(_ sender:UIButton){
-        self.quantityChangeDelegate?.increaseQuantity(at: sender.tag)
+        self.quantityChangeDelegate?.decreaseQuantity(at: sender.tag)
     }
 
 }

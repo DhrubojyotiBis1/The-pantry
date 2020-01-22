@@ -2251,6 +2251,7 @@
                                                         <constraint firstAttribute="trailing" secondItem="LYa-5S-TQd" secondAttribute="trailing" constant="8" id="cMl-AX-btP"/>
                                                         <constraint firstItem="b2r-az-x9G" firstAttribute="top" secondItem="CUq-Iy-zkC" secondAttribute="top" constant="6" id="g2a-Us-ZWJ"/>
                                                         <constraint firstItem="LYa-5S-TQd" firstAttribute="top" secondItem="CUq-Iy-zkC" secondAttribute="top" constant="6" id="iIa-yn-MKw"/>
+                                                        <constraint firstItem="v4s-Gu-rON" firstAttribute="top" secondItem="LYa-5S-TQd" secondAttribute="bottom" constant="15.5" id="kij-LA-hEr"/>
                                                         <constraint firstAttribute="bottom" secondItem="v4s-Gu-rON" secondAttribute="bottom" id="uXt-Ng-uLc"/>
                                                         <constraint firstAttribute="bottom" secondItem="b2r-az-x9G" secondAttribute="bottom" constant="6" id="xwN-8V-tX7"/>
                                                     </constraints>
@@ -2268,6 +2269,7 @@
                                             <outlet property="increaseQuantityButton" destination="3so-YN-Qih" id="z0j-uO-Lru"/>
                                             <outlet property="price" destination="XXI-hg-GMV" id="sCW-lp-3Dr"/>
                                             <outlet property="productName" destination="OjO-gS-va9" id="lao-lu-tiX"/>
+                                            <outlet property="quantityLabel" destination="wxd-bZ-A01" id="CBt-jW-GpS"/>
                                             <outlet property="removeButton" destination="72h-Po-6Co" id="T8f-kk-5Nw"/>
                                         </connections>
                                     </tableViewCell>

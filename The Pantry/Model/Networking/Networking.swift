@@ -238,7 +238,7 @@ public class Networking{
                 //store each product in product details class arry
                 //send the arry back
                 //handel the token expired error
-                print(cartProductDetails)
+                print("getUserCartDetails \(cartProductDetails)")
                 var productInCart = [cartProduct]()
                 for i in 0..<cartProductDetails.count{
                     let productId = cartProductDetails[i][cartDetailsKey.productId].string!
