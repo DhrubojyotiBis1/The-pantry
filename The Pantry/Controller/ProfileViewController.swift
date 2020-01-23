@@ -37,7 +37,11 @@ class ProfileViewController: UIViewController {
         performSegue(withIdentifier: segueId.editProfileVCId, sender: nil)
     }
     
-    @IBAction func staticWebPageButtonClicked(_ sender : UIButton){
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == segueId.editProfileVCId{
+            let destination = segue.destination as! MyAccountViewController
+            destination.delegate = self
+        }
     }
     
     @IBAction func backButtonPressed(_ sender :UIButton){
@@ -59,5 +63,12 @@ extension ProfileViewController{
         self.userName.text = "\(firstName!) \(lastName!)"
         self.userEmail.text = email!
         self.phoneNumber.text = "+91 " + phoneNUmber!
+    }
+}
+
+extension ProfileViewController:MyAccountProtocol{
+    func didViewDismis() {
+        self.setup()
+        self.view.makeToast("Update Successful", duration: 2, position: .center, completion: nil)
     }
 }

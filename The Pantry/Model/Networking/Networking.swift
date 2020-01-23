@@ -126,10 +126,10 @@ public class Networking{
     }
     
     //For account detalis change
-    func changeAccountDetails(withFirstName firstName:String,lastName:String,email:String,token:String,password:String,completion: @escaping(_ result:Bool)->()){
+    func changeAccountDetails(withFirstName firstName:String,lastName:String,token:String,completion: @escaping(_ result:Bool)->()){
         
         
-        let pram = [registeAndLoginPram.firstName:firstName,  registeAndLoginPram.lastName:lastName, registeAndLoginPram.password:password, registeAndLoginPram.email:email,responceKey.token:token]
+        let pram = [registeAndLoginPram.firstName:firstName,  registeAndLoginPram.lastName:lastName,responceKey.token:token]
         
         Alamofire.request(url.changeAccountDetailsURL ,method: .post , parameters : pram).responseJSON { (response) in
             if response.result.isSuccess{

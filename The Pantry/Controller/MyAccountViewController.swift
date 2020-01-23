@@ -9,29 +9,35 @@
 import UIKit
 import SVProgressHUD
 
+protocol MyAccountProtocol {
+    func didViewDismis()
+}
+
 class MyAccountViewController: UIViewController {
 
-    @IBOutlet weak var confirmPassword: UITextField!
-    @IBOutlet weak var newPassword: UITextField!
-    @IBOutlet weak var lastName: UITextField!
-    @IBOutlet weak var firstName: UITextField!
-    var email = String()
+    @IBOutlet weak var firstNameTextField:UITextField!
+    @IBOutlet weak var lastNameTextField:UITextField!
+    @IBOutlet weak var phoneNumber:UILabel!
+    @IBOutlet weak var emailLabel:UILabel!
+    @IBOutlet weak var contentView:UIView!
+    
+    var credentials:[String:String]!
+    var delegate:MyAccountProtocol?
     var token = String()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-            let credentials = save().getCredentials()
-            addTextIntextField(usingCredentials: credentials)
+        // Do any additional setup after loading the view
+        self.setup()
     }
 
     @IBAction func saveButtonPressed(_ sender: Any) {
-        if(confirmPassword.text! == newPassword.text!){
+        if(firstNameTextField.text !=  "" && lastNameTextField.text !=  ""){
             SVProgressHUD.show()
             self.neworking()
         }else{
-            print("newPassword and confirmPassword is not equal")
+            print("firstName and lastName both are required")
             //Handel the error
         }
     }
@@ -44,13 +50,20 @@ class MyAccountViewController: UIViewController {
 //MARK:- Networking stuff
 extension MyAccountViewController{
     private func neworking() {
-        Networking().changeAccountDetails(withFirstName: firstName.text!, lastName: lastName.text!, email: self.email, token: self.token, password: newPassword.text!) { (result) in
+        let firstName = firstNameTextField.text!
+        let lastName = lastNameTextField.text!
+        let email = emailLabel.text!
+        let phoneNumber = self.credentials[saveCredential.phoneNumber]!
+        Networking().changeAccountDetails(withFirstName: firstName, lastName: lastName, token: self.token) { (result) in
             SVProgressHUD.dismiss()
             
             if(result){
                 //Account details change done
                 print("Account details change done")
                 //Show an alart to the user that its completed
+                save().saveCredentials(withFirstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, token: self.token)
+                self.delegate?.didViewDismis()
+                self.dismiss(animated: true, completion: nil)
             }else{
                 //Account details change failes
                 //handel the error if failed to change the detalies of the account
@@ -61,13 +74,25 @@ extension MyAccountViewController{
 }
 
 extension MyAccountViewController{
+    
+    private func setup(){
+        credentials = save().getCredentials()
+        addTextIntextField(usingCredentials: credentials)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
+        self.contentView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func onTap(){
+        self.firstNameTextField.endEditing(true)
+        self.lastNameTextField.endEditing(true)
+    }
+    
     private func addTextIntextField(usingCredentials credentials:[String:String]){
-        //setting the credentials to the textField
-        self.firstName.text = credentials[saveCredential.firstName]
-        self.lastName.text = credentials[saveCredential.lastName]
         
         //geting the token fand email from saved credentials
-        self.email = credentials[saveCredential.email]!
+        self.emailLabel.text = credentials[saveCredential.email]!
+        self.phoneNumber.text = "+91 " + credentials[saveCredential.phoneNumber]!
         self.token = credentials[saveCredential.token]!
     }
 }

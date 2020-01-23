@@ -11,7 +11,7 @@ import Foundation
 public struct url{
     static let registerURL = "http://api.gourmetatthepantry.com/api/register.php"
     static let loginURL = "http://api.gourmetatthepantry.com/api/login.php"
-    static let changeAccountDetailsURL = "https://btoscecom.herokuapp.com/api/update_acc.php/"
+    static let changeAccountDetailsURL = "http://api.gourmetatthepantry.com/api/update_acc.php/"
     static let changePasswordURL = "http://api.gourmetatthepantry.com/api/change_password.php"
     static let downloadImageURL = "https://btoscecom.herokuapp.com/api/get_homescreen.php/"
     static let productListURL = "http://api.gourmetatthepantry.com/api/get_homescreen.php/"
