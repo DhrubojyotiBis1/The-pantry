@@ -16,6 +16,7 @@ protocol ProductListCollectionViewCellDelegate {
 class ProductListCollectionViewCell: UICollectionViewCell {
     
     var section = Int()
+    @IBOutlet weak var cellWidth: NSLayoutConstraint!
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var productImage:UIImageView!

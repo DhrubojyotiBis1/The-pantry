@@ -145,6 +145,9 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
             self.makeCardView(fromViews: cell.cellView, isViewNavigationBar: false)
         }
         
+        if let screenWidth = self.view.window?.bounds.width{
+            cell.cellWidth.constant = screenWidth/2.4
+        }
         return cell
         
     }

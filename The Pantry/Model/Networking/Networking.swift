@@ -215,7 +215,7 @@ public class Networking{
                     let name = userJSON[i]["name"].string!
                     let sellingPrice = userJSON[i]["selling price"].string!
                     let productId = "\(userJSON[i]["pid"])"
-                    let productDescription =  ""//userJSON[i]["description"].string!
+                    let productDescription =  userJSON[i]["short_description"].string!
                     let newproduct = product(name: name, sellingPrice: sellingPrice,productId: productId,productDescription:productDescription)
                     products.append(newproduct)
                 }
@@ -477,7 +477,7 @@ public class Networking{
         
     }
     
-    func getTransactionHistory(withToken token:String,completion:@escaping(_ result:Int, _ transactionHistory:[order]?)->()){
+    func getTransactionHistory(withToken token:String,completion:@escaping(_ result:Int, _ transactionHistory:[order]?,_ products:[[selectedProduct]]?,_ totalAmount:[String]?)->()){
         
         let param = [responceKey.token : token]
         
@@ -488,6 +488,9 @@ public class Networking{
                 let transactionHistoryJSON = JSON(response.result.value!)
                 if transactionHistoryJSON.count > 0{
                     var transactionHistory = [order]()
+                    var productOrder = [[selectedProduct]]()
+                    var tempARRAY = [selectedProduct]()
+                    var totalAmount = [String]()
                     for i in 0..<transactionHistoryJSON.count{
                         let orderDate = transactionHistoryJSON[i][transactionKey.orderDate].string!.split(separator: " ")
                         let orderID = transactionHistoryJSON[i][transactionKey.orderId].int!
@@ -499,15 +502,31 @@ public class Networking{
                         }
                         let transactionOrder = order(orderDate: "\(orderDate[0])", orderId: orderID, isOrderSuccess: isPaymentSucess)
                         transactionHistory.append(transactionOrder)
+                        
+                        for j in 0..<transactionHistoryJSON[i]["products"].count{
+                            let name = transactionHistoryJSON[i]["products"][j]["name"].string!
+                            let sellingPrice = transactionHistoryJSON[i]["products"][j]["unit_price"].string!
+                            let productId = "\(transactionHistoryJSON[i]["products"][j]["id"].int!)"
+                            let quantity = transactionHistoryJSON[i]["products"][j]["quantity"].int!
+                            let orderProduct = product(name: name, sellingPrice: sellingPrice, productId: productId, productDescription: "")
+                            let newOrder = selectedProduct(product: orderProduct, quantity: quantity)
+                            tempARRAY.append(newOrder)
+                            
+                        }
+                        productOrder.append(tempARRAY)
+                        tempARRAY.removeAll()
+                        let total = transactionHistoryJSON[i]["total"].string!
+                        totalAmount.append(total)
+                        
                     }
-                    completion(1,transactionHistory)
+                    completion(1,transactionHistory, productOrder, totalAmount)
                     return
                 }
-                completion(-1,nil)
+                completion(-1,nil, nil, nil)
             }else{
                 //fail to do networking
                 print(response.error?.localizedDescription as Any)
-                completion(0,nil)
+                completion(0,nil, nil, nil)
             }
         }
 
