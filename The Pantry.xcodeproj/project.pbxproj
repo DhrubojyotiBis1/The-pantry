@@ -13,6 +13,7 @@
 		6F44365123A3768300F6BED2 /* PopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F44365023A3768300F6BED2 /* PopUpViewController.swift */; };
 		6F44365323A380AC00F6BED2 /* ProductListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F44365223A380AC00F6BED2 /* ProductListCollectionViewCell.swift */; };
 		6F4D6E6923AD593300D6EF40 /* cartProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F4D6E6823AD593300D6EF40 /* cartProduct.swift */; };
+		6F4D7E3823DA2CF800567E8B /* TransactionHistoryIdAndPriceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F4D7E3723DA2CF800567E8B /* TransactionHistoryIdAndPriceTableViewCell.swift */; };
 		6F4DAC7F239F76F2000E66CD /* MyAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F4DAC7E239F76F2000E66CD /* MyAccountViewController.swift */; };
 		6F4DACCE239F845C000E66CD /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6F4DACCC239F845C000E66CD /* Model.xcdatamodeld */; };
 		6F4DACD0239F88B0000E66CD /* save.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F4DACCF239F88B0000E66CD /* save.swift */; };
@@ -59,6 +60,7 @@
 		6F44365023A3768300F6BED2 /* PopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpViewController.swift; sourceTree = "<group>"; };
 		6F44365223A380AC00F6BED2 /* ProductListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListCollectionViewCell.swift; sourceTree = "<group>"; };
 		6F4D6E6823AD593300D6EF40 /* cartProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cartProduct.swift; sourceTree = "<group>"; };
+		6F4D7E3723DA2CF800567E8B /* TransactionHistoryIdAndPriceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionHistoryIdAndPriceTableViewCell.swift; sourceTree = "<group>"; };
 		6F4DAC7E239F76F2000E66CD /* MyAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAccountViewController.swift; sourceTree = "<group>"; };
 		6F4DACCD239F845C000E66CD /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		6F4DACCF239F88B0000E66CD /* save.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = save.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 				6F928CF923A3B48F00A821A9 /* YourCartTableViewCell.swift */,
 				6F928CFF23A3FB5D00A821A9 /* DescriptionTableViewCell.swift */,
 				6F928D0323A4068900A821A9 /* ProductDesctiptionCollectionViewCell.swift */,
+				6F4D7E3723DA2CF800567E8B /* TransactionHistoryIdAndPriceTableViewCell.swift */,
 			);
 			path = CustomCollectionView;
 			sourceTree = "<group>";
@@ -389,6 +392,7 @@
 				6F80061B23D209D6004F2F6B /* slideMenuAnimation.swift in Sources */,
 				6FBC7B6523D34F95007DE89D /* AddressViewController.swift in Sources */,
 				6F25998323AA4472003C6B60 /* EnterMoblieNumberController.swift in Sources */,
+				6F4D7E3823DA2CF800567E8B /* TransactionHistoryIdAndPriceTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

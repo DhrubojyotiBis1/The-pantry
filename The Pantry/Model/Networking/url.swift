@@ -25,5 +25,5 @@ public struct url{
     static let prepareOrderURL = "http://api.gourmetatthepantry.com/api/prepare_order_new.php?"
     static let transactionStatus = "http://api.gourmetatthepantry.com/api/transactionStatus.php?"
     static let catagoryURl = "http://api.gourmetatthepantry.com/api/categories.php"
-    static let transactionHistoryURL = "http://api.gourmetatthepantry.com/api/history.php?"
+    static let transactionHistoryURL = "http://api.gourmetatthepantry.com/api/previous_orders.php"
 }
