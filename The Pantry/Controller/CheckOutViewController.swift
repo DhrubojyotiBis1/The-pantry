@@ -29,6 +29,7 @@ class CheckOutViewController: UIViewController {
     
     var isCouponApplied = false
     var phoneNumber:String!
+    var transactionResult = Int()
     var checkOutAddress = [String]()
     var selectedProducts = [selectedProduct]()
     var preOrderResponse:preOrderResponce!
@@ -60,6 +61,13 @@ class CheckOutViewController: UIViewController {
     
     @IBAction func backButtonPressed(_ sender:UIButton){
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == segueId.transactionResult{
+            let destination = segue.destination as! TransactionResultViewController
+            destination.transactionResult = self.transactionResult
+        }
     }
     
 }
@@ -199,16 +207,21 @@ extension CheckOutViewController:RazorpayPaymentCompletionProtocolWithData{
         let usercredential = save().getCredentials()
         let token = usercredential[saveCredential.token]!
         Networking().checkTransactionStatus(withRazorPayPaymentId: payment_id, razorPayOrderId: resopayOrderId, razorPaySignature: razorPaySignature, andToken: token) { (result, massage) in
-            if(result){
+            if(result == 1){
                 //transaction done
-            }else{
-                //transaction failes
+                self.transactionResult = result
+                save().removeItemAddedToCart()
+                self.performSegue(withIdentifier: segueId.transactionResult, sender: nil)
+            }else if result == 0{
+                //transaction failes due to network issues
+                self.view.makeToast(massage, duration: 3, position: .bottom, completion: nil)
             }
         }
     }
     
     func onPaymentError(_ code: Int32, description str: String, andData response: [AnyHashable : Any]?) {
-        print("nope")
+        self.transactionResult = 2
+        self.performSegue(withIdentifier: segueId.transactionResult, sender: nil)
     }
     
 }

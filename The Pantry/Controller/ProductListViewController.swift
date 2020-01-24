@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 protocol  ProductListViewControllerProtocol{
     func didComeFromProductListViewController(value:Bool)
@@ -27,6 +28,7 @@ class ProductListViewController: UIViewController{
     var numberOfItemAdded = Int()
     var isfirstTime = true
     var rowForSeceltedproductToSeeDescription = Int()
+    var isGoingToTrasactionVC = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +41,11 @@ class ProductListViewController: UIViewController{
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
+        if self.isGoingToTrasactionVC{
+            print("fuck")
+            SVProgressHUD.show()
+            self.isGoingToTrasactionVC = false
+        }
     }
     
     
@@ -54,7 +60,8 @@ class ProductListViewController: UIViewController{
         }else if segue.identifier == segueId.yourCartVC{
             let destination = segue.destination as! YourCartViewController
             destination.delegate = self
-
+        }else if segue.identifier == segueId.transactionVCId{
+            self.isGoingToTrasactionVC = true
         }
     }
     

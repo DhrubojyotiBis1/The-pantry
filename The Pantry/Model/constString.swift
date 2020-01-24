@@ -26,6 +26,7 @@ struct segueId{
     static let enterMobileNumberVcId = "goToEnterMobileNumberVC"
     static let addressVC = "goToAddressVC"
     static let transactionVCId = "goToTransactionVC"
+    static let transactionResult = "goToTransactionResultVC"
 }
 
 struct registeAndLoginPram {
@@ -66,9 +67,9 @@ struct userCart {
 }
 
 struct webPageURL {
-    static let FAQ = "http://gourmetatthepantry.com/public/terms"
+    static let FAQ = "http://gourmetatthepantry.com/public/faq"
     static let privacyPolicy = "http://gourmetatthepantry.com/public/privacy"
-    static let aboutUs = "http://gourmetatthepantry.com/public/disclaimer"
+    static let aboutUs = "http://gourmetatthepantry.com/public/about"
 }
 
 struct smsGateWay {

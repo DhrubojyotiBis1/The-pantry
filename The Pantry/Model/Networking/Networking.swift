@@ -443,7 +443,7 @@ public class Networking{
         }
     }
     
-    func checkTransactionStatus(withRazorPayPaymentId paymentId:String,razorPayOrderId orderId : String,razorPaySignature signature :String,andToken token:String,completion:@escaping(_ result:Bool,_ massage:String?)->()){
+    func checkTransactionStatus(withRazorPayPaymentId paymentId:String,razorPayOrderId orderId : String,razorPaySignature signature :String,andToken token:String,completion:@escaping(_ result:Int,_ massage:String?)->()){
         
         let param:[String:String] = [razorPayTransactionkey.token:token,razorPayTransactionkey.signature:signature,razorPayTransactionkey.paymentId:paymentId,razorPayTransactionkey.razorPayOrderId:orderId]
         
@@ -452,8 +452,13 @@ public class Networking{
                      //networking done
                        //if response.result.value!.cout is 16 then the massage is send
                         print("response",response.result.value!)
+                        let userResponse  = JSON(response.result.value!)
+                        let massage = userResponse["message"].string!
+                    //if networking is done then i am assuming transaction is complete
+                        completion(1,massage)
                    }else{
                        //fail to do networking
+                        completion(0,"Network Problem")
                        print(response.error?.localizedDescription as Any)
                    }
                }

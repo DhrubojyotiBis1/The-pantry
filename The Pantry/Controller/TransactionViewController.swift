@@ -18,6 +18,7 @@ class TransactionViewController: UIViewController {
     var transactionHistory = [order]()
     var orderedProduct = [[selectedProduct]]()
     var totalCost = [String]()
+    var isCommingFromTransactionVC = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +28,11 @@ class TransactionViewController: UIViewController {
     }
     
     @IBAction func backButtonPressed(_ sender:UIButton){
-        dismiss(animated: true, completion: nil)
+        if self.isCommingFromTransactionVC {
+            performSegue(withIdentifier: segueId.HomeVCId, sender: nil)
+        }else{
+            dismiss(animated: true, completion: nil)
+        }
     }
 }
 
