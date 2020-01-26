@@ -22,6 +22,7 @@ class ViewController: UIViewController {
     var animator:DotsLoadingView!
     var itemInCart = [selectedProduct]()
     var numberOfProductInCart = Int()
+    var bannerImages = [UIImage?]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,6 +52,8 @@ class ViewController: UIViewController {
         if(segue.identifier == segueId.HomeVCId){
             //send the images to the Home VC
             save().saveCartDetais(withDetails: self.itemInCart)
+            let destination = segue.destination as! HomeViewController
+            destination.bannerImages = self.bannerImages
         }
     }
 }
@@ -58,10 +61,11 @@ class ViewController: UIViewController {
 //MARK:- Networking stuff
 extension ViewController{
     private func neworking() {
-            Networking().downloadImage(havingUrls: nil) { (result) in
+        Networking().downloadImageForHomePage(/*havingUrls: nil*/) { (result,images)  in
                 if(result){
                     //Pass the image array to the home VC
-                    print("Image download complete")
+                    self.bannerImages = images
+                    print("Image download complete",images.count,images)
                 }else{
                     //handel the error
                     print("Image download fails")

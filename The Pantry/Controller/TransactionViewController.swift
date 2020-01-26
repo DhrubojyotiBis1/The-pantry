@@ -72,6 +72,9 @@ extension TransactionViewController:UITableViewDelegate,UITableViewDataSource{
             if orderedProduct[indexPath.row].count == 4{
                 slaveTableViewCellHight -= 4
             }
+            if orderedProduct[indexPath.row].count == 1{
+                slaveTableViewCellHight += 15
+            }
         }
         let hight = CGFloat(Double(orderedProduct[indexPath.row].count)*slaveTableViewCellHight + 50 + 25)
         return hight;

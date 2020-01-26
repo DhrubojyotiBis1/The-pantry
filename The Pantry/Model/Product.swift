@@ -13,4 +13,5 @@ struct product:Codable {
     var sellingPrice = String()
     var productId = String()
     var productDescription = String()
+    var imageURL = [String]()
 }

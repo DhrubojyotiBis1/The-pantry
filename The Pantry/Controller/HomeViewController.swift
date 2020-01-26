@@ -31,6 +31,7 @@ class HomeViewController: UIViewController {
     var transection = slideMenuAnimation()
     var itemInCart = [selectedProduct]()
     var products = [product]()
+    var bannerImages = [UIImage?]()
     var stringUrlForSelectedPage:String?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -180,6 +181,9 @@ extension HomeViewController{
                 if(isSucess){
                     //got the product list details
                     //move the user to the next VC
+                    for i in 0..<productList.count{
+                        print(i,productList[i])
+                    }
                     self.products = productList
                     self.performSegue(withIdentifier: segueId.productListVC, sender: nil)
                 }else{
@@ -194,7 +198,7 @@ extension HomeViewController{
 //For the ads collection View
 extension HomeViewController:UICollectionViewDelegate,UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return self.bannerImages.count
     }
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -202,7 +206,9 @@ extension HomeViewController:UICollectionViewDelegate,UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = self.adsCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier.adsCellID, for: indexPath) as! HomeCollectionViewCell
-        cell.adsImageView.image = UIImage(named: "ads")
+        if bannerImages[indexPath.section] != nil{
+            cell.adsImageView.image = self.bannerImages[indexPath.section]!
+        }
         return cell
     }
     

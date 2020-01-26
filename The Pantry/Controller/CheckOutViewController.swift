@@ -26,6 +26,7 @@ class CheckOutViewController: UIViewController {
     @IBOutlet weak var topNavigationView:UIView!
     @IBOutlet weak var coupon:UITextField!
     @IBOutlet weak var contentView:UIView!
+    @IBOutlet weak var totalCost:UILabel!
     
     var isCouponApplied = false
     var phoneNumber:String!
@@ -271,6 +272,13 @@ extension CheckOutViewController{
         //adding tap gesture to the content View
         let tapGesture = UITapGestureRecognizer(target: self, action:  #selector(onTap))
         self.contentView.addGestureRecognizer(tapGesture)
+        
+        var totalPrice = Double()
+        for i in 0..<self.selectedProducts.count{
+           totalPrice += Double(selectedProducts[i].product!.sellingPrice)! * Double(selectedProducts[i].quantity)
+        }
+        
+        self.totalCost.text = "\(totalPrice)"
     }
     
     @objc private func onTap(){

@@ -20,6 +20,7 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var registerButton: UIButton!
     
     var mobileNumber = String()
+    var bannerImages = [UIImage?]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +42,8 @@ class RegisterViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == segueId.HomeVCId){
             //send the images to the home VC
+            let destination = segue.destination as! HomeViewController
+            destination.bannerImages = self.bannerImages
         }
     }
     
@@ -57,11 +60,12 @@ extension RegisterViewController{
              mobileNumber.removeFirst()
         }
         
-        Networking().checkRegistration(withFirstName: firstName.text!, lastName: lastName.text!, email: email.text!, password: password.text!,phoneNumber : mobileNumber){success,massage in
+        Networking().checkRegistration(withFirstName: firstName.text!, lastName: lastName.text!, email: email.text!, password: password.text!,phoneNumber : mobileNumber){success,massage,bannerImages  in
             SVProgressHUD.dismiss()
             if(success){
                 print("Done registration")
                 //take the user to the next page
+                self.bannerImages = bannerImages
                 self.performSegue(withIdentifier: segueId.HomeVCId, sender: nil)
             }else{
                 print("Failed")

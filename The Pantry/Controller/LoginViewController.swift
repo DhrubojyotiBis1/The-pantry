@@ -15,6 +15,8 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var email: UITextField!
     @IBOutlet var loginView: UIView!
     @IBOutlet weak var registerButton: UIButton!
+    
+    var bannerImages = [UIImage?]()
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -39,6 +41,8 @@ class LoginViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == segueId.HomeVCId){
             //send the images to the home VC
+            let destination = segue.destination as! HomeViewController
+            destination.bannerImages = self.bannerImages
         }
     }
     
@@ -47,11 +51,12 @@ class LoginViewController: UIViewController {
 //MARK:- Networking stuff
 extension LoginViewController{
     private func neworking() {
-        Networking().CheckforLogin(withEmail: self.email.text!, andPassword: self.password.text!, comingfromLoginVC: true){success,token in
+        Networking().CheckforLogin(withEmail: self.email.text!, andPassword: self.password.text!, comingfromLoginVC: true){success,token,bannerImages  in
             SVProgressHUD.dismiss()
             if(success){
                 //save the credential for auto login
                 print("Login done")
+                self.bannerImages = bannerImages
                 //Going to the HomeViewController
                 self.performSegue(withIdentifier: segueId.HomeVCId, sender: nil)
             }else{

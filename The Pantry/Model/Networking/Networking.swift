@@ -13,8 +13,10 @@ import SwiftyJSON
 public class Networking{
     
     //For Registration
-    func checkRegistration(withFirstName firstname:String,lastName:String,email:String,password:String,phoneNumber:String,completion: @escaping (_ result:Bool,_ massage:String?) -> ()){
+    func checkRegistration(withFirstName firstname:String,lastName:String,email:String,password:String,phoneNumber:String,completion: @escaping (_ result:Bool,_ massage:String?,_ bannerImages:[UIImage?]) -> ()){
         let pram = [registeAndLoginPram.firstName:firstname,  registeAndLoginPram.lastName:lastName, registeAndLoginPram.password:password, registeAndLoginPram.email:email,registeAndLoginPram.phoneNumeber:phoneNumber]
+        
+        var bannerImages = [UIImage?]()
         
         Alamofire.request(url.registerURL ,method: .post , parameters : pram).responseJSON { (response) in
             if response.result.isSuccess{
@@ -24,31 +26,34 @@ public class Networking{
                 let userJSON : JSON = JSON(response.result.value!)
                 print("checkRegistration \(userJSON)")
                 if(userJSON["message"].string == "success"){
-                    self.CheckforLogin(withEmail : email,andPassword :password, comingfromLoginVC: false){result , token in
+                    self.CheckforLogin(withEmail : email,andPassword :password, comingfromLoginVC: false){result , token, images  in
                         if(result){
                             //saveing the credentials
                             save().saveCredentials(withFirstName: firstname, lastName: lastName, email: email, phoneNumber: phoneNumber, token: token)
-                            completion(true,userJSON["message"].string!)
+                            bannerImages = images
+                            completion(true,userJSON["message"].string!, bannerImages)
                             
                         }else{
                             //Registration complete but not getting token "Something went wrong"
-                            completion(false,userJSON["message"].string! )
+                            completion(false,userJSON["message"].string!, bannerImages )
                         }
                     }
                 }else{
                     //registration failed as already register
-                    completion(false,userJSON["message"].string! )
+                    completion(false,userJSON["message"].string!, bannerImages )
                 }
             }else{
                 //Registration is failed
-                completion(false,nil)
+                completion(false,"Network Problem!", bannerImages)
             }
         }
     }
     
     //For login
-    func CheckforLogin(withEmail email:String,andPassword password:String,comingfromLoginVC : Bool,completion: @escaping(_ result:Bool,_ token:String)->()){
+    func CheckforLogin(withEmail email:String,andPassword password:String,comingfromLoginVC : Bool,completion: @escaping(_ result:Bool,_ token:String,_ bannerImages:[UIImage?])->()){
         let pram = [registeAndLoginPram.password:password, registeAndLoginPram.email:email]
+        
+        var bannerImages = [UIImage?]()
         
         Alamofire.request(url.loginURL ,method: .post , parameters : pram).responseJSON { (response) in
             if response.result.isSuccess{
@@ -61,7 +66,12 @@ public class Networking{
                     if(userJSON[responceKey.token].string != nil){
                         save().saveCredentials(withFirstName: userJSON[responceKey.firstName].string!, lastName: userJSON[responceKey.lastName].string!, email: email, phoneNumber: userJSON[responceKey.phoneNumber].string!, token: userJSON[responceKey.token].string!)
                         
-                        //getting each urls from the json
+                        
+                        self.downloadImageForHomePage { (_, images) in
+                            bannerImages = images
+                            completion(true,userJSON[responceKey.token].string!, bannerImages)
+                        }
+                        /*//getting each urls from the json
                         let urls = self.getUrls(fromJson: userJSON)
                         
                         //checkng if urls are valid or not
@@ -79,18 +89,24 @@ public class Networking{
                         }else{
                             //when we dont get the url
                             completion(true,"faulty urls"/*,images:[uiImage]?*/)
-                        }
+                        }*/
                     }else{
                         //no toket found
                         //Something went wrong not
                         //handel the error with a Popup
-                        completion(false,"wrong password")
+                        completion(false,"wrong password", bannerImages)
                     }
                 }else{
                     //Sending the token to the checkRegistration
                     if(userJSON[responceKey.token].string != nil){
                         
-                        //getting each urls from the json
+                        //Download image using url.downloadImageURL
+                        
+                        self.downloadImageForHomePage { (_, images) in
+                            bannerImages = images
+                            completion(true,userJSON[responceKey.token].string!, bannerImages)
+                        }
+                        /*//getting each urls from the json
                         let urls = self.getUrls(fromJson: userJSON)
                         
                         //checkng if urls are valid or not
@@ -111,16 +127,16 @@ public class Networking{
                             //when we dont get the url
                             completion(true,userJSON[responceKey.token].string!/*,images:[uiImage]?*/)
                             print("download of image not possible")
-                        }
+                        }*/
                     }else{
                         //login failde hence no token
-                        completion(false,"nil")
+                        completion(false,"nil", bannerImages)
                         print("email id used")
                     }
                 }
             }else{
                 //Registration is failed
-                completion(false, "Registration faild")
+                completion(false, "Registration faild", bannerImages)
             }
         }
     }
@@ -169,8 +185,32 @@ public class Networking{
 
     }
     
-    func downloadImage(havingUrls urls: [String.SubSequence]? ,completion:@escaping (_ result:Bool/*,_ images:[UIImage]?*/)->()){
-        if(urls != nil){
+    func downloadImageForHomePage(/*havingUrls urls: String? ,*/completion:@escaping (_ result:Bool,_ images:[UIImage?])->()){
+        let dispatchGroup = DispatchGroup()
+        var bannerImage = [UIImage?]()
+        self.getAdsImageURLForHomeViewControllerBanner { (result, urls) in
+            for i in 0..<urls!.count{
+                var tempImage:UIImage?
+                dispatchGroup.enter()
+                Alamofire.request("\(urls![i])").responseData{ (response) in
+                    if response.error == nil{
+                        print("yes")
+                        if let data = response.data {
+                            print("yes1")
+                            tempImage = UIImage(data: data)!
+                        }
+                    }else{
+                        tempImage = nil
+                    }
+                    dispatchGroup.leave()
+                    bannerImage.append(tempImage)
+                }
+            }
+            dispatchGroup.notify(queue: .main) {
+                completion(true,bannerImage)
+            }
+        }
+        /*if(urls != nil){
             //coming from the loginVC or registerVC
             //have the urls
             //start downloading the image
@@ -193,7 +233,7 @@ public class Networking{
                     completion(false)
                 }
             }
-        }
+        }*/
     }
     
     
@@ -212,11 +252,19 @@ public class Networking{
                 //send the arry back
                 print("getListOfProducts \(userJSON)")
                 for i in 0..<userJSON.count{
+                    var tempImageURL = [String]()
                     let name = userJSON[i]["name"].string!
                     let sellingPrice = userJSON[i]["selling price"].string!
                     let productId = "\(userJSON[i]["pid"])"
                     let productDescription =  userJSON[i]["short_description"].string!
-                    let newproduct = product(name: name, sellingPrice: sellingPrice,productId: productId,productDescription:productDescription)
+                    if userJSON[i]["images"].count > 0 {
+                        for j in 0..<userJSON[i]["images"].count{
+                            if let imageURL = userJSON[i]["images"][j]["path"].string{
+                                tempImageURL.append(imageURL)
+                            }
+                        }
+                    }
+                    let newproduct = product(name: name, sellingPrice: sellingPrice,productId: productId,productDescription:productDescription,imageURL: tempImageURL)
                     products.append(newproduct)
                 }
                 completion(true,products)
@@ -380,7 +428,7 @@ public class Networking{
               //networking done
                 //if response.result.value!.cout is 16 then the massage is send
                 let productDetails:JSON = JSON(response.result.value!)
-                print(productDetails)
+                print("getProductDetails: \(productDetails)")
                 let name = productDetails[productkey.productDetails][productkey.name].string!
                 let sellingPrice = productDetails[productkey.productDetails][productkey.sellingPrice].string!
                 let description = productDetails[productkey.productDetails][productkey.productDescription].string!
@@ -546,6 +594,7 @@ extension Networking{
             if response.result.isSuccess{
                 let userjson:JSON = JSON(response.result.value!)
                 //getting each urls
+                print("getAdsImageURLForHomeViewControllerBanner \(userjson)")
                 let urls = self.getUrls(fromJson: userjson)
                 if(urls != nil){
                     //if we get the url then only download of the image is possible
