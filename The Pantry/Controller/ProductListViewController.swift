@@ -149,18 +149,16 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
                 self.tempUrl = url
                 if self.productImage[url] != nil{
                     if i == 0 {
-                        if self.tempUrl == url{
-                            cell.productImage.image = self.productImage[url]!
-                            cell.activityIndicator.stopAnimating()
-                            cell.activityIndicator.isHidden = true
-                        }
+                        cell.productImage.image = self.productImage[url]!
+                        cell.activityIndicator.stopAnimating()
+                        cell.activityIndicator.isHidden = true
                     }
                 }else{
                     Networking().downloadImageForProduct(withURL: url) { (image) in
-                        self.productImage[url] = image
                         if i == 0 {
-                            if self.tempUrl == url{
-                                cell.productImage.image = image
+                            if let cellToUpdate = self.productListCollectionView.cellForItem(at: indexPath) as? ProductListCollectionViewCell{
+                                cellToUpdate.productImage.image = image
+                                self.productImage[url] = image
                                 cell.activityIndicator.stopAnimating()
                                 cell.activityIndicator.isHidden = true
                             }
@@ -318,15 +316,7 @@ extension ProductListViewController{
                 
         //adding tap gesture to the view cart view
         self.addGestureRecognization()
-        
-        //setting timer to load first product images
-        self.setTimer()
     }
-    
-    private func setTimer(){
-        self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(reloadTableViewForInitialImage), userInfo: nil, repeats: false)
-    }
-    
     @objc private func reloadTableViewForInitialImage(){
         print("after 5 sec")
         self.productListCollectionView.reloadData()
