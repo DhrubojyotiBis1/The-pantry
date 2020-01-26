@@ -22,6 +22,7 @@ class ProductListViewController: UIViewController{
     @IBOutlet weak var numberOfItemAddedLabel:UILabel!
     @IBOutlet weak var totalPriceLabel:UILabel!
     
+    var tempUrl:String?
     var delegate:ProductListViewControllerProtocol?
     var totalPrice = Double()
     var selectedProducts = [selectedProduct]()
@@ -29,6 +30,8 @@ class ProductListViewController: UIViewController{
     var isfirstTime = true
     var rowForSeceltedproductToSeeDescription = Int()
     var isGoingToTrasactionVC = false
+    var productImage = [String:UIImage?]()
+    var timer = Timer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -135,6 +138,37 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
         //if there is image in the uiimage array for the index path the show that
         //else download image using the url from the array of the product details class and store it in a different [uiimage]
         //stop the activity indicator
+        if self.availableProducts[row].imageURL.count == 0{
+            cell.productImage.image = nil
+            tempUrl = nil
+            cell.activityIndicator.startAnimating()
+            cell.activityIndicator.isHidden = false
+        }else{
+            for i in 0..<self.availableProducts[row].imageURL.count{
+                let url = "http://gourmetatthepantry.com/public/storage/" + self.availableProducts[row].imageURL[i]
+                self.tempUrl = url
+                if self.productImage[url] != nil{
+                    if i == 0 {
+                        if self.tempUrl == url{
+                            cell.productImage.image = self.productImage[url]!
+                            cell.activityIndicator.stopAnimating()
+                            cell.activityIndicator.isHidden = true
+                        }
+                    }
+                }else{
+                    Networking().downloadImageForProduct(withURL: url) { (image) in
+                        self.productImage[url] = image
+                        if i == 0 {
+                            if self.tempUrl == url{
+                                cell.productImage.image = image
+                                cell.activityIndicator.stopAnimating()
+                                cell.activityIndicator.isHidden = true
+                            }
+                        }
+                    }
+                }
+            }
+        }
         
          self.numberOfItemAddedLabel.text = "\(self.numberOfItemAdded)" + "Item"
          self.totalPriceLabel.text = "₹" + "\(self.totalPrice)"
@@ -269,6 +303,7 @@ extension ProductListViewController:ProductDescriptionProtocol{
 extension ProductListViewController{
     
     private func setup(){
+        print(self.selectedProducts)
         //confinding to delegate
         self.productListCollectionView.delegate = self
         self.productListCollectionView.dataSource = self
@@ -283,7 +318,18 @@ extension ProductListViewController{
                 
         //adding tap gesture to the view cart view
         self.addGestureRecognization()
-
+        
+        //setting timer to load first product images
+        self.setTimer()
+    }
+    
+    private func setTimer(){
+        self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(reloadTableViewForInitialImage), userInfo: nil, repeats: false)
+    }
+    
+    @objc private func reloadTableViewForInitialImage(){
+        print("after 5 sec")
+        self.productListCollectionView.reloadData()
     }
     
     private func getStarted(){

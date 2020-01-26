@@ -267,6 +267,7 @@ public class Networking{
                     let newproduct = product(name: name, sellingPrice: sellingPrice,productId: productId,productDescription:productDescription,imageURL: tempImageURL)
                     products.append(newproduct)
                 }
+                print(products)
                 completion(true,products)
             }else{
                 //fail to get the product details
@@ -584,6 +585,26 @@ public class Networking{
         }
 
         
+    }
+    
+    func downloadImageForProduct(withURL url:String,completion:@escaping (_ images:UIImage?)->()){
+        var tempImage:UIImage?
+        Alamofire.request(url).responseData{ (response) in
+            if response.error == nil{
+                if let data = response.data {
+                    if let image = UIImage(data: data){
+                        tempImage = image
+                    }else{
+                        tempImage = nil
+                    }
+                }else{
+                    tempImage = nil
+                }
+            }else{
+                tempImage = nil
+            }
+            completion(tempImage)
+        }   
     }
 }
 
