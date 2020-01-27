@@ -872,7 +872,7 @@
                                                                         <rect key="frame" x="8" y="8" width="343" height="333"/>
                                                                         <subviews>
                                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="dRb-bB-6o3">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="102" height="333"/>
+                                                                                <rect key="frame" x="0.0" y="83.5" width="102" height="166.5"/>
                                                                             </imageView>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aj Kya Banaoge?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eAT-eQ-Bwi">
                                                                                 <rect key="frame" x="108" y="148.5" width="235" height="36"/>
@@ -909,17 +909,17 @@
                                                                         <rect key="frame" x="0.0" y="0.0" width="166.5" height="280"/>
                                                                         <subviews>
                                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="YjA-Bz-G30">
-                                                                                <rect key="frame" x="35.5" y="0.0" width="96" height="126"/>
+                                                                                <rect key="frame" x="46" y="0.0" width="75" height="126"/>
                                                                                 <subviews>
                                                                                     <button opaque="NO" tag="1" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2bi-Ir-zI7">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="96" height="111.5"/>
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="75" height="111.5"/>
                                                                                         <state key="normal" image="veg"/>
                                                                                         <connections>
                                                                                             <action selector="catagoryButtonPressed:" destination="YfH-Cc-Wmb" eventType="touchUpInside" id="x2h-aM-5Pb"/>
                                                                                         </connections>
                                                                                     </button>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Veg Meal Kit" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a14-Qp-mwQ">
-                                                                                        <rect key="frame" x="0.0" y="111.5" width="96" height="14.5"/>
+                                                                                        <rect key="frame" x="0.0" y="111.5" width="75" height="14.5"/>
                                                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                                                                         <nil key="textColor"/>
                                                                                         <nil key="highlightedColor"/>
@@ -2950,6 +2950,10 @@
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="H2H-PZ-b22">
                                                     <rect key="frame" x="0.0" y="0.0" width="377" height="202.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="377" id="E7m-JR-OXr"/>
+                                                        <constraint firstAttribute="height" constant="202.5" id="tXo-wY-w14"/>
+                                                    </constraints>
                                                 </imageView>
                                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="HZK-6v-3bn">
                                                     <rect key="frame" x="171" y="84" width="35" height="35"/>
@@ -2971,12 +2975,14 @@
                                         <size key="customSize" width="377" height="202.5"/>
                                         <connections>
                                             <outlet property="activityIndicator" destination="HZK-6v-3bn" id="WVJ-Mk-kKt"/>
+                                            <outlet property="hightConstrain" destination="tXo-wY-w14" id="Xus-ru-cJY"/>
                                             <outlet property="productImage" destination="H2H-PZ-b22" id="UZs-6Q-fMl"/>
+                                            <outlet property="widthContrain" destination="E7m-JR-OXr" id="X8W-sb-zIw"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="8ns-8R-ctD">
+                            <pageControl opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="8ns-8R-ctD">
                                 <rect key="frame" x="0.0" y="167" width="375" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="rLd-Ce-ThM"/>
@@ -3256,6 +3262,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="Q86-Ab-C2C"/>
                     <connections>
+                        <outlet property="collectionViewHightConstrain" destination="e7f-6s-Aqd" id="2oy-86-jzi"/>
                         <outlet property="initialProductQuantityChangeButton" destination="5Kf-C9-gtc" id="Zwo-n8-GU5"/>
                         <outlet property="numberOfItemInCartLabel" destination="bpx-xM-ACf" id="Rkz-a2-q9n"/>
                         <outlet property="numberOfQuantityAddedLabel" destination="vtB-VJ-iMn" id="9Ff-4J-esj"/>
@@ -3793,10 +3800,10 @@
         <image name="veg" width="48" height="48"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="PFK-BV-5Vj"/>
-        <segue reference="bM1-so-pLB"/>
+        <segue reference="iKW-bI-Zmj"/>
+        <segue reference="fBF-Ue-JLq"/>
         <segue reference="zNA-fP-hne"/>
-        <segue reference="uT9-kQ-yHz"/>
+        <segue reference="UfU-kb-QFa"/>
         <segue reference="QBv-ON-yLf"/>
     </inferredMetricsTieBreakers>
 </document>

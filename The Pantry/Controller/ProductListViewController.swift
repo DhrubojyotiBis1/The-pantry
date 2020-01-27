@@ -32,6 +32,7 @@ class ProductListViewController: UIViewController{
     var isGoingToTrasactionVC = false
     var productImage = [String:UIImage?]()
     var timer = Timer()
+    let generalStorageURL = "http://gourmetatthepantry.com/public/storage/"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,6 +60,12 @@ class ProductListViewController: UIViewController{
         }else if segue.identifier == segueId.productDescriptionVCId {
             let destination = segue.destination as! ProductDescriptionViewController
             destination.productForDescription = self.availableProducts[rowForSeceltedproductToSeeDescription]
+            var temProductImage = [String:UIImage?]()
+            for i in 0..<availableProducts[rowForSeceltedproductToSeeDescription].imageURL.count{
+                let productURL = self.generalStorageURL + availableProducts[rowForSeceltedproductToSeeDescription].imageURL[i]
+                temProductImage[productURL] = self.productImage[productURL]
+            }
+            destination.productImages = temProductImage
             destination.delegate = self
         }else if segue.identifier == segueId.yourCartVC{
             let destination = segue.destination as! YourCartViewController
@@ -145,7 +152,7 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
             cell.activityIndicator.isHidden = false
         }else{
             for i in 0..<self.availableProducts[row].imageURL.count{
-                let url = "http://gourmetatthepantry.com/public/storage/" + self.availableProducts[row].imageURL[i]
+                let url = self.generalStorageURL + self.availableProducts[row].imageURL[i]
                 self.tempUrl = url
                 if self.productImage[url] != nil{
                     if i == 0 {
@@ -155,10 +162,10 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
                     }
                 }else{
                     Networking().downloadImageForProduct(withURL: url) { (image) in
+                        self.productImage[url] = image
                         if i == 0 {
                             if let cellToUpdate = self.productListCollectionView.cellForItem(at: indexPath) as? ProductListCollectionViewCell{
                                 cellToUpdate.productImage.image = image
-                                self.productImage[url] = image
                                 cell.activityIndicator.stopAnimating()
                                 cell.activityIndicator.isHidden = true
                             }

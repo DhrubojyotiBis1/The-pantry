@@ -10,6 +10,8 @@ import UIKit
 
 class ProductDesctiptionCollectionViewCell: UICollectionViewCell {
     
+    @IBOutlet weak var hightConstrain: NSLayoutConstraint!
+    @IBOutlet weak var widthContrain: NSLayoutConstraint!
     @IBOutlet weak var productImage:UIImageView!
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
     

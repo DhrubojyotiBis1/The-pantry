@@ -63,7 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                        }
                    }
                    self.didCartUpdated = true
-               }
+        }
     }
 
     // MARK: - Core Data stack

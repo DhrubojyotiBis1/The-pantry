@@ -14,6 +14,7 @@ protocol ProductDescriptionProtocol {
 
 class ProductDescriptionViewController: UIViewController {
     
+    @IBOutlet weak var collectionViewHightConstrain: NSLayoutConstraint!
     @IBOutlet weak var productDescescriptionTableView:UITableView!
     @IBOutlet weak var productDescriptionCollectionView:UICollectionView!
     @IBOutlet weak var pageController:UIPageControl!
@@ -32,6 +33,7 @@ class ProductDescriptionViewController: UIViewController {
     var numberOfItemInCart = 0
     var totalPrice:Double = 0
     var delegate:ProductDescriptionProtocol?
+    var productImages = [String:UIImage?]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -148,7 +150,7 @@ extension ProductDescriptionViewController:UICollectionViewDataSource, UICollect
         return 1
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return self.productImages.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -159,6 +161,16 @@ extension ProductDescriptionViewController:UICollectionViewDataSource, UICollect
         //if there is image in the uiimage array for the index path then show that
         //else download image using the url from the array of the product details class and store it in a different [uiimage]
         //stop the activity indicator
+        
+        let url = "http://gourmetatthepantry.com/public/storage/" + self.productForDescription.imageURL[indexPath.section]
+        
+        if productImages[url] != nil{
+            cell.activityIndicator.stopAnimating()
+            cell.productImage.image = productImages[url]!
+        }
+        
+        cell.hightConstrain.constant = self.productDescriptionCollectionView.bounds.height
+        cell.widthContrain.constant = self.productDescriptionCollectionView.bounds.width
         
         return cell
     }
@@ -214,8 +226,12 @@ extension ProductDescriptionViewController{
         productDescriptionCollectionView.delegate = self
         productDescriptionCollectionView.dataSource = self
         
-        //setting the initial value of page controller 
-        self.pageController.numberOfPages = 3
+        //setting the initial value of page controller
+        if self.productImages.count <= 1{
+            self.pageController.isHidden = true
+            self.pageController.isEnabled = false
+        }
+        self.pageController.numberOfPages = self.productImages.count
         self.pageController.currentPage = 0
         
         //setting ProductName and ProductPrice
@@ -225,6 +241,10 @@ extension ProductDescriptionViewController{
         self.setupForViewCartView()
         
         self.setupForQuantityChange()
+        
+        if (self.view.bounds.height / 3) >  self.collectionViewHightConstrain.constant {
+            self.collectionViewHightConstrain.constant = self.view.bounds.height / 3
+        }
     }
     
     @objc private func onViewCartViewTapped(){
