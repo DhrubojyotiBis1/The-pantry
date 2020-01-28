@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 protocol ProductDescriptionProtocol {
     func didProductDescriptionViewControllerDismiss()
@@ -26,6 +27,7 @@ class ProductDescriptionViewController: UIViewController {
     @IBOutlet weak var viewCartView:UIView!
     @IBOutlet weak var numberOfItemInCartLabel:UILabel!
     @IBOutlet weak var totalPricelabel:UILabel!
+    @IBOutlet weak var navigationBar:UIView!
     
     var productInCart = [selectedProduct]()
     var productForDescription = product()
@@ -45,6 +47,10 @@ class ProductDescriptionViewController: UIViewController {
     @IBAction func backButtonPressed(_ sender:UIButton){
         self.delegate?.didProductDescriptionViewControllerDismiss()
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func viewTransactionHistoryButtonPressed(_ sender:UIButton){
+        performSegue(withIdentifier: segueId.transactionVCId, sender: nil)
     }
     
     @IBAction func productQuantityChangeButtonPressed(_ sender:UIButton){
@@ -115,9 +121,18 @@ class ProductDescriptionViewController: UIViewController {
         save().saveCartDetais(withDetails: self.productInCart)
     }
     
+    @IBAction func threeDotButtonPressed(_ sender:UIButton){
+        performSegue(withIdentifier: segueId.threeDotPopVCId, sender: nil)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == segueId.yourCartVC{
             let destination = segue.destination as! YourCartViewController
+            destination.delegate = self
+        }else if segue.identifier == segueId.transactionVCId{
+            SVProgressHUD.show()
+        }else if segue.identifier == segueId.threeDotPopVCId{
+            let destination = segue.destination as! PopUpViewController
             destination.delegate = self
         }
     }
@@ -150,7 +165,7 @@ extension ProductDescriptionViewController:UICollectionViewDataSource, UICollect
         return 1
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.productImages.count
+        return self.productForDescription.imageURL.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -167,6 +182,16 @@ extension ProductDescriptionViewController:UICollectionViewDataSource, UICollect
         if productImages[url] != nil{
             cell.activityIndicator.stopAnimating()
             cell.productImage.image = productImages[url]!
+        }else{
+            Networking().downloadImageForProduct(withURL: url) { (image) in
+                DispatchQueue.main.async {
+                    if let cellToUpdate = self.productDescriptionCollectionView.cellForItem(at: indexPath) as? ProductDesctiptionCollectionViewCell{
+                        cellToUpdate.productImage.image = image
+                        cell.activityIndicator.stopAnimating()
+                        cell.activityIndicator.isHidden = true
+                    }
+                }
+            }
         }
         
         cell.hightConstrain.constant = self.productDescriptionCollectionView.bounds.height
@@ -226,12 +251,19 @@ extension ProductDescriptionViewController{
         productDescriptionCollectionView.delegate = self
         productDescriptionCollectionView.dataSource = self
         
+        //setting the card view for the top view
+        self.navigationBar.layer.masksToBounds = false
+        self.navigationBar.layer.shadowColor = UIColor.gray.cgColor
+        self.navigationBar.layer.shadowOffset = CGSize(width: 0, height: 4)
+        self.navigationBar.layer.shadowOpacity = 0.4
+        
         //setting the initial value of page controller
-        if self.productImages.count <= 1{
+        if self.productForDescription.imageURL.count <= 1{
             self.pageController.isHidden = true
             self.pageController.isEnabled = false
         }
-        self.pageController.numberOfPages = self.productImages.count
+        self.pageController.pageIndicatorTintColor = UIColor.green
+        self.pageController.numberOfPages = self.productForDescription.imageURL.count
         self.pageController.currentPage = 0
         
         //setting ProductName and ProductPrice
@@ -312,11 +344,33 @@ extension ProductDescriptionViewController{
         
     }
     
+    private func clearCartPressed(){
+        self.productInCart.removeAll()
+        save().saveCartDetais(withDetails: self.productInCart)
+        self.setUp()
+    }
+    
 }
 
 extension ProductDescriptionViewController:YourCartViewControllerProtocol{
     func didComeFromYourCart(value: Bool) {
         self.setupForViewCartView()
         self.setupForQuantityChange()
+    }
+}
+
+extension ProductDescriptionViewController:popUpPopUpViewControllerDelegate{
+    func popUpButtonTaped(withTag tag: Int) {
+        print("yes")
+        switch tag {
+        case 1:
+            //clear cart
+            self.clearCartPressed()
+            break
+        case 2:
+            performSegue(withIdentifier: segueId.profileVCId, sender: nil)
+        default:
+            break
+        }
     }
 }

@@ -31,7 +31,7 @@ class TransactionResultViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool){
         super.viewWillDisappear(animated)
-        SVProgressHUD.show()
+        SVProgressHUD.dismiss()
     }
     
     @IBAction func checkOrderBUttonPressed(_ sender:UIButton){
