@@ -160,7 +160,7 @@ struct productkey{
     static let productDetails = "product_details"
     static let name = "name"
     static let productId = "id"
-    static let productDescription = "description"
+    static let productDescription = "short_description"
     static let category = "category"
     static let sellingPrice = "selling_price"
 }

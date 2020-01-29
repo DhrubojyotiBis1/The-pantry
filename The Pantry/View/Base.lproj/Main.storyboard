@@ -1623,7 +1623,7 @@
             <objects>
                 <viewController modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" id="Nay-lB-3L2" customClass="PopUpViewController" customModule="The_Pantry" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8fr-uJ-jVW">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RSr-JA-srN">
@@ -2301,6 +2301,7 @@
                         <outlet property="checkOutButtonView" destination="N1F-uJ-TYO" id="aFd-GV-lSD"/>
                         <outlet property="yourCartTableView" destination="Ytf-WO-KRQ" id="87V-Qv-oVh"/>
                         <segue destination="5Pd-Aa-KeU" kind="show" identifier="goToAddressVC" id="rJH-iR-YQE"/>
+                        <segue destination="H0G-p2-5XH" kind="show" identifier="goToProductDescriptionVC" id="wsa-Vp-mfL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Sz-IN-jKl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -3964,6 +3965,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="qld-UG-KmR"/>
+        <segue reference="wsa-Vp-mfL"/>
         <segue reference="fBF-Ue-JLq"/>
         <segue reference="A62-CG-zpc"/>
         <segue reference="x5l-kD-6SF"/>

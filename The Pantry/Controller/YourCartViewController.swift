@@ -23,6 +23,8 @@ class YourCartViewController:UIViewController{
     var totalPrice = Double()
     var numberOfItemAdded = Int()
     var delegate:YourCartViewControllerProtocol?
+    var selectedProductForDescriptionRow = Int()
+    var isCommingformDescriptionVC = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +51,14 @@ class YourCartViewController:UIViewController{
 
         if self.selectedProducts.count > 0{
             self.performSegue(withIdentifier: segueId.addressVC, sender: nil)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == segueId.productDescriptionVCId{
+            let destination = segue.destination as! ProductDescriptionViewController
+            destination.productForDescription = self.selectedProducts[selectedProductForDescriptionRow].product
+            destination.delegate = self
         }
     }
     
@@ -87,6 +97,13 @@ extension YourCartViewController : UITableViewDelegate,UITableViewDataSource{
         cell.quantityChangeDelegate = self
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if !isCommingformDescriptionVC{
+            self.selectedProductForDescriptionRow = indexPath.row
+            performSegue(withIdentifier: segueId.productDescriptionVCId, sender: nil)
+        }
     }
     
 }
@@ -131,6 +148,8 @@ extension YourCartViewController{
     //All private functions
     
     private func setUp(){
+        self.numberOfItemAdded = 0
+        self.totalPrice = 0
         self.yourCartTableView.dataSource = self
         self.yourCartTableView.delegate = self
         self.changeUiIfNeeded()
@@ -140,6 +159,7 @@ extension YourCartViewController{
         if let selectedProduct = save().getCartDetails(){
             self.selectedProducts = selectedProduct
         }
+        print(self.selectedProducts)
         self.getTotalPriceAndNumberofItemInCart()
         
         if self.selectedProducts.count == 0{
@@ -176,5 +196,12 @@ extension YourCartViewController{
 extension YourCartViewController:CheckOutViewControllerProtcol{
     func didPaymentCmplete(withsStatus status: Bool) {
         
+    }
+}
+
+extension YourCartViewController:ProductDescriptionProtocol{
+    func didProductDescriptionViewControllerDismiss() {
+        self.setUp()
+        self.yourCartTableView.reloadData()
     }
 }

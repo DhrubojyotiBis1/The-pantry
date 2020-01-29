@@ -42,6 +42,7 @@ class ProductDescriptionViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         self.setUp()
+        print(self.productForDescription.imageURL.count)
     }
     
     @IBAction func backButtonPressed(_ sender:UIButton){
@@ -128,6 +129,7 @@ class ProductDescriptionViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == segueId.yourCartVC{
             let destination = segue.destination as! YourCartViewController
+            destination.isCommingformDescriptionVC = true
             destination.delegate = self
         }else if segue.identifier == segueId.transactionVCId{
             SVProgressHUD.show()

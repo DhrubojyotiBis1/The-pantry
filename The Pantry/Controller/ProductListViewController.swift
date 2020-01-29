@@ -338,7 +338,7 @@ extension ProductListViewController{
         if let selectedProduct = save().getCartDetails(){
             self.selectedProducts = selectedProduct
         }
-        
+        print(selectedProducts)
         self.isfirstTime = true
 
     }
