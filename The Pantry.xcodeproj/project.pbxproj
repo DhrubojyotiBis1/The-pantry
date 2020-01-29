@@ -19,6 +19,7 @@
 		6F4DACD0239F88B0000E66CD /* save.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F4DACCF239F88B0000E66CD /* save.swift */; };
 		6F4EFD0923AB543000E49FC7 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F4EFD0823AB543000E49FC7 /* Product.swift */; };
 		6F4F16F423E1EE1800C9BC21 /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F4F16F323E1EE1800C9BC21 /* HomeTableViewCell.swift */; };
+		6F4F16FC23E21E9400C9BC21 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6F4F16FB23E21E9400C9BC21 /* Main.storyboard */; };
 		6F4FD51F23D22772008803B2 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F4FD51E23D22772008803B2 /* MenuViewController.swift */; };
 		6F50FE4723ABFF8D00C7AF21 /* RazorPayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F50FE4623ABFF8D00C7AF21 /* RazorPayViewController.swift */; };
 		6F5318C223AA30F50015B580 /* OtpVarificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F5318C123AA30F50015B580 /* OtpVarificationViewController.swift */; };
@@ -50,7 +51,6 @@
 		6FEE1735239F0B29002079FC /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FEE1734239F0B28002079FC /* Networking.swift */; };
 		A368231BCC0F8436D21EA64A /* Pods_The_Pantry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A51DDFF6D2F1570F5A9A959F /* Pods_The_Pantry.framework */; };
 		E084D04D225BBC1200E6F163 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E084D04C225BBC1200E6F163 /* AppDelegate.swift */; };
-		E084D052225BBC1200E6F163 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E084D050225BBC1200E6F163 /* Main.storyboard */; };
 		E084D057225BBC1300E6F163 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E084D055225BBC1300E6F163 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +68,7 @@
 		6F4DACCF239F88B0000E66CD /* save.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = save.swift; sourceTree = "<group>"; };
 		6F4EFD0823AB543000E49FC7 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		6F4F16F323E1EE1800C9BC21 /* HomeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
+		6F4F16FB23E21E9400C9BC21 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		6F4FD51E23D22772008803B2 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		6F50FE4623ABFF8D00C7AF21 /* RazorPayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RazorPayViewController.swift; sourceTree = "<group>"; };
 		6F5318C123AA30F50015B580 /* OtpVarificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtpVarificationViewController.swift; sourceTree = "<group>"; };
@@ -101,7 +102,6 @@
 		A51DDFF6D2F1570F5A9A959F /* Pods_The_Pantry.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_The_Pantry.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E084D049225BBC1200E6F163 /* The Pantry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Pantry.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E084D04C225BBC1200E6F163 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E084D051225BBC1200E6F163 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E084D056225BBC1300E6F163 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E084D058225BBC1300E6F163 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -153,7 +153,7 @@
 		6F703C61239EBF3E007C5E78 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				E084D050225BBC1200E6F163 /* Main.storyboard */,
+				6F4F16FB23E21E9400C9BC21 /* Main.storyboard */,
 				E084D055225BBC1300E6F163 /* LaunchScreen.storyboard */,
 				6FA8325D239EBFDE00DEC90E /* Assets.xcassets 20-32-52-381.xcassets */,
 			);
@@ -305,9 +305,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F4F16FC23E21E9400C9BC21 /* Main.storyboard in Resources */,
 				6FA8325E239EBFDE00DEC90E /* Assets.xcassets 20-32-52-381.xcassets in Resources */,
 				E084D057225BBC1300E6F163 /* LaunchScreen.storyboard in Resources */,
-				E084D052225BBC1200E6F163 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -407,14 +407,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		E084D050225BBC1200E6F163 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E084D051225BBC1200E6F163 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		E084D055225BBC1300E6F163 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
