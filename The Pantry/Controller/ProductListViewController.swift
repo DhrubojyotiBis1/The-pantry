@@ -164,10 +164,12 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
                     Networking().downloadImageForProduct(withURL: url) { (image) in
                         self.productImage[url] = image
                         if i == 0 {
-                            if let cellToUpdate = self.productListCollectionView.cellForItem(at: indexPath) as? ProductListCollectionViewCell{
-                                cellToUpdate.productImage.image = image
-                                cell.activityIndicator.stopAnimating()
-                                cell.activityIndicator.isHidden = true
+                            DispatchQueue.main.async {
+                                if let cellToUpdate = self.productListCollectionView.cellForItem(at: indexPath) as? ProductListCollectionViewCell{
+                                    cellToUpdate.productImage.image = self.productImage[url]!
+                                    cellToUpdate.activityIndicator.stopAnimating()
+                                    cellToUpdate.activityIndicator.isHidden = true
+                                }
                             }
                         }
                     }
