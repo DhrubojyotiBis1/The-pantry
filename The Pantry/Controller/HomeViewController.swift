@@ -11,8 +11,14 @@ import SVProgressHUD
 import SafariServices
 
 class HomeViewController: UIViewController {
-    @IBOutlet weak var adsCollectionView: UICollectionView!
-    @IBOutlet var conteverView: [UIView]!
+    //@IBOutlet weak var adsCollectionView: UICollectionView!
+    //@IBOutlet var conteverView: [UIView]!
+    
+    @IBOutlet weak var widthConstrainViewCartView: NSLayoutConstraint!
+    @IBOutlet weak var horizontalcentralViewCartView: NSLayoutConstraint!
+    @IBOutlet weak var stackViewTrailingConstrain: NSLayoutConstraint!
+    @IBOutlet weak var catagoriesStackViewTrailingConstant: NSLayoutConstraint!
+    @IBOutlet var catagoryButtons: [UIButton]!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var trailingConstrain: NSLayoutConstraint!
     @IBOutlet weak var viewBottomConstrain: NSLayoutConstraint!
@@ -20,11 +26,14 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var viewLeadingConstrain: NSLayoutConstraint!
     @IBOutlet weak var mainView:UIView!
     @IBOutlet weak var backgroundView:UIView!
-    @IBOutlet weak var dynamicHeadingLabel:UILabel!
-    /*    @IBOutlet weak var viewCartView:UIView!
+    @IBOutlet weak var recomendedForYouTabelView:UITableView!
+    @IBOutlet weak var viewCartView:UIView!
+    @IBOutlet weak var bottomCostrainTableView:NSLayoutConstraint!
+    //@IBOutlet weak var dynamicHeadingLabel:UILabel!
+    //@IBOutlet weak var viewCartView:UIView!
     @IBOutlet weak var numberOfItemInCartLabel:UILabel!
-    @IBOutlet weak var totalPricelabel:UILabel!*/
-    var StringsForHeadting = ["Get our best deals!","Sale coming soon!","Deal of the day!","Aj Kya Banaoge?"]
+    @IBOutlet weak var totalPricelabel:UILabel!
+    /*var StringsForHeadting = ["Get our best deals!","Sale coming soon!","Deal of the day!","Aj Kya Banaoge?"]*/
     var showingHeadingAtIndex = 0
     var numberOfItemInCart = 0
     var totalPrice = Double()
@@ -94,11 +103,13 @@ extension HomeViewController{
     //All private function extention
     private func setup(){
         
-        _ = Timer.scheduledTimer(timeInterval: 4, target: self, selector: #selector(self.runTimedCode), userInfo: nil, repeats: true)
+       /* _ = Timer.scheduledTimer(timeInterval: 4, target: self, selector: #selector(self.runTimedCode), userInfo: nil, repeats: true)*/
         
         //confinding to dataSource and deligate
-        self.adsCollectionView.dataSource = self
-        self.adsCollectionView.delegate = self
+        //self.adsCollectionView.dataSource = self
+        //self.adsCollectionView.delegate = self
+        self.recomendedForYouTabelView.delegate = self
+        self.recomendedForYouTabelView.dataSource = self
         
         //setting the card view for the top view
         self.topView.layer.masksToBounds = false
@@ -107,26 +118,32 @@ extension HomeViewController{
         self.topView.layer.shadowOpacity = 0.4
         
         //setting the card view for the contenor view
-        for i in 0..<self.conteverView.count{
+        /*for i in 0..<self.conteverView.count{
             self.conteverView[i].layer.masksToBounds = false
             self.conteverView[i].layer.cornerRadius = 2
             self.conteverView[i].layer.shadowColor = UIColor.gray.cgColor
             self.conteverView[i].layer.shadowOffset = CGSize(width: 0, height: 2)
             self.conteverView[i].layer.shadowOpacity = 0.4
+        }*/
+        
+        for i in 0..<self.catagoryButtons.count{
+           self.catagoryButtons[i].layer.cornerRadius = 40
         }
+        
         self.setupForViewCartView()
     }
     
-    @objc private func runTimedCode(){
+    /*@objc private func runTimedCode(){
         dynamicHeadingLabel.fadeTransition(1)
         self.dynamicHeadingLabel.text = self.StringsForHeadting[self.showingHeadingAtIndex]
         showingHeadingAtIndex += 1
         if showingHeadingAtIndex == StringsForHeadting.count{
             self.showingHeadingAtIndex = 0
         }
-    }
+    }*/
     
     @objc func onTap(){
+        print("Yes")
         performSegue(withIdentifier: segueId.yourCartVC, sender: nil)
     }
     
@@ -139,16 +156,24 @@ extension HomeViewController{
         self.numberOfItemInCart = 0
         self.totalPrice = 0
         if(self.itemInCart.count == 0){
-            //self.viewCartView.isHidden = true
+            self.viewCartView.isHidden = true
+            if self.bottomCostrainTableView.constant != 10{
+                self.bottomCostrainTableView.constant -= self.viewCartView.bounds.height
+            }
         }else{
-             //self.viewCartView.isHidden = false
+             self.viewCartView.isHidden = false
+             self.bottomCostrainTableView.constant += self.viewCartView.bounds.height
         }
         for i in 0..<self.itemInCart.count{
             self.numberOfItemInCart += self.itemInCart[i].quantity
             self.totalPrice += Double(itemInCart[i].product!.sellingPrice)! * Double(itemInCart[i].quantity)
         }
-        //self.numberOfItemInCartLabel.text! = "\(numberOfItemInCart)"+"Item"
-        //self.totalPricelabel.text = "₹"+"\(self.totalPrice)"
+        self.numberOfItemInCartLabel.text! = "\(numberOfItemInCart)"+"Item"
+        self.totalPricelabel.text = "₹"+"\(self.totalPrice)"
+        self.widthConstrainViewCartView.constant = self.view.bounds.width
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
+        self.viewCartView.addGestureRecognizer(tapGesture)
     }
     
     private func getProductCatagory(fromTag tag:Int)->String{
@@ -195,8 +220,27 @@ extension HomeViewController{
 }
 
 
+extension HomeViewController:UITableViewDelegate,UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = recomendedForYouTabelView.dequeueReusableCell(withIdentifier: "recomendedProductTableViewCell", for: indexPath) as! HomeTableViewCell
+        
+        cell.addButton.tag = indexPath.row
+        cell.subtractButton.tag = indexPath.row
+        cell.delegate = self
+        
+        return cell
+    }
+    
+    
+}
+
+
 //For the ads collection View
-extension HomeViewController:UICollectionViewDelegate,UICollectionViewDataSource{
+/*extension HomeViewController:UICollectionViewDelegate,UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.bannerImages.count
     }
@@ -226,13 +270,21 @@ extension HomeViewController:UICollectionViewDelegate,UICollectionViewDataSource
         
         
     }
-}
+}*/
 
 extension HomeViewController{
     private func changeContrain(isMenuShown:Bool){
         
         if isMenuShown {
-            self.mainView.layer.cornerRadius = 10
+            self.mainView.layer.cornerRadius = 20
+            self.mainView.layer.masksToBounds = false
+            self.mainView.layer.shadowColor = UIColor.gray.cgColor
+            self.mainView.layer.shadowOffset = CGSize(width: 0, height: 4)
+            self.mainView.layer.shadowOpacity = 0.6
+            self.mainView.layer.shadowRadius = 15
+            self.viewCartView.roundCorners(corners: .bottomLeft, radius: 20)
+
+            
             self.backgroundView.backgroundColor = UIColor(red: 120/255, green: 202/255, blue: 40/255, alpha: 0.9)
             self.viewBottomConstrain.constant = self.viewBottomConstrain.constant + self.view.bounds.width*0.06
             
@@ -241,9 +293,23 @@ extension HomeViewController{
             self.viewLeadingConstrain.constant = self.viewTopConstrain.constant + self.view.bounds.width*0.6
             
             self.trailingConstrain.constant -= self.view.bounds.width*0.6
+            self.horizontalcentralViewCartView.constant = self.view.bounds.width*0.032
+            
+            if self.view.bounds.width < 380{
+                self.catagoriesStackViewTrailingConstant.constant += self.view.bounds.width*0.025
+                self.stackViewTrailingConstrain.constant -= 50
+            }
+            
         }else{
             
             self.mainView.layer.cornerRadius = 0
+            self.mainView.layer.masksToBounds = true
+            self.mainView.layer.shadowColor = UIColor.white.cgColor
+            self.mainView.layer.shadowOffset = CGSize(width: 0, height: 0)
+            self.mainView.layer.shadowOpacity = 0
+            self.mainView.layer.shadowRadius = 0
+            self.viewCartView.roundCorners(corners: .bottomLeft, radius: 0)
+            
             self.backgroundView.backgroundColor = UIColor.systemBackground
             
             self.viewBottomConstrain.constant = 0
@@ -251,8 +317,14 @@ extension HomeViewController{
             self.viewTopConstrain.constant = 8
             
             self.viewLeadingConstrain.constant = 0
+            self.horizontalcentralViewCartView.constant = 0
             
             self.trailingConstrain.constant = 0
+            if self.view.bounds.width < 380{
+                self.catagoriesStackViewTrailingConstant.constant = 8
+                self.stackViewTrailingConstrain.constant = 8
+            }
+
         }
         
         UIView.animate(withDuration: 0.2, delay: 0.0, options: .curveEaseIn, animations: {
@@ -297,12 +369,26 @@ extension HomeViewController{
 
 extension HomeViewController:YourCartViewControllerProtocol,ProductListViewControllerProtocol{
     func didComeFromProductListViewController(value: Bool) {
+        self.bottomCostrainTableView.constant = 10
         self.setupForViewCartView()
     }
     
     func didComeFromYourCart(value: Bool) {
+        self.bottomCostrainTableView.constant = 10
         self.setupForViewCartView()
     }
+}
+
+extension HomeViewController:HomeTableViewCellProtocol{
+    func addButtonPressed(tag: Int) {
+        print(tag)
+    }
+    
+    func subButtonPressed(tag: Int) {
+        print(tag)
+    }
+    
+    
 }
 
 extension HomeViewController:popUpPopUpViewControllerDelegate,MenuViewControllerProtocol{
@@ -367,5 +453,11 @@ extension UIView {
         animation.type = CATransitionType.fade
         animation.duration = duration
         layer.add(animation, forKey: CATransitionType.fade.rawValue)
+    }
+    func roundCorners(corners: UIRectCorner, radius: CGFloat) {
+        let path = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        let mask = CAShapeLayer()
+        mask.path = path.cgPath
+        layer.mask = mask
     }
 }
