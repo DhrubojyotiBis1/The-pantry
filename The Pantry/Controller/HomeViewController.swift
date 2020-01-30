@@ -37,6 +37,9 @@ class HomeViewController: UIViewController {
     var showingHeadingAtIndex = 0
     var numberOfItemInCart = 0
     var totalPrice = Double()
+    var recomendedProducts = [product]()
+    let generalStorageURL = "http://gourmetatthepantry.com/public/storage/"
+    var recomendedProductImage = [String:UIImage?]()
     var transection = slideMenuAnimation()
     var itemInCart = [selectedProduct]()
     var products = [product]()
@@ -222,7 +225,7 @@ extension HomeViewController{
 
 extension HomeViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return self.recomendedProducts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -231,6 +234,42 @@ extension HomeViewController:UITableViewDelegate,UITableViewDataSource{
         cell.addButton.tag = indexPath.row
         cell.subtractButton.tag = indexPath.row
         cell.delegate = self
+        
+        if self.recomendedProducts[indexPath.row].imageURL.count == 0{
+            cell.productImage.image = nil
+            /*tempUrl = nil
+            cell.activityIndicator.startAnimating()
+            cell.activityIndicator.isHidden = false*/
+        }else{
+            for i in 0..<self.recomendedProducts[indexPath.row].imageURL.count{
+                let url = self.generalStorageURL + self.recomendedProducts[indexPath.row].imageURL[i]
+                //self.tempUrl = url
+                if self.recomendedProductImage[url] != nil{
+                    if i == 0 {
+                        cell.productImage.image = self.recomendedProductImage[url]!
+                        /*cell.activityIndicator.stopAnimating()
+                        cell.activityIndicator.isHidden = true*/
+                    }
+                }else{
+                    Networking().downloadImageForProduct(withURL: url) { (image) in
+                        self.recomendedProductImage[url] = image
+                        if i == 0 {
+                            DispatchQueue.main.async {
+                                if let cellToUpdate = self.recomendedForYouTabelView.cellForRow(at: indexPath) as? HomeTableViewCell{
+                                    cellToUpdate.productImage.image = self.recomendedProductImage[url]!
+                                    /*cellToUpdate.activityIndicator.stopAnimating()
+                                    cellToUpdate.activityIndicator.isHidden = true*/
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        cell.productName.text = self.recomendedProducts[indexPath.row].name
+        cell.productDiscription.text = self.recomendedProducts[indexPath.row].productDescription
+        cell.productSellingPrice.text = self.recomendedProducts[indexPath.row].sellingPrice
         
         return cell
     }

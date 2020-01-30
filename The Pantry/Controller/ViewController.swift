@@ -23,6 +23,7 @@ class ViewController: UIViewController {
     var itemInCart = [selectedProduct]()
     var numberOfProductInCart = Int()
     var bannerImages = [UIImage?]()
+    var recomendedProduct = [product]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +36,8 @@ class ViewController: UIViewController {
         self.decideDestinationSegueID()
         //doing the networking i.e downloading image if user is going to Home VC
         if self.destinationSegueId == segueId.HomeVCId{
-            self.neworking()
+            //self.neworking()
+            self.getRecommendedProduct()
             self.getCartDetails()
         }
     }
@@ -53,14 +55,15 @@ class ViewController: UIViewController {
             //send the images to the Home VC
             save().saveCartDetais(withDetails: self.itemInCart)
             let destination = segue.destination as! HomeViewController
-            destination.bannerImages = self.bannerImages
+            //destination.bannerImages = self.bannerImages
+            destination.recomendedProducts = self.recomendedProduct
         }
     }
 }
 
 //MARK:- Networking stuff
 extension ViewController{
-    private func neworking() {
+    /*private func neworking() {
         Networking().downloadImageForHomePage(/*havingUrls: nil*/) { (result,images)  in
                 if(result){
                     //Pass the image array to the home VC
@@ -78,6 +81,19 @@ extension ViewController{
                     self.process = true
                 }
             }
+    }*/
+    
+    private func getRecommendedProduct(){
+        let catagory = "recommended-for-you"
+        Networking().getListOfProducts(forCatagory: catagory) { (result, recomendedProducts) in
+            self.recomendedProduct = recomendedProducts
+            if(self.process){
+                self.animator.stop()
+                self.performSegue(withIdentifier: self.destinationSegueId, sender: nil)
+            }else{
+                self.process = true
+            }
+        }
     }
     
     private func getCartDetails(){

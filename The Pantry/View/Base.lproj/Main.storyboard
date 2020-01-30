@@ -928,7 +928,7 @@
                                                     <constraint firstItem="WA7-9j-Z1j" firstAttribute="leading" secondItem="D6y-t1-fw5" secondAttribute="leading" constant="8" id="sXC-q1-7YG"/>
                                                 </constraints>
                                             </view>
-                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kEm-N0-kld">
+                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kEm-N0-kld">
                                                 <rect key="frame" x="8" y="204" width="359" height="403"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                 <prototypes>
@@ -943,10 +943,10 @@
                                                                     <rect key="frame" x="8" y="8" width="343" height="150"/>
                                                                     <subviews>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no image " translatesAutoresizingMaskIntoConstraints="NO" id="pmK-bg-RAM">
-                                                                            <rect key="frame" x="8" y="5" width="140" height="137"/>
+                                                                            <rect key="frame" x="8" y="8" width="140" height="140"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="140" id="7re-s0-luc"/>
-                                                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="140" id="Dtb-G1-nPr"/>
+                                                                                <constraint firstAttribute="height" constant="140" id="Dtb-G1-nPr"/>
                                                                             </constraints>
                                                                         </imageView>
                                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="4ce-fa-TyW">
@@ -1025,8 +1025,7 @@
                                                                         <constraint firstAttribute="trailing" secondItem="4ce-fa-TyW" secondAttribute="trailing" constant="8" id="8e0-r4-cWX"/>
                                                                         <constraint firstAttribute="bottom" secondItem="61K-if-h1R" secondAttribute="bottom" id="CW2-7j-bwg"/>
                                                                         <constraint firstItem="61K-if-h1R" firstAttribute="top" secondItem="4ce-fa-TyW" secondAttribute="bottom" constant="8" id="Cxf-Bs-gOW"/>
-                                                                        <constraint firstItem="pmK-bg-RAM" firstAttribute="top" secondItem="gnt-Cm-jIk" secondAttribute="top" constant="5" id="I9h-7v-9Y0"/>
-                                                                        <constraint firstAttribute="bottom" secondItem="pmK-bg-RAM" secondAttribute="bottom" constant="8" id="Ilu-59-yJw"/>
+                                                                        <constraint firstItem="pmK-bg-RAM" firstAttribute="top" secondItem="gnt-Cm-jIk" secondAttribute="top" constant="8" id="I9h-7v-9Y0"/>
                                                                         <constraint firstItem="61K-if-h1R" firstAttribute="leading" secondItem="pmK-bg-RAM" secondAttribute="trailing" constant="8" id="N9C-4z-zDv"/>
                                                                         <constraint firstItem="4ce-fa-TyW" firstAttribute="top" secondItem="gnt-Cm-jIk" secondAttribute="top" constant="8" id="VA5-dC-bJ5"/>
                                                                         <constraint firstItem="pmK-bg-RAM" firstAttribute="leading" secondItem="gnt-Cm-jIk" secondAttribute="leading" constant="8" id="v84-5C-OeF"/>
@@ -1047,6 +1046,7 @@
                                                             <outlet property="productImage" destination="pmK-bg-RAM" id="E7b-ph-wlk"/>
                                                             <outlet property="productName" destination="r1M-Ux-YdK" id="dg9-iJ-9fh"/>
                                                             <outlet property="productQuantity" destination="wxd-bZ-A01" id="YDd-Y4-8ei"/>
+                                                            <outlet property="productSellingPrice" destination="7ai-3j-UI8" id="tUJ-bk-9u1"/>
                                                             <outlet property="subtractButton" destination="8D7-mV-h4i" id="Ilm-54-HDM"/>
                                                         </connections>
                                                     </tableViewCell>
@@ -3964,12 +3964,12 @@
         <image name="veg" width="48" height="48"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="qld-UG-KmR"/>
-        <segue reference="wsa-Vp-mfL"/>
-        <segue reference="fBF-Ue-JLq"/>
-        <segue reference="A62-CG-zpc"/>
+        <segue reference="PFK-BV-5Vj"/>
+        <segue reference="EFn-LC-GMC"/>
+        <segue reference="bM1-so-pLB"/>
+        <segue reference="bad-x7-UcN"/>
         <segue reference="x5l-kD-6SF"/>
-        <segue reference="UfU-kb-QFa"/>
+        <segue reference="uT9-kQ-yHz"/>
         <segue reference="QBv-ON-yLf"/>
     </inferredMetricsTieBreakers>
 </document>

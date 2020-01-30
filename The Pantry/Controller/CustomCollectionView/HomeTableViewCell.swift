@@ -24,6 +24,7 @@ class HomeTableViewCell: UITableViewCell {
     @IBOutlet weak var cellView:UIView!
     @IBOutlet weak var addButton:UIButton!
     @IBOutlet weak var subtractButton:UIButton!
+    @IBOutlet weak var productSellingPrice:UILabel!
     var delegate:HomeTableViewCellProtocol?
 
     override func awakeFromNib() {
