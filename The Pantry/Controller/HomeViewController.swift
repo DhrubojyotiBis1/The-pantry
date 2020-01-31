@@ -42,9 +42,11 @@ class HomeViewController: UIViewController {
     var recomendedProductImage = [String:UIImage?]()
     var transection = slideMenuAnimation()
     var itemInCart = [selectedProduct]()
+    var isfirstTime = true
     var products = [product]()
     var bannerImages = [UIImage?]()
     var stringUrlForSelectedPage:String?
+    var numberOfItemAdded = Int()
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -157,7 +159,10 @@ extension HomeViewController{
         }
         
         self.numberOfItemInCart = 0
+        self.numberOfItemAdded = 0
         self.totalPrice = 0
+        self.viewCartView.isHidden = true
+        self.isfirstTime = true
         if(self.itemInCart.count == 0){
             self.viewCartView.isHidden = true
             if self.bottomCostrainTableView.constant != 10{
@@ -167,12 +172,12 @@ extension HomeViewController{
              self.viewCartView.isHidden = false
              self.bottomCostrainTableView.constant += self.viewCartView.bounds.height
         }
-        for i in 0..<self.itemInCart.count{
+        /*for i in 0..<self.itemInCart.count{
             self.numberOfItemInCart += self.itemInCart[i].quantity
             self.totalPrice += Double(itemInCart[i].product!.sellingPrice)! * Double(itemInCart[i].quantity)
         }
         self.numberOfItemInCartLabel.text! = "\(numberOfItemInCart)"+"Item"
-        self.totalPricelabel.text = "₹"+"\(self.totalPrice)"
+        self.totalPricelabel.text = "₹"+"\(self.totalPrice)"*/
         self.widthConstrainViewCartView.constant = self.view.bounds.width
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
@@ -234,6 +239,10 @@ extension HomeViewController:UITableViewDelegate,UITableViewDataSource{
         cell.addButton.tag = indexPath.row
         cell.subtractButton.tag = indexPath.row
         cell.delegate = self
+        cell.subtractButton.isHidden = true
+        cell.productQuantity.text = "0"
+        self.viewCartView.isHidden = true
+        cell.productQuantity.isHidden = true
         
         if self.recomendedProducts[indexPath.row].imageURL.count == 0{
             cell.productImage.image = nil
@@ -270,6 +279,32 @@ extension HomeViewController:UITableViewDelegate,UITableViewDataSource{
         cell.productName.text = self.recomendedProducts[indexPath.row].name
         cell.productDiscription.text = self.recomendedProducts[indexPath.row].productDescription
         cell.productSellingPrice.text = self.recomendedProducts[indexPath.row].sellingPrice
+        
+        //setting row and section no. to get which add button pressed later
+        let row = indexPath.row
+        if(row >= 0 && row < recomendedProducts.count){
+            if(self.itemInCart.count > 0){
+                for i in 0..<self.itemInCart.count{
+                    if(self.itemInCart[i].product.productId ==  self.recomendedProducts[row].productId){
+                        cell.productQuantity.text = "\(self.itemInCart[i].quantity)"
+                        cell.subtractButton.isHidden = false
+                        cell.productQuantity.isHidden = false
+                    }
+                    if(isfirstTime){
+                        self.totalPrice += Double(self.itemInCart[i].quantity) *  Double(self.itemInCart[i].product.sellingPrice)!
+                        self.numberOfItemAdded += self.itemInCart[i].quantity
+                    }
+                }
+            }
+        }
+        
+        self.isfirstTime = false
+        
+        self.numberOfItemInCartLabel.text = "\(self.numberOfItemAdded)" + "Item"
+         self.totalPricelabel.text = "₹" + "\(self.totalPrice)"
+        if(self.totalPrice > 0){
+            self.viewCartView.isHidden = false
+        }
         
         return cell
     }
@@ -410,21 +445,66 @@ extension HomeViewController:YourCartViewControllerProtocol,ProductListViewContr
     func didComeFromProductListViewController(value: Bool) {
         self.bottomCostrainTableView.constant = 10
         self.setupForViewCartView()
+        self.recomendedForYouTabelView.reloadData()
     }
     
     func didComeFromYourCart(value: Bool) {
         self.bottomCostrainTableView.constant = 10
         self.setupForViewCartView()
+        self.recomendedForYouTabelView.reloadData()
     }
 }
 
 extension HomeViewController:HomeTableViewCellProtocol{
     func addButtonPressed(tag: Int) {
-        print(tag)
+        let i = tag
+        var doneWithSelectedProduct = false
+        let justSelectedProduct = self.recomendedProducts[i]
+        for j in 0..<self.itemInCart.count{
+            if(itemInCart[j].product.productId == justSelectedProduct.productId ){
+                self.itemInCart[j].quantity += 1
+                doneWithSelectedProduct = true
+            }
+        }
+        
+        if(!doneWithSelectedProduct){
+            self.isfirstTime = false
+            let quantity = 1
+            let justSelectedProduct = selectedProduct(product: justSelectedProduct, quantity: quantity)
+            self.itemInCart.append(justSelectedProduct)
+        }
+        
+        self.numberOfItemAdded += 1
+        self.totalPrice += Double(justSelectedProduct.sellingPrice)!
+        
+        self.recomendedForYouTabelView.reloadData()
+        
+        save().saveCartDetais(withDetails: self.itemInCart)
+        
     }
     
     func subButtonPressed(tag: Int) {
-        print(tag)
+        self.isfirstTime = false
+        let i = tag
+        let justSelectedProduct = recomendedProducts[i]
+        for j in 0..<self.itemInCart.count{
+            if(itemInCart[j].product.productId == justSelectedProduct.productId ){
+                self.itemInCart[j].quantity -= 1
+                if(itemInCart[j].quantity == 0){
+                    self.itemInCart.remove(at: j)
+                    break
+                }
+            }
+        }
+        
+        self.numberOfItemAdded -= 1
+        if(totalPrice != 0){
+            self.totalPrice -= Double(justSelectedProduct.sellingPrice)!
+        }
+        
+        self.recomendedForYouTabelView.reloadData()
+        
+        save().saveCartDetais(withDetails: self.itemInCart)
     }
     
     
