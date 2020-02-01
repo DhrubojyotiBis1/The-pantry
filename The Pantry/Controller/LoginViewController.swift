@@ -19,6 +19,9 @@ class LoginViewController: UIViewController {
     var itemInCart = [selectedProduct]()
     var numberOfProductInCart:Int?
     var bannerImages = [UIImage?]()
+    var productInCartImages = [String:UIImage?]()
+    var recomendedProduct = [product]()
+    var process = Bool()
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -45,6 +48,8 @@ class LoginViewController: UIViewController {
             //send the images to the home VC
             let destination = segue.destination as! HomeViewController
             destination.bannerImages = self.bannerImages
+            destination.recomendedProducts = self.recomendedProduct
+            destination.productInCartImage = self.productInCartImages
         }
     }
     
@@ -100,6 +105,16 @@ extension LoginViewController{
     }
     
     private func getCartDetails(completion:@escaping()->()){
+        var isReadyToPerformSegue = false
+        self.getRecommendedProduct {
+            if isReadyToPerformSegue {
+                print("yep")
+                completion()
+            }else{
+                print("yepp")
+                isReadyToPerformSegue = true
+            }
+        }
         let userCredential = save().getCredentials()
         if let token = userCredential[saveCredential.token]{
             Networking().getUserCartDetails(withUserToken: token) { (result,productsInCart)  in
@@ -112,8 +127,17 @@ extension LoginViewController{
                             if(result){
                                 let cartItem = selectedProduct(product: products, quantity: quantity)
                                 self.itemInCart.append(cartItem)
-                                if self.numberOfProductInCart == self.itemInCart.count{
-                                    completion()
+                                let url  = "http://gourmetatthepantry.com/public/storage/"+cartItem.product.imageURL[0]
+                                self.downloadImageForProductInCart(withUrl: url) {
+                                    if self.numberOfProductInCart == self.itemInCart.count{
+                                        if isReadyToPerformSegue{
+                                            print("ye")
+                                            completion()
+                                        }else{
+                                            print("yeppp")
+                                            isReadyToPerformSegue = true
+                                        }
+                                    }
                                 }
                             }else{
                                 print("look in Login VC")
@@ -129,6 +153,26 @@ extension LoginViewController{
                     completion()
                 }
             }
+        }
+    }
+    
+    private func getRecommendedProduct(completion:@escaping ()->()){
+        let catagory = "recommended-for-you"
+        Networking().getListOfProducts(forCatagory: catagory) { (result, recomendedProducts) in
+            self.recomendedProduct = recomendedProducts
+            if(result){
+                SVProgressHUD.dismiss()
+                completion()
+            }else{
+                //internet problem
+            }
+        }
+    }
+    
+    private func downloadImageForProductInCart(withUrl url:String,completion:@escaping ()->()){
+        Networking().downloadImageForProduct(withURL: url) { (cartProductImages) in
+            self.productInCartImages[url] = cartProductImages
+            completion()
         }
     }
 }

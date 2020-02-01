@@ -10,7 +10,7 @@ import UIKit
 import SVProgressHUD
 
 protocol ProductDescriptionProtocol {
-    func didProductDescriptionViewControllerDismiss()
+    func didProductDescriptionViewControllerDismiss(productInCart : [String:UIImage?])
 }
 
 class ProductDescriptionViewController: UIViewController {
@@ -36,6 +36,7 @@ class ProductDescriptionViewController: UIViewController {
     var totalPrice:Double = 0
     var delegate:ProductDescriptionProtocol?
     var productImages = [String:UIImage?]()
+    var productImageInCart = [String:UIImage?]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +47,7 @@ class ProductDescriptionViewController: UIViewController {
     }
     
     @IBAction func backButtonPressed(_ sender:UIButton){
-        self.delegate?.didProductDescriptionViewControllerDismiss()
+        self.delegate?.didProductDescriptionViewControllerDismiss(productInCart: self.productImageInCart)
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -73,6 +74,8 @@ class ProductDescriptionViewController: UIViewController {
                 
                 if productInCart[i].quantity == 0{
                     isAdded = false
+                    let url = "http://gourmetatthepantry.com/public/storage/" + productInCart[i].product.imageURL[0]
+                    self.productImageInCart.removeValue(forKey: url)
                     self.productInCart.remove(at: i)
                 }else{
                     self.numberOfQuantityAddedLabel.text = "\(self.productInCart[i].quantity)"
@@ -107,7 +110,8 @@ class ProductDescriptionViewController: UIViewController {
         self.isProductQuantityChangeButtonVisible = true
         self.numberOfQuantityAddedLabel.text = "\(quantity)"
         
-        
+        let url = "http://gourmetatthepantry.com/public/storage/" + newProduct.product.imageURL[0]
+        self.productImageInCart[url] = self.productImages[url]
         self.numberOfItemInCart += 1
         self.totalPrice += Double(self.productForDescription.sellingPrice)!
         
@@ -130,6 +134,7 @@ class ProductDescriptionViewController: UIViewController {
         if segue.identifier == segueId.yourCartVC{
             let destination = segue.destination as! YourCartViewController
             destination.isCommingformDescriptionVC = true
+            destination.productInCartImages = self.productImageInCart
             destination.delegate = self
         }else if segue.identifier == segueId.transactionVCId{
             SVProgressHUD.show()

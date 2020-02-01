@@ -25,6 +25,7 @@ class YourCartViewController:UIViewController{
     var delegate:YourCartViewControllerProtocol?
     var selectedProductForDescriptionRow = Int()
     var isCommingformDescriptionVC = false
+    var productInCartImages = [String:UIImage?]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,6 +97,27 @@ extension YourCartViewController : UITableViewDelegate,UITableViewDataSource{
         cell.delegate = self
         cell.quantityChangeDelegate = self
         
+        //setting images
+        if self.selectedProducts[indexPath.row].product.imageURL.count == 0{
+            cell.productImage.image = nil
+        }else{
+            let url = "http://gourmetatthepantry.com/public/storage/"+self.selectedProducts[indexPath.row].product.imageURL[0]
+            if self.productInCartImages[url] != nil{
+                print("Not Downloading")
+                cell.productImage.image = self.productInCartImages[url]!
+            }else{
+                print("Downloading")
+                Networking().downloadImageForProduct(withURL: url) { (image) in
+                    self.productInCartImages[url] = image
+                    DispatchQueue.main.async {
+                        if let cellToUpdate = self.yourCartTableView.cellForRow(at: indexPath) as? YourCartTableViewCell{
+                            cellToUpdate.productImage.image = image
+                        }
+                    }
+                }
+            }
+        }
+        
         return cell
     }
     
@@ -159,7 +181,6 @@ extension YourCartViewController{
         if let selectedProduct = save().getCartDetails(){
             self.selectedProducts = selectedProduct
         }
-        print(self.selectedProducts)
         self.getTotalPriceAndNumberofItemInCart()
         
         if self.selectedProducts.count == 0{
@@ -200,7 +221,8 @@ extension YourCartViewController:CheckOutViewControllerProtcol{
 }
 
 extension YourCartViewController:ProductDescriptionProtocol{
-    func didProductDescriptionViewControllerDismiss() {
+    func  didProductDescriptionViewControllerDismiss(productInCart: [String : UIImage?]){
+        self.productInCartImages = productInCart
         self.setUp()
         self.yourCartTableView.reloadData()
     }

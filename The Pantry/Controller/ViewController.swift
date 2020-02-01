@@ -22,7 +22,7 @@ class ViewController: UIViewController {
     var animator:DotsLoadingView!
     var itemInCart = [selectedProduct]()
     var numberOfProductInCart = Int()
-    var bannerImages = [UIImage?]()
+    var productInCartImages = [String:UIImage?]()
     var recomendedProduct = [product]()
 
     override func viewDidLoad() {
@@ -57,6 +57,7 @@ class ViewController: UIViewController {
             let destination = segue.destination as! HomeViewController
             //destination.bannerImages = self.bannerImages
             destination.recomendedProducts = self.recomendedProduct
+            destination.productInCartImage = self.productInCartImages
         }
     }
 }
@@ -82,6 +83,12 @@ extension ViewController{
                 }
             }
     }*/
+    
+    private func downloadImageForProductInCart(withUrl url:String){
+        Networking().downloadImageForProduct(withURL: url) { (cartProductImages) in
+            self.productInCartImages[url] = cartProductImages
+        }
+    }
     
     private func getRecommendedProduct(){
         let catagory = "recommended-for-you"
@@ -113,10 +120,18 @@ extension ViewController{
                                 if(result){
                                     let cartItem = selectedProduct(product: products, quantity: quantity)
                                     self.itemInCart.append(cartItem)
-                                    if(self.numberOfProductInCart == 0){
-                                        self.checkProcessForCartItemDownload()
+                                    if products?.imageURL.count == 0{
+                                        //no url to download cart product image
                                     }else{
-                                        self.numberOfProductInCart -= 1
+                                        let url = "http://gourmetatthepantry.com/public/storage/"+products!.imageURL[0]
+                                        Networking().downloadImageForProduct(withURL: url) { (images) in
+                                            self.productInCartImages[url] = images
+                                            if(self.numberOfProductInCart == 0){
+                                                self.checkProcessForCartItemDownload()
+                                            }else{
+                                                 self.numberOfProductInCart -= 1
+                                            }
+                                        }
                                     }
                                 }else{
                                     print("look in View Controller")
@@ -172,6 +187,7 @@ extension ViewController{
         if(self.process){
             self.animator.stop()
             self.performSegue(withIdentifier: self.destinationSegueId, sender: nil)
+            //save().save(cartImages: self.productInCartImages)
         }else{
             self.process = true
         }

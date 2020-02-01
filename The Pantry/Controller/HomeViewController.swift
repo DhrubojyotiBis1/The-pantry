@@ -40,6 +40,7 @@ class HomeViewController: UIViewController {
     var recomendedProducts = [product]()
     let generalStorageURL = "http://gourmetatthepantry.com/public/storage/"
     var recomendedProductImage = [String:UIImage?]()
+    var productInCartImage = [String:UIImage?]()
     var transection = slideMenuAnimation()
     var itemInCart = [selectedProduct]()
     var isfirstTime = true
@@ -56,6 +57,7 @@ class HomeViewController: UIViewController {
     
     @IBAction func catagoryButtonPressed(_ sender: UIButton) {
         SVProgressHUD.show()
+       // save().save(cartImages: self.productInCartImage)
         let productCatagory = self.getProductCatagory(fromTag: sender.tag)
         self.getProdctListDetails(withProductCatagory: productCatagory)
     }
@@ -79,9 +81,11 @@ class HomeViewController: UIViewController {
         if segue.identifier == segueId.productListVC{
             let destination = segue.destination as! ProductListViewController
             destination.availableProducts = self.products
+            destination.cartProductImage = self.productInCartImage
             destination.delegate = self
         }else if segue.identifier == segueId.yourCartVC{
             let destination = segue.destination as! YourCartViewController
+            destination.productInCartImages = self.productInCartImage
             destination.delegate = self
         }else if segue.identifier == segueId.threeDotPopVCId{
             let destiination = segue.destination as! PopUpViewController
@@ -148,7 +152,7 @@ extension HomeViewController{
     }*/
     
     @objc func onTap(){
-        print("Yes")
+        //save().save(cartImages: self.productInCartImage)
         performSegue(withIdentifier: segueId.yourCartVC, sender: nil)
     }
     
@@ -157,6 +161,8 @@ extension HomeViewController{
         if let selectedProduct = save().getCartDetails(){
             self.itemInCart = selectedProduct
         }
+        
+        //self.productInCartImage = save().getcartImages()
         
         self.numberOfItemInCart = 0
         self.numberOfItemAdded = 0
@@ -199,6 +205,8 @@ extension HomeViewController{
     
     private func clearCart(){
         self.itemInCart.removeAll()
+        self.productInCartImage.removeAll()
+        //save().save(cartImages: self.productInCartImage)
         save().saveCartDetais(withDetails: self.itemInCart)
         self.setupForViewCartView()
     }
@@ -242,6 +250,7 @@ extension HomeViewController:UITableViewDelegate,UITableViewDataSource{
         cell.subtractButton.isHidden = true
         cell.productQuantity.text = "0"
         self.viewCartView.isHidden = true
+        self.bottomCostrainTableView.constant = 10
         cell.productQuantity.isHidden = true
         
         if self.recomendedProducts[indexPath.row].imageURL.count == 0{
@@ -304,6 +313,7 @@ extension HomeViewController:UITableViewDelegate,UITableViewDataSource{
          self.totalPricelabel.text = "₹" + "\(self.totalPrice)"
         if(self.totalPrice > 0){
             self.viewCartView.isHidden = false
+            self.bottomCostrainTableView.constant += self.viewCartView.bounds.height
         }
         
         return cell
@@ -442,7 +452,8 @@ extension HomeViewController{
 }
 
 extension HomeViewController:YourCartViewControllerProtocol,ProductListViewControllerProtocol{
-    func didComeFromProductListViewController(value: Bool) {
+   func didComeFromProductListViewController(value:Bool,producIncartImages:[String:UIImage?]){
+        self.productInCartImage = producIncartImages
         self.bottomCostrainTableView.constant = 10
         self.setupForViewCartView()
         self.recomendedForYouTabelView.reloadData()
@@ -471,6 +482,10 @@ extension HomeViewController:HomeTableViewCellProtocol{
             self.isfirstTime = false
             let quantity = 1
             let justSelectedProduct = selectedProduct(product: justSelectedProduct, quantity: quantity)
+            if justSelectedProduct.product.imageURL.count != 0{
+                let url = "http://gourmetatthepantry.com/public/storage/" + justSelectedProduct.product.imageURL[0]
+                self.productInCartImage[url] = self.recomendedProductImage[url]
+            }
             self.itemInCart.append(justSelectedProduct)
         }
         
@@ -492,6 +507,10 @@ extension HomeViewController:HomeTableViewCellProtocol{
                 self.itemInCart[j].quantity -= 1
                 if(itemInCart[j].quantity == 0){
                     self.itemInCart.remove(at: j)
+                    if justSelectedProduct.imageURL.count != 0{
+                        let url = "http://gourmetatthepantry.com/public/storage/" + justSelectedProduct.imageURL[0]
+                        self.productInCartImage.removeValue(forKey: url)
+                    }
                     break
                 }
             }

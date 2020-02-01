@@ -887,7 +887,7 @@
                                                                 <rect key="frame" x="279" y="0.0" width="80" height="97"/>
                                                                 <subviews>
                                                                     <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hRJ-R8-PhY">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="80" height="92"/>
                                                                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <state key="normal" image="merchandise"/>
                                                                         <connections>
@@ -895,7 +895,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Merchandise" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zeY-yE-BRb">
-                                                                        <rect key="frame" x="0.0" y="85" width="80" height="12"/>
+                                                                        <rect key="frame" x="0.0" y="97" width="80" height="0.0"/>
                                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="10"/>
                                                                         <nil key="textColor"/>
@@ -943,7 +943,7 @@
                                                                     <rect key="frame" x="8" y="8" width="343" height="150"/>
                                                                     <subviews>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no image " translatesAutoresizingMaskIntoConstraints="NO" id="pmK-bg-RAM">
-                                                                            <rect key="frame" x="8" y="8" width="140" height="140"/>
+                                                                            <rect key="frame" x="8" y="8" width="140" height="138"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="140" id="7re-s0-luc"/>
                                                                                 <constraint firstAttribute="height" constant="140" id="Dtb-G1-nPr"/>
@@ -1031,6 +1031,7 @@
                                                                         <constraint firstItem="pmK-bg-RAM" firstAttribute="top" secondItem="gnt-Cm-jIk" secondAttribute="top" constant="8" id="I9h-7v-9Y0"/>
                                                                         <constraint firstItem="61K-if-h1R" firstAttribute="leading" secondItem="pmK-bg-RAM" secondAttribute="trailing" constant="8" id="N9C-4z-zDv"/>
                                                                         <constraint firstItem="4ce-fa-TyW" firstAttribute="top" secondItem="gnt-Cm-jIk" secondAttribute="top" constant="8" id="VA5-dC-bJ5"/>
+                                                                        <constraint firstAttribute="bottom" secondItem="pmK-bg-RAM" secondAttribute="bottom" constant="4" id="sF1-JZ-Nec"/>
                                                                         <constraint firstItem="pmK-bg-RAM" firstAttribute="leading" secondItem="gnt-Cm-jIk" secondAttribute="leading" constant="8" id="v84-5C-OeF"/>
                                                                     </constraints>
                                                                 </view>
@@ -2147,7 +2148,11 @@
                                                             </constraints>
                                                         </view>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no image " translatesAutoresizingMaskIntoConstraints="NO" id="b2r-az-x9G" userLabel="no image">
-                                                            <rect key="frame" x="8" y="6" width="160" height="128"/>
+                                                            <rect key="frame" x="8" y="6" width="160" height="130"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="160" id="1sM-vb-GzJ"/>
+                                                                <constraint firstAttribute="height" constant="130" id="blz-fe-5q0"/>
+                                                            </constraints>
                                                         </imageView>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="LYa-5S-TQd">
                                                             <rect key="frame" x="176" y="6" width="175" height="117.5"/>
@@ -2234,7 +2239,6 @@
                                                         <constraint firstItem="LYa-5S-TQd" firstAttribute="top" secondItem="CUq-Iy-zkC" secondAttribute="top" constant="6" id="iIa-yn-MKw"/>
                                                         <constraint firstItem="v4s-Gu-rON" firstAttribute="top" secondItem="LYa-5S-TQd" secondAttribute="bottom" constant="15.5" id="kij-LA-hEr"/>
                                                         <constraint firstAttribute="bottom" secondItem="v4s-Gu-rON" secondAttribute="bottom" id="uXt-Ng-uLc"/>
-                                                        <constraint firstAttribute="bottom" secondItem="b2r-az-x9G" secondAttribute="bottom" constant="6" id="xwN-8V-tX7"/>
                                                     </constraints>
                                                 </view>
                                             </subviews>
@@ -2249,6 +2253,7 @@
                                             <outlet property="decreaseQuantityButton" destination="Wu3-ky-CPK" id="Iia-2t-GbX"/>
                                             <outlet property="increaseQuantityButton" destination="pZy-pf-lSs" id="qDv-61-oFJ"/>
                                             <outlet property="price" destination="XXI-hg-GMV" id="sCW-lp-3Dr"/>
+                                            <outlet property="productImage" destination="b2r-az-x9G" id="imd-Tc-mEn"/>
                                             <outlet property="productName" destination="OjO-gS-va9" id="lao-lu-tiX"/>
                                             <outlet property="quantityLabel" destination="qyg-ZY-TTV" id="ihn-EM-jiT"/>
                                             <outlet property="removeButton" destination="72h-Po-6Co" id="T8f-kk-5Nw"/>
@@ -2309,7 +2314,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Sz-IN-jKl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5612" y="3303"/>
+            <point key="canvasLocation" x="5612" y="3302.698650674663"/>
         </scene>
         <!--Address View Controller-->
         <scene sceneID="eDb-j1-Slr">
@@ -3968,7 +3973,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="PFK-BV-5Vj"/>
-        <segue reference="EFn-LC-GMC"/>
+        <segue reference="wsa-Vp-mfL"/>
         <segue reference="bM1-so-pLB"/>
         <segue reference="bad-x7-UcN"/>
         <segue reference="x5l-kD-6SF"/>

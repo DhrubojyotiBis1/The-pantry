@@ -24,6 +24,7 @@ class YourCartTableViewCell: UITableViewCell {
     @IBOutlet weak var quantityLabel:UILabel!
     @IBOutlet weak var increaseQuantityButton:UIButton!
     @IBOutlet weak var decreaseQuantityButton:UIButton!
+    @IBOutlet weak var productImage:UIImageView!
     
     var delegate:YourCartTableViewCellDelegate?
     var quantityChangeDelegate:YourCartTableViewCellProtocol?

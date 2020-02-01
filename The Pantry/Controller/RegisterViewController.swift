@@ -21,6 +21,8 @@ class RegisterViewController: UIViewController {
     
     var mobileNumber = String()
     var bannerImages = [UIImage?]()
+    var recomendedProduct = [product]()
+    var process = Bool()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +46,7 @@ class RegisterViewController: UIViewController {
             //send the images to the home VC
             let destination = segue.destination as! HomeViewController
             destination.bannerImages = self.bannerImages
+            destination.recomendedProducts = self.recomendedProduct
         }
     }
     
@@ -61,12 +64,13 @@ extension RegisterViewController{
         }
         
         Networking().checkRegistration(withFirstName: firstName.text!, lastName: lastName.text!, email: email.text!, password: password.text!,phoneNumber : mobileNumber){success,massage,bannerImages  in
-            SVProgressHUD.dismiss()
             if(success){
                 print("Done registration")
                 //take the user to the next page
                 self.bannerImages = bannerImages
-                self.performSegue(withIdentifier: segueId.HomeVCId, sender: nil)
+                self.getRecommendedProduct {
+                    self.performSegue(withIdentifier: segueId.HomeVCId, sender: nil)
+                }
             }else{
                 print("Failed")
                 //show the alart that the registration is failed
@@ -79,6 +83,19 @@ extension RegisterViewController{
         }
         
     }
+    
+    private func getRecommendedProduct(completion:@escaping ()->()){
+           let catagory = "recommended-for-you"
+           Networking().getListOfProducts(forCatagory: catagory) { (result, recomendedProducts) in
+               self.recomendedProduct = recomendedProducts
+               if(result){
+                   SVProgressHUD.dismiss()
+                   completion()
+               }else{
+                   //Internet problem
+               }
+           }
+       }
 }
 
 extension RegisterViewController{

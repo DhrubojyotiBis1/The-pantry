@@ -10,7 +10,7 @@ import UIKit
 import SVProgressHUD
 
 protocol  ProductListViewControllerProtocol{
-    func didComeFromProductListViewController(value:Bool)
+    func didComeFromProductListViewController(value:Bool,producIncartImages:[String:UIImage?])
 }
 
 class ProductListViewController: UIViewController{
@@ -25,6 +25,7 @@ class ProductListViewController: UIViewController{
     var tempUrl:String?
     var delegate:ProductListViewControllerProtocol?
     var totalPrice = Double()
+    var cartProductImage = [String:UIImage?]()
     var selectedProducts = [selectedProduct]()
     var numberOfItemAdded = Int()
     var isfirstTime = true
@@ -66,9 +67,12 @@ class ProductListViewController: UIViewController{
                 temProductImage[productURL] = self.productImage[productURL]
             }
             destination.productImages = temProductImage
+            destination.productImageInCart = self.cartProductImage
             destination.delegate = self
         }else if segue.identifier == segueId.yourCartVC{
             let destination = segue.destination as! YourCartViewController
+            destination.productInCartImages = self.cartProductImage
+            print(self.cartProductImage.count)
             destination.delegate = self
         }else if segue.identifier == segueId.transactionVCId{
             self.isGoingToTrasactionVC = true
@@ -80,7 +84,7 @@ class ProductListViewController: UIViewController{
     }
     
     @IBAction func backButtonPressed(_ sender: UIButton) {
-        self.delegate?.didComeFromProductListViewController(value: true)
+        self.delegate?.didComeFromProductListViewController(value: true, producIncartImages: self.cartProductImage)
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -238,6 +242,10 @@ extension ProductListViewController:ProductListCollectionViewCellDelegate{
                 self.selectedProducts[j].quantity -= 1
                 if(selectedProducts[j].quantity == 0){
                     self.selectedProducts.remove(at: j)
+                    if justSelectedProduct.imageURL.count != 0{
+                        let url = "http://gourmetatthepantry.com/public/storage/" + justSelectedProduct.imageURL[0]
+                        self.cartProductImage.removeValue(forKey: url)
+                    }
                     break
                 }
             }
@@ -252,6 +260,7 @@ extension ProductListViewController:ProductListCollectionViewCellDelegate{
         self.productListCollectionView.reloadItems(at: [indepath])
         
         save().saveCartDetais(withDetails: self.selectedProducts)
+        //save().save(cartImages: self.cartProductImage)
         
     }
     
@@ -277,6 +286,10 @@ extension ProductListViewController:ProductListCollectionViewCellDelegate{
         if(!doneWithSelectedProduct){
             let quantity = 1
             let justSelectedProduct = selectedProduct(product: justSelectedProduct, quantity: quantity)
+            if justSelectedProduct.product.imageURL.count != 0{
+                let url = "http://gourmetatthepantry.com/public/storage/" + justSelectedProduct.product.imageURL[0]
+                self.cartProductImage[url] = self.productImage[url]
+            }
             self.selectedProducts.append(justSelectedProduct)
         }
         
@@ -287,20 +300,27 @@ extension ProductListViewController:ProductListCollectionViewCellDelegate{
         self.productListCollectionView.reloadItems(at: [indepath])
         
         save().saveCartDetais(withDetails: self.selectedProducts)
-        
+        //save().save(cartImages: self.cartProductImage)
     }
 }
 
 
 extension ProductListViewController:YourCartViewControllerProtocol{
     func didComeFromYourCart(value: Bool) {
+        for i in 0..<selectedProducts.count{
+            let url = self.generalStorageURL+selectedProducts[i].product.imageURL[0]
+            if self.cartProductImage[url] == nil{
+                self.cartProductImage[url] = self.productImage[url]
+            }
+        }
         self.getStarted()
         self.productListCollectionView.reloadData()
     }
 }
 
 extension ProductListViewController:ProductDescriptionProtocol{
-    func didProductDescriptionViewControllerDismiss() {
+    func didProductDescriptionViewControllerDismiss(productInCart : [String:UIImage?]){
+        self.cartProductImage = productInCart
         self.getStarted()
         self.productListCollectionView.reloadData()
     }
@@ -325,6 +345,7 @@ extension ProductListViewController{
                 
         //adding tap gesture to the view cart view
         self.addGestureRecognization()
+        //self.cartProductImage = save().getcartImages()
     }
     @objc private func reloadTableViewForInitialImage(){
         print("after 5 sec")
@@ -369,7 +390,9 @@ extension ProductListViewController{
     
     private func clearCartPressed(){
         self.selectedProducts.removeAll()
+        self.cartProductImage.removeAll()
         save().saveCartDetais(withDetails: self.selectedProducts)
+        //save().save(cartImages: self.cartProductImage)
         self.getStarted()
         self.productListCollectionView.reloadData()
     }

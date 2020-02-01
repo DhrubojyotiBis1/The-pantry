@@ -39,6 +39,19 @@ public class save{
         return productAlreadyAddedToCart
     }
     
+    func save(cartImages images:[String:UIImage?]){
+        //UserDefaults.standard.saveDictionary(dict: images, key: "cartImages")
+        UserDefaults.standard.setDict(dictionary: images, forKey: "cartImages")
+    }
+    
+    func getcartImages()-> [String:UIImage?]{
+        let cartImages = UserDefaults.standard.getDictionary(key: "cartImages") as! [String:UIImage?]
+        
+        //UserDefaults.standard.getDictionary(key: "cartImages") as! [String:UIImage?]
+        
+        return cartImages
+    }
+    
     func getCredentials()->[String:String]{
         var creadential = [String:String]()
         creadential[saveCredential.firstName] =  UserDefaults.standard.string(forKey: saveCredential.firstName)
@@ -88,5 +101,36 @@ extension UserDefaults {
         }
         
         return encodedData.map { try! JSONDecoder().decode(type, from: $0) }
+    }
+    
+    func saveDictionary(dict: Dictionary<String, UIImage?>, key: String){
+        let preferences = UserDefaults.standard
+        let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: dict)
+        preferences.set(encodedData, forKey: key)
+    }
+    
+    func getDictionary(key: String) -> Dictionary<String, UIImage?> {
+        let preferences = UserDefaults.standard
+        if preferences.object(forKey: key) != nil{
+            let decoded = preferences.object(forKey: key)  as! Data
+            let decodedDict = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! Dictionary<String, UIImage?>
+            
+            return decodedDict
+        } else {
+            let emptyDict = Dictionary<String, UIImage?>()
+            return emptyDict
+        }
+    }
+    
+    /// Save dictionary on key
+    open func setDict<Key, Value>(dictionary: [Key: Value]?, forKey key: String) {
+        let data = NSKeyedArchiver.archivedData(withRootObject: dictionary as Any)
+        set(data, forKey: key)
+    }
+
+    // Retrieve dictionary for key
+    open func getDictionary<Key, Value>(forKey key: String) -> [Key: Value]? {
+        guard let data = object(forKey: key) as? Data else { return nil }
+        return NSKeyedUnarchiver.unarchiveObject(with: data) as? [Key: Value]
     }
 }

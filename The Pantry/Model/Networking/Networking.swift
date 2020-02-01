@@ -434,8 +434,11 @@ public class Networking{
                 let sellingPrice = productDetails[productkey.productDetails][productkey.sellingPrice].string!
                 let description = productDetails[productkey.productDetails][productkey.productDescription].string!
                 let productId = "\(productDetails[productkey.productDetails][productkey.productId].int!)"
-                
-                let cartProduct = product(name: name, sellingPrice: sellingPrice, productId: productId, productDescription: description)
+                var imagesUrl = [String]()
+                if let imageUrl = productDetails["images"]["path"].string{
+                    imagesUrl.append(imageUrl)
+                }
+                let cartProduct = product(name: name, sellingPrice: sellingPrice, productId: productId, productDescription: description, imageURL: imagesUrl)
                 
                 completion(true,cartProduct)
                 
