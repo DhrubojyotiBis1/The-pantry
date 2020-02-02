@@ -27,6 +27,7 @@ struct segueId{
     static let addressVC = "goToAddressVC"
     static let transactionVCId = "goToTransactionVC"
     static let transactionResult = "goToTransactionResultVC"
+    static let addAddressVCId = "goToAddAdressVC"
 }
 
 struct registeAndLoginPram {

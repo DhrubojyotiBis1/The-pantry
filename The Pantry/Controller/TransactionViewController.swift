@@ -9,6 +9,9 @@
 import UIKit
 import Toast_Swift
 import SVProgressHUD
+protocol TransactionViewControllerProtocol {
+    func didTransactionViewControllerDismiss()
+}
 
 class TransactionViewController: UIViewController {
     
@@ -19,6 +22,7 @@ class TransactionViewController: UIViewController {
     var orderedProduct = [[selectedProduct]]()
     var totalCost = [String]()
     var isCommingFromTransactionVC = false
+    var delegate:TransactionViewControllerProtocol?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +33,10 @@ class TransactionViewController: UIViewController {
     
     @IBAction func backButtonPressed(_ sender:UIButton){
         if self.isCommingFromTransactionVC {
-            performSegue(withIdentifier: segueId.HomeVCId, sender: nil)
+            //performSegue(withIdentifier: segueId.addressVC, sender: nil)
+            self.dismiss(animated: true) {
+                self.delegate?.didTransactionViewControllerDismiss()
+            }
         }else{
             dismiss(animated: true, completion: nil)
         }

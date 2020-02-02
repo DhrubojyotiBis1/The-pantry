@@ -609,6 +609,38 @@ public class Networking{
             completion(tempImage)
         }   
     }
+    
+    func getAddress(withToken token:String,completion:@escaping (_ resut:Bool,_ address:[address]?)->()){
+        let param = ["token":token]
+        Alamofire.request(url.addressURL,method: .get ,parameters : param).responseData{ (response) in
+            if response.result.isSuccess{
+                let addressJSON = JSON(response.result.value!)
+                var userAddress = [address]()
+                print("address",addressJSON)
+                for i in 0..<addressJSON.count{
+                    let billing_address_1 = addressJSON[i]["billing_address_1"].string!
+                    let billing_address_2 = addressJSON[i]["billing_address_2"].string!
+                    let billing_city = addressJSON[i]["billing_city"].string!
+                    let billing_state = addressJSON[i]["billing_state"].string!
+                    let billing_pin = addressJSON[i]["billing_pin"].string!
+                    let billing_country = addressJSON[i]["billing_country"].string!
+                    let shipping_address_1 = addressJSON[i]["shipping_address_1"].string!
+                    let shipping_address_2 = addressJSON[i]["shipping_address_2"].string!
+                    let shipping_city = addressJSON[i]["shipping_city"].string!
+                    let shipping_state = addressJSON[i]["shipping_state"].string!
+                    let shipping_pin = addressJSON[i]["shipping_pin"].string!
+                    let shipping_country = addressJSON[i]["shipping_country"].string!
+                    
+                    let tempAddress = address(billing_address_1: billing_address_1, billing_address_2: billing_address_2, billing_city: billing_city, billing_state: billing_state, billing_pin: billing_pin, billing_country: billing_country, shipping_address_1: shipping_address_1, shipping_address_2: shipping_address_2, shipping_city: shipping_city, shipping_state: shipping_state, shipping_pin: shipping_pin, shipping_country: shipping_country)
+                    userAddress.append(tempAddress)
+                }
+                
+                completion(true,userAddress)
+            }else{
+                completion(false,nil)
+            }
+        }
+    }
 }
 
 //For private functions

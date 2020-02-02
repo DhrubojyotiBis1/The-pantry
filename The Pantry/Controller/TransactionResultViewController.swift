@@ -42,6 +42,7 @@ class TransactionResultViewController: UIViewController {
         if segue.identifier == segueId.transactionVCId{
             let destination = segue.destination as! TransactionViewController
             destination.isCommingFromTransactionVC = true
+            destination.delegate = self
         }
     }
 
@@ -65,5 +66,12 @@ extension TransactionResultViewController{
         default:
             break
         }
+    }
+}
+
+extension TransactionResultViewController:TransactionViewControllerProtocol{
+    func didTransactionViewControllerDismiss() {
+        print("yescalling")
+        dismiss(animated: false, completion: nil)
     }
 }
