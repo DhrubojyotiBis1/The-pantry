@@ -1,3 +1,3 @@
 # The-pantry
 
-##An ecommerce app.
+## An ecommerce app.
