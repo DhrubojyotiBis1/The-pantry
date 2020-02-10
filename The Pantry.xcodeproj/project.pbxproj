@@ -25,6 +25,8 @@
 		6F5480AF23A0DE7C003A926C /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F5480AE23A0DE7C003A926C /* ChangePasswordViewController.swift */; };
 		6F5480B123A0F158003A926C /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F5480B023A0F158003A926C /* HomeViewController.swift */; };
 		6F5480B423A11CE0003A926C /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F5480B323A11CE0003A926C /* HomeCollectionViewCell.swift */; };
+		6F5D06AA23E8633200FB08DC /* 4762-food-carousel.json in Resources */ = {isa = PBXBuildFile; fileRef = 6F5D06A923E8633200FB08DC /* 4762-food-carousel.json */; };
+		6F5D06AC23E8693100FB08DC /* lottieAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F5D06AB23E8693100FB08DC /* lottieAnimation.swift */; };
 		6F5E8D5B23A019D000907FB7 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F5E8D5A23A019D000907FB7 /* ProfileViewController.swift */; };
 		6F67F1DD23E6D670005DFF77 /* PreviousAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F67F1DC23E6D670005DFF77 /* PreviousAddressViewController.swift */; };
 		6F67F1DF23E6D7A8005DFF77 /* PreviousAddressTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F67F1DE23E6D7A8005DFF77 /* PreviousAddressTableViewCell.swift */; };
@@ -77,6 +79,8 @@
 		6F5480AE23A0DE7C003A926C /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
 		6F5480B023A0F158003A926C /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		6F5480B323A11CE0003A926C /* HomeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCell.swift; sourceTree = "<group>"; };
+		6F5D06A923E8633200FB08DC /* 4762-food-carousel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "4762-food-carousel.json"; sourceTree = "<group>"; };
+		6F5D06AB23E8693100FB08DC /* lottieAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lottieAnimation.swift; sourceTree = "<group>"; };
 		6F5E8D5A23A019D000907FB7 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		6F67F1DC23E6D670005DFF77 /* PreviousAddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousAddressViewController.swift; sourceTree = "<group>"; };
 		6F67F1DE23E6D7A8005DFF77 /* PreviousAddressTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousAddressTableViewCell.swift; sourceTree = "<group>"; };
@@ -211,6 +215,7 @@
 				6F4D6E6823AD593300D6EF40 /* cartProduct.swift */,
 				6F80061A23D209D6004F2F6B /* slideMenuAnimation.swift */,
 				6F67F1E023E6DD61005DFF77 /* address.swift */,
+				6F5D06AB23E8693100FB08DC /* lottieAnimation.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -244,6 +249,7 @@
 		E084D04B225BBC1200E6F163 /* The Pantry */ = {
 			isa = PBXGroup;
 			children = (
+				6F5D06A923E8633200FB08DC /* 4762-food-carousel.json */,
 				E084D04C225BBC1200E6F163 /* AppDelegate.swift */,
 				6FA83263239EE3E100DEC90E /* Model */,
 				6F703C61239EBF3E007C5E78 /* View */,
@@ -317,6 +323,7 @@
 			files = (
 				6FA8325E239EBFDE00DEC90E /* Assets.xcassets 20-32-52-381.xcassets in Resources */,
 				E084D057225BBC1300E6F163 /* LaunchScreen.storyboard in Resources */,
+				6F5D06AA23E8633200FB08DC /* 4762-food-carousel.json in Resources */,
 				E084D052225BBC1200E6F163 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -401,6 +408,7 @@
 				6F4FD51F23D22772008803B2 /* MenuViewController.swift in Sources */,
 				6F4D6E6923AD593300D6EF40 /* cartProduct.swift in Sources */,
 				6F928D0423A4068900A821A9 /* ProductDesctiptionCollectionViewCell.swift in Sources */,
+				6F5D06AC23E8693100FB08DC /* lottieAnimation.swift in Sources */,
 				6F50FE4723ABFF8D00C7AF21 /* RazorPayViewController.swift in Sources */,
 				6F928D0023A3FB5D00A821A9 /* DescriptionTableViewCell.swift in Sources */,
 				6FEE1731239F05C0002079FC /* LoginViewController.swift in Sources */,
@@ -564,7 +572,7 @@
 				CURRENT_PROJECT_VERSION = 34;
 				DEVELOPMENT_TEAM = 55DX457GXB;
 				INFOPLIST_FILE = "$(SRCROOT)/The Pantry/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -585,7 +593,7 @@
 				CURRENT_PROJECT_VERSION = 34;
 				DEVELOPMENT_TEAM = 55DX457GXB;
 				INFOPLIST_FILE = "$(SRCROOT)/The Pantry/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

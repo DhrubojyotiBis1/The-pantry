@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SVProgressHUD
 
 protocol  ProductListViewControllerProtocol{
     func didComeFromProductListViewController(value:Bool,producIncartImages:[String:UIImage?])
@@ -29,6 +28,7 @@ class ProductListViewController: UIViewController{
     var selectedProducts = [selectedProduct]()
     var numberOfItemAdded = Int()
     var isfirstTime = true
+    var animationController:animation! = nil
     var rowForSeceltedproductToSeeDescription = Int()
     var isGoingToTrasactionVC = false
     var productImage = [String:UIImage?]()
@@ -48,7 +48,7 @@ class ProductListViewController: UIViewController{
         super.viewWillDisappear(animated)
         if self.isGoingToTrasactionVC{
             print("fuck")
-            SVProgressHUD.show()
+            self.animationController.play()
             self.isGoingToTrasactionVC = false
         }
     }
@@ -149,30 +149,32 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
         //if there is image in the uiimage array for the index path the show that
         //else download image using the url from the array of the product details class and store it in a different [uiimage]
         //stop the activity indicator
-        if self.availableProducts[row].imageURL.count == 0{
-            cell.productImage.image = nil
-            tempUrl = nil
-            cell.activityIndicator.startAnimating()
-            cell.activityIndicator.isHidden = false
-        }else{
-            for i in 0..<self.availableProducts[row].imageURL.count{
-                let url = self.generalStorageURL + self.availableProducts[row].imageURL[i]
-                self.tempUrl = url
-                if self.productImage[url] != nil{
-                    if i == 0 {
-                        cell.productImage.image = self.productImage[url]!
-                        cell.activityIndicator.stopAnimating()
-                        cell.activityIndicator.isHidden = true
-                    }
-                }else{
-                    Networking().downloadImageForProduct(withURL: url) { (image) in
-                        self.productImage[url] = image
+        if row < availableProducts.count{
+            if self.availableProducts[row].imageURL.count == 0{
+                cell.productImage.image = nil
+                tempUrl = nil
+                cell.activityIndicator.startAnimating()
+                cell.activityIndicator.isHidden = false
+            }else{
+                for i in 0..<self.availableProducts[row].imageURL.count{
+                    let url = self.generalStorageURL + self.availableProducts[row].imageURL[i]
+                    self.tempUrl = url
+                    if self.productImage[url] != nil{
                         if i == 0 {
-                            DispatchQueue.main.async {
-                                if let cellToUpdate = self.productListCollectionView.cellForItem(at: indexPath) as? ProductListCollectionViewCell{
-                                    cellToUpdate.productImage.image = self.productImage[url]!
-                                    cellToUpdate.activityIndicator.stopAnimating()
-                                    cellToUpdate.activityIndicator.isHidden = true
+                            cell.productImage.image = self.productImage[url]!
+                            cell.activityIndicator.stopAnimating()
+                            cell.activityIndicator.isHidden = true
+                        }
+                    }else{
+                        Networking().downloadImageForProduct(withURL: url) { (image) in
+                            self.productImage[url] = image
+                            if i == 0 {
+                                DispatchQueue.main.async {
+                                    if let cellToUpdate = self.productListCollectionView.cellForItem(at: indexPath) as? ProductListCollectionViewCell{
+                                        cellToUpdate.productImage.image = self.productImage[url]!
+                                        cellToUpdate.activityIndicator.stopAnimating()
+                                        cellToUpdate.activityIndicator.isHidden = true
+                                    }
                                 }
                             }
                         }
@@ -346,6 +348,7 @@ extension ProductListViewController{
         //adding tap gesture to the view cart view
         self.addGestureRecognization()
         //self.cartProductImage = save().getcartImages()
+        self.animationController = animation(animationView: self.view)
     }
     @objc private func reloadTableViewForInitialImage(){
         print("after 5 sec")

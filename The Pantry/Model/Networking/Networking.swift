@@ -641,6 +641,24 @@ public class Networking{
             }
         }
     }
+    
+    func applyCoupon(withCouponCode couponCode:String,andAmount amount:String,completion:@escaping ()->()){
+           
+           let param = ["coupon":couponCode,"amaount":amount]
+           
+        Alamofire.request(url.couponURL,method: .post ,parameters : param).responseJSON { (response) in
+               if response.result.isSuccess{
+                 //networking done
+                   //if response.result.value!.cout is 16 then the massage is send
+                    print(response.result.value!)
+               }else{
+                   //fail to do networking
+                   print(response.error?.localizedDescription as Any)
+               }
+           }
+           
+       }
+    
 }
 
 //For private functions

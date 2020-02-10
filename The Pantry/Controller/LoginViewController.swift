@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SVProgressHUD
 
 class LoginViewController: UIViewController {
 
@@ -16,6 +15,7 @@ class LoginViewController: UIViewController {
     @IBOutlet var loginView: UIView!
     @IBOutlet weak var registerButton: UIButton!
     
+    var animationController:animation! = nil
     var itemInCart = [selectedProduct]()
     var numberOfProductInCart:Int?
     var bannerImages = [UIImage?]()
@@ -35,7 +35,7 @@ class LoginViewController: UIViewController {
     
     
     @IBAction func logInButtonPressed(_ sender: Any) {
-        SVProgressHUD.show()
+        animationController.play()
         self.neworking()
     }
  
@@ -65,7 +65,7 @@ extension LoginViewController{
                 self.bannerImages = bannerImages
                 //Going to the HomeViewController
                 self.getCartDetails {
-                    SVProgressHUD.dismiss()
+                    self.animationController.stop()
                     if self.itemInCart.count != 0{
                         save().saveCartDetais(withDetails: self.itemInCart)
                     }
@@ -73,6 +73,7 @@ extension LoginViewController{
                 }
             }else{
                 //show alar for the faliur of login
+                self.animationController.stop()
                 print("login failed \(token)")
             }
         }
@@ -88,6 +89,8 @@ extension LoginViewController{
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
         self.loginView.addGestureRecognizer(tapGesture)
         self.makeCardView(forButton: self.registerButton)
+        
+        self.animationController = animation(animationView: self.view)
     }
     
     @objc private func onTap(){
@@ -161,7 +164,7 @@ extension LoginViewController{
         Networking().getListOfProducts(forCatagory: catagory) { (result, recomendedProducts) in
             self.recomendedProduct = recomendedProducts
             if(result){
-                SVProgressHUD.dismiss()
+                self.animationController.stop()
                 completion()
             }else{
                 //internet problem

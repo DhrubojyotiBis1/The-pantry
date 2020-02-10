@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SVProgressHUD
 import SafariServices
 
 class HomeViewController: UIViewController {
@@ -35,6 +34,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var totalPricelabel:UILabel!
     /*var StringsForHeadting = ["Get our best deals!","Sale coming soon!","Deal of the day!","Aj Kya Banaoge?"]*/
     var showingHeadingAtIndex = 0
+    var animationController:animation! = nil
     var numberOfItemInCart = 0
     var totalPrice = Double()
     var recomendedProducts = [product]()
@@ -56,7 +56,7 @@ class HomeViewController: UIViewController {
     }
     
     @IBAction func catagoryButtonPressed(_ sender: UIButton) {
-        SVProgressHUD.show()
+        animationController.play()
        // save().save(cartImages: self.productInCartImage)
         let productCatagory = self.getProductCatagory(fromTag: sender.tag)
         self.getProdctListDetails(withProductCatagory: productCatagory)
@@ -140,6 +140,7 @@ extension HomeViewController{
         }
         
         self.setupForViewCartView()
+        self.animationController = animation(animationView: self.view)
     }
     
     /*@objc private func runTimedCode(){
@@ -211,6 +212,27 @@ extension HomeViewController{
         self.setupForViewCartView()
     }
     
+    private func shareButtonTapped() {
+        let textToShare = "The Pantry delivers ready to cook freshly prepped meal kits to your doorstep."
+        
+        if let myWebsite = NSURL(string: "http://gourmetatthepantry.com/")  {
+            
+            let activityController = UIActivityViewController(activityItems: [myWebsite,textToShare], applicationActivities: nil)
+             
+            activityController.completionWithItemsHandler = { (nil, completed, _, error) in
+                if completed {
+                    print("completed")
+                } else {
+                    print("cancled")
+                }
+            }
+            present(activityController, animated: true) {
+                print("presented")
+            }
+            
+        }
+    }
+    
 }
 
 //MARK:- Networking stuff
@@ -218,7 +240,7 @@ extension HomeViewController{
     private func getProdctListDetails(withProductCatagory productCatagory:String){
             //got the cart details hence can add move the user to product list VC
             Networking().getListOfProducts(forCatagory: productCatagory){isSucess,productList  in
-                SVProgressHUD.dismiss()
+                self.animationController.stop()
                 if(isSucess){
                     //got the product list details
                     //move the user to the next VC
@@ -542,7 +564,7 @@ extension HomeViewController:popUpPopUpViewControllerDelegate,MenuViewController
                 break
                 
             case 2:
-                
+                self.shareButtonTapped()
                 break
                 
             case 3:

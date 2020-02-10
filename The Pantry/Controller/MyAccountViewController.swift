@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SVProgressHUD
 
 protocol MyAccountProtocol {
     func didViewDismis()
@@ -23,6 +22,7 @@ class MyAccountViewController: UIViewController {
     
     var credentials:[String:String]!
     var delegate:MyAccountProtocol?
+    var animationController:animation! = nil
     var token = String()
     
     override func viewDidLoad() {
@@ -34,7 +34,7 @@ class MyAccountViewController: UIViewController {
 
     @IBAction func saveButtonPressed(_ sender: Any) {
         if(firstNameTextField.text !=  "" && lastNameTextField.text !=  ""){
-            SVProgressHUD.show()
+            self.animationController.play()
             self.neworking()
         }else{
             print("firstName and lastName both are required")
@@ -55,7 +55,7 @@ extension MyAccountViewController{
         let email = emailLabel.text!
         let phoneNumber = self.credentials[saveCredential.phoneNumber]!
         Networking().changeAccountDetails(withFirstName: firstName, lastName: lastName, token: self.token) { (result) in
-            SVProgressHUD.dismiss()
+            self.animationController.stop()
             
             if(result){
                 //Account details change done
@@ -81,6 +81,7 @@ extension MyAccountViewController{
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
         self.contentView.addGestureRecognizer(tapGesture)
+        self.animationController = animation(animationView: self.view)
     }
     
     @objc private func onTap(){

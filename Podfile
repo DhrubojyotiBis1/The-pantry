@@ -11,4 +11,5 @@ target 'The Pantry' do
     pod 'SVProgressHUD'
     pod 'razorpay-pod', '~> 1.1.4'
     pod 'Toast-Swift'
+    pod 'lottie-ios'
 end

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SVProgressHUD
 
 class ChangePasswordViewController: UIViewController {
 
@@ -16,17 +15,19 @@ class ChangePasswordViewController: UIViewController {
     @IBOutlet weak var currentPassword: UITextField!
     var token = String()
     var email = String()
+    var animationController:animation! = nil
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         let credentials = save().getCredentials()
         self.getEmailAndToken(fromCredentials: credentials)
+        self.animationController = animation(animationView: self.view)
     }
     @IBAction func submitButtonPressed(_ sender: UIButton) {
         
         if(confirmPassword.text! == newPassword.text!){
-            SVProgressHUD.show()
+            animationController.play()
             self.neworking()
         }else{
             //show a popup that confirm password and new password doesnot matches 
@@ -42,7 +43,7 @@ class ChangePasswordViewController: UIViewController {
 extension ChangePasswordViewController{
     private func neworking() {
         Networking().changePassword(withCurrentPassword: self.currentPassword.text!, newPassword: self.newPassword.text!, email: self.email, andToken: self.token){ (result) in
-            SVProgressHUD.dismiss()
+            self.animationController.stop()
             
             if(result){
                 //Account details change done
