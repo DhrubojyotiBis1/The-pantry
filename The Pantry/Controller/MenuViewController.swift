@@ -79,10 +79,12 @@ extension MenuViewController{
                 
                  tapGesture = UITapGestureRecognizer(target: self, action: #selector(onFAQViewTap))
                 
-            }else{
+            }else if i == 5{
                 
                  tapGesture = UITapGestureRecognizer(target: self, action: #selector(onAboutUsViewTap))
                 
+            }else if i == 6{
+                tapGesture = UITapGestureRecognizer(target: self, action: #selector(contactUs))
             }
             self.menuLableViews[i].addGestureRecognizer(tapGesture)
             
@@ -116,6 +118,10 @@ extension MenuViewController{
     
     @objc private func onTap(){
         self.dismisView(withOption: nil)
+    }
+    
+    @objc private func contactUs(){
+        self.dismisView(withOption: 6)
     }
     
     private func dismisView(withOption option:Int?){

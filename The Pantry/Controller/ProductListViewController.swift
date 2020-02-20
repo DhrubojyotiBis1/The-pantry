@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 protocol  ProductListViewControllerProtocol{
     func didComeFromProductListViewController(value:Bool,producIncartImages:[String:UIImage?])
@@ -28,7 +29,6 @@ class ProductListViewController: UIViewController{
     var selectedProducts = [selectedProduct]()
     var numberOfItemAdded = Int()
     var isfirstTime = true
-    var animationController:animation! = nil
     var rowForSeceltedproductToSeeDescription = Int()
     var isGoingToTrasactionVC = false
     var productImage = [String:UIImage?]()
@@ -48,7 +48,7 @@ class ProductListViewController: UIViewController{
         super.viewWillDisappear(animated)
         if self.isGoingToTrasactionVC{
             print("fuck")
-            self.animationController.play()
+            SVProgressHUD.show()
             self.isGoingToTrasactionVC = false
         }
     }
@@ -348,7 +348,6 @@ extension ProductListViewController{
         //adding tap gesture to the view cart view
         self.addGestureRecognization()
         //self.cartProductImage = save().getcartImages()
-        self.animationController = animation(animationView: self.view)
     }
     @objc private func reloadTableViewForInitialImage(){
         print("after 5 sec")

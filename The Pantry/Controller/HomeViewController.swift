@@ -579,6 +579,9 @@ extension HomeViewController:popUpPopUpViewControllerDelegate,MenuViewController
                 self.stringUrlForSelectedPage = webPageURL.aboutUs
                 self.showWebView()
                 break
+            case 6:
+                self.performSegue(withIdentifier: segueId.contactUsVCId, sender: nil)
+                break
             default:
                 break
             }
