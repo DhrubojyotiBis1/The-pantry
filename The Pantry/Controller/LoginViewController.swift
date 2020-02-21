@@ -15,6 +15,9 @@ class LoginViewController: UIViewController {
     @IBOutlet var loginView: UIView!
     @IBOutlet weak var registerButton: UIButton!
     
+    var isPasswordChanges = false
+    var isRecomendationCompele = false
+    
     var animationController:animation! = nil
     var itemInCart = [selectedProduct]()
     var numberOfProductInCart:Int?
@@ -65,16 +68,20 @@ extension LoginViewController{
                 self.bannerImages = bannerImages
                 //Going to the HomeViewController
                 self.getCartDetails {
-                    self.animationController.stop()
                     if self.itemInCart.count != 0{
                         save().saveCartDetais(withDetails: self.itemInCart)
                     }
+                    self.animationController.stop()
                     self.performSegue(withIdentifier: segueId.HomeVCId, sender: nil)
                 }
             }else{
                 //show alar for the faliur of login
                 self.animationController.stop()
-                print("login failed \(token)")
+                if token == "Registration faild"{
+                    self.show(message: "Something Went wrong!")
+                }else{
+                    self.show(message: token)
+                }
             }
         }
     }
@@ -82,6 +89,11 @@ extension LoginViewController{
 
 extension LoginViewController{
     private func setup(){
+        
+        if self.isPasswordChanges{
+            self.view.makeToast("Password has been Changes!", duration: 3, position: .center, completion: nil)
+        }
+        
         //make the corner of the register button round
         self.registerButton.layer.cornerRadius = 10
         
@@ -164,7 +176,6 @@ extension LoginViewController{
         Networking().getListOfProducts(forCatagory: catagory) { (result, recomendedProducts) in
             self.recomendedProduct = recomendedProducts
             if(result){
-                self.animationController.stop()
                 completion()
             }else{
                 //internet problem

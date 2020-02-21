@@ -11,6 +11,8 @@ import Toast_Swift
 class OtpVarificationViewController: UIViewController {
     
     var phoneNumber = String()
+    var token = String()
+    var isVarifyingForForgetPassword = false
     @IBOutlet var contentView: UIView!
     
     @IBOutlet weak var phoneNumberLable : UILabel!
@@ -28,6 +30,9 @@ class OtpVarificationViewController: UIViewController {
     }
     
     @IBAction func continueButtonPressed(_ sender:UIButton){
+        if isVarifyingForForgetPassword{
+            self.phoneNumber = "91" + self.phoneNumber
+        }
         self.neworkingForOtpVarification()
     }
     
@@ -37,13 +42,20 @@ class OtpVarificationViewController: UIViewController {
     
 
     @IBAction func didNotGetOtpButtonPressed(_ sender: UIButton) {
-        self.networkingForResendingOtp()
+        if isVarifyingForForgetPassword{
+            self.dismiss(animated: true, completion: nil)
+        }else{
+            self.networkingForResendingOtp()
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == segueId.registrationVCId{
             let destination = segue.destination as! RegisterViewController
             destination.mobileNumber = self.phoneNumber
+        }else if segue.identifier == segueId.ForgotPasswordChangePasswordVCId{
+            let destinaton = segue.destination as! NewPasswordViewController
+            destinaton.token = self.token
         }
     }
 }
@@ -59,25 +71,54 @@ extension OtpVarificationViewController{
         let fourth = self.fourthNumberInOtpTextField.text!
         
         let otp = first + second + third + fourth
-        Networking().otpVarification(withOtp: otp, andPhoneNumber: self.phoneNumber) { (result, massage) in
-            if(result){
-                print("otp varification done")
-                //check it the user is existing user or not
-                //if not then send to register page
-                //else send to home VC
-                self.performSegue(withIdentifier: segueId.registrationVCId, sender: nil)
-            }else{
-                if(massage == "otp_not_verified"){
-                    //error deu to wrong otp entered
-                    //show th error massage to user
-                    self.view.makeToast("otp_not_verified", duration: 3, position: .bottom, completion: nil)
-                }else if massage == "otp_expired"{
-                    //error due to experied otp
-                    //show th error massage to user
-                    self.view.makeToast("otp_not_verified", duration: 3, position: .bottom, completion: nil)
+        if isVarifyingForForgetPassword{
+            
+            Networking().varifyParrowordForForgetpassword(withOtp: otp, andToken: token){ (result, massage) in
+                if(result){
+                    print("otp varification done")
+                    //check it the user is existing user or not
+                    //if not then send to register page
+                    //else send to home VC
+                    self.token = massage!
+                    self.performSegue(withIdentifier: segueId.ForgotPasswordChangePasswordVCId, sender: nil)
                 }else{
-                    //netwok error
-                    print("Network not present")
+                    if(massage == "otp_not_verified"){
+                        //error deu to wrong otp entered
+                        //show th error massage to user
+                        self.view.makeToast("otp_not_verified", duration: 3, position: .bottom, completion: nil)
+                    }else if massage == "otp_expired"{
+                        //error due to experied otp
+                        //show th error massage to user
+                        self.view.makeToast("otp_not_verified", duration: 3, position: .bottom, completion: nil)
+                    }else{
+                        //netwok error
+                        print("Network not present")
+                    }
+                }
+            }
+
+            
+        }else{
+            Networking().otpVarification(withOtp: otp, andPhoneNumber: self.phoneNumber) { (result, massage) in
+                if(result){
+                    print("otp varification done")
+                    //check it the user is existing user or not
+                    //if not then send to register page
+                    //else send to home VC
+                    self.performSegue(withIdentifier: segueId.registrationVCId, sender: nil)
+                }else{
+                    if(massage == "otp_not_verified"){
+                        //error deu to wrong otp entered
+                        //show th error massage to user
+                        self.view.makeToast("otp_not_verified", duration: 3, position: .bottom, completion: nil)
+                    }else if massage == "otp_expired"{
+                        //error due to experied otp
+                        //show th error massage to user
+                        self.view.makeToast("otp_not_verified", duration: 3, position: .bottom, completion: nil)
+                    }else{
+                        //netwok error
+                        print("Network not present")
+                    }
                 }
             }
         }

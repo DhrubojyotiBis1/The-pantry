@@ -63,18 +63,7 @@ class HomeViewController: UIViewController {
     }
     
     @IBAction func menuButtonTapped(_ sender:UIButton){
-        
-        self.changeContrain(isMenuShown: true)
-        
-        //show the slide menu
-        guard let menu = storyboard?.instantiateViewController(identifier: "menuVC") as? MenuViewController else{return}
-        
-        menu.modalPresentationStyle = .overCurrentContext
-        menu.transitioningDelegate = self
-        
-        menu.delegate = self
-        
-        present(menu, animated: true, completion: nil)
+        self.showMenu()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -112,6 +101,10 @@ extension HomeViewController{
     //All private function extention
     private func setup(){
         
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture))
+        swipeRight.direction = UISwipeGestureRecognizer.Direction.right
+        self.view.addGestureRecognizer(swipeRight)
+        
        /* _ = Timer.scheduledTimer(timeInterval: 4, target: self, selector: #selector(self.runTimedCode), userInfo: nil, repeats: true)*/
         
         //confinding to dataSource and deligate
@@ -141,6 +134,34 @@ extension HomeViewController{
         
         self.setupForViewCartView()
         self.animationController = animation(animationView: self.view)
+    }
+    
+    func showMenu(){
+     self.changeContrain(isMenuShown: true)
+        
+        //show the slide menu
+        guard let menu = storyboard?.instantiateViewController(identifier: "menuVC") as? MenuViewController else{return}
+        
+        menu.modalPresentationStyle = .overCurrentContext
+        menu.transitioningDelegate = self
+        
+        menu.delegate = self
+        
+        present(menu, animated: true, completion: nil)
+    }
+    
+    @objc func respondToSwipeGesture(gesture: UIGestureRecognizer) {
+
+        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+
+
+            switch swipeGesture.direction {
+            case UISwipeGestureRecognizer.Direction.right:
+                self.showMenu()
+                default:
+                    break
+            }
+        }
     }
     
     /*@objc private func runTimedCode(){
@@ -189,6 +210,15 @@ extension HomeViewController{
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
         self.viewCartView.addGestureRecognizer(tapGesture)
+    }
+    
+    private func logOutButtonPressed(){
+        let appDelegate = AppDelegate()
+        appDelegate.didCartUpdated = false
+        appDelegate.saveCartData()
+        save().removeCredentials()
+        save().removeItemAddedToCart()
+        performSegue(withIdentifier: segueId.loginVCId, sender: nil)
     }
     
     private func getProductCatagory(fromTag tag:Int)->String{
@@ -283,12 +313,9 @@ extension HomeViewController:UITableViewDelegate,UITableViewDataSource{
         }else{
             for i in 0..<self.recomendedProducts[indexPath.row].imageURL.count{
                 let url = self.generalStorageURL + self.recomendedProducts[indexPath.row].imageURL[i]
-                //self.tempUrl = url
                 if self.recomendedProductImage[url] != nil{
                     if i == 0 {
                         cell.productImage.image = self.recomendedProductImage[url]!
-                        /*cell.activityIndicator.stopAnimating()
-                        cell.activityIndicator.isHidden = true*/
                     }
                 }else{
                     Networking().downloadImageForProduct(withURL: url) { (image) in
@@ -297,8 +324,6 @@ extension HomeViewController:UITableViewDelegate,UITableViewDataSource{
                             DispatchQueue.main.async {
                                 if let cellToUpdate = self.recomendedForYouTabelView.cellForRow(at: indexPath) as? HomeTableViewCell{
                                     cellToUpdate.productImage.image = self.recomendedProductImage[url]!
-                                    /*cellToUpdate.activityIndicator.stopAnimating()
-                                    cellToUpdate.activityIndicator.isHidden = true*/
                                 }
                             }
                         }
@@ -345,38 +370,6 @@ extension HomeViewController:UITableViewDelegate,UITableViewDataSource{
 }
 
 
-//For the ads collection View
-/*extension HomeViewController:UICollectionViewDelegate,UICollectionViewDataSource{
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.bannerImages.count
-    }
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = self.adsCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier.adsCellID, for: indexPath) as! HomeCollectionViewCell
-        if bannerImages[indexPath.section] != nil{
-            cell.adsImageView.image = self.bannerImages[indexPath.section]!
-        }
-        return cell
-    }
-    
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let layout = self.adsCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        
-        let cellWidthIncludingSpacing = layout.itemSize.width + layout.minimumLineSpacing
-        var offSet = targetContentOffset.pointee
-        let index = (offSet.x + scrollView.contentInset.left) / cellWidthIncludingSpacing
-        let roundIndex = round(index)
-        
-        offSet = CGPoint(x: roundIndex * cellWidthIncludingSpacing - scrollView.contentInset.left, y: scrollView.contentInset.top)
-        
-        targetContentOffset.pointee = offSet
-        
-        
-    }
-}*/
 
 extension HomeViewController{
     private func changeContrain(isMenuShown:Bool){
@@ -581,6 +574,9 @@ extension HomeViewController:popUpPopUpViewControllerDelegate,MenuViewController
                 break
             case 6:
                 self.performSegue(withIdentifier: segueId.contactUsVCId, sender: nil)
+                break
+            case 7:
+                self.logOutButtonPressed()
                 break
             default:
                 break

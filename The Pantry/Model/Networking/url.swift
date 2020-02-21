@@ -28,4 +28,6 @@ public struct url{
     static let transactionHistoryURL = "http://api.gourmetatthepantry.com/api/previous_orders.php"
     static let addressURL = "http://api.gourmetatthepantry.com/api/addresses.php?"
     static let couponURL = "http://api.gourmetatthepantry.com/api/check_coupon.php?"
+    static let forgetPasswordOtpURL = "http://api.gourmetatthepantry.com/api/forgot_password.php?"
+    static let newPasswordURL = "http://api.gourmetatthepantry.com/api/otp_verify.php?"
 }

@@ -45,6 +45,9 @@ class MenuViewController: UIViewController {
 extension MenuViewController{
     private func setup(){
         
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture))
+        swipeLeft.direction = UISwipeGestureRecognizer.Direction.left
+        self.view.addGestureRecognizer(swipeLeft)
         
         self.topView.layer.masksToBounds = false
         self.topView.layer.shadowColor = UIColor.gray.cgColor
@@ -85,11 +88,27 @@ extension MenuViewController{
                 
             }else if i == 6{
                 tapGesture = UITapGestureRecognizer(target: self, action: #selector(contactUs))
+            }else if i == 7{
+                tapGesture = UITapGestureRecognizer(target: self, action: #selector(logOut))
             }
             self.menuLableViews[i].addGestureRecognizer(tapGesture)
             
         }
         
+    }
+    
+    @objc func respondToSwipeGesture(gesture: UIGestureRecognizer) {
+
+        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+
+
+            switch swipeGesture.direction {
+            case UISwipeGestureRecognizer.Direction.left:
+                self.dismisView(withOption: nil)
+                default:
+                    break
+            }
+        }
     }
     
     @objc private func onProfileViewTap(){
@@ -122,6 +141,10 @@ extension MenuViewController{
     
     @objc private func contactUs(){
         self.dismisView(withOption: 6)
+    }
+    
+    @objc private func logOut(){
+        self.dismisView(withOption: 7)
     }
     
     private func dismisView(withOption option:Int?){

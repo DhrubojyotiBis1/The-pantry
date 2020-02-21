@@ -71,30 +71,11 @@ public class Networking{
                             bannerImages = images
                             completion(true,userJSON[responceKey.token].string!, bannerImages)
                         }
-                        /*//getting each urls from the json
-                        let urls = self.getUrls(fromJson: userJSON)
-                        
-                        //checkng if urls are valid or not
-                        if(urls != nil){
-                            //if we get the valid url then only download of the image is possible
-                            self.downloadImage(havingUrls: urls) { (result) in
-                                if(result){
-                                    //login complate along with downloading of the images
-                                    completion(true,"download of image complete"/*,images:[uiImage]?*/)
-                                }else{
-                                    //login complate but downloading of the images fails
-                                    completion(true,"download of image failed"/*,images:[uiImage]?*/)
-                                }
-                            }
-                        }else{
-                            //when we dont get the url
-                            completion(true,"faulty urls"/*,images:[uiImage]?*/)
-                        }*/
                     }else{
                         //no toket found
                         //Something went wrong not
                         //handel the error with a Popup
-                        completion(false,"wrong password", bannerImages)
+                        completion(false,"Wrong password!", bannerImages)
                     }
                 }else{
                     //Sending the token to the checkRegistration
@@ -106,28 +87,6 @@ public class Networking{
                             bannerImages = images
                             completion(true,userJSON[responceKey.token].string!, bannerImages)
                         }
-                        /*//getting each urls from the json
-                        let urls = self.getUrls(fromJson: userJSON)
-                        
-                        //checkng if urls are valid or not
-                        if(urls != nil){
-                            //if we get the valid url then only download of the image is possible
-                            self.downloadImage(havingUrls: urls) { (result) in
-                                if(result){
-                                    //Registation complate along with downloading of the images
-                                    completion(true,userJSON[responceKey.token].string!/*,images:[uiImage]?*/)
-                                    print("download of image complete")
-                                }else{
-                                    //Registation complate but downloading of the images fails
-                                    completion(true,userJSON[responceKey.token].string!/*,images:[uiImage]?*/)
-                                    print("download of the image fails")
-                                }
-                            }
-                        }else{
-                            //when we dont get the url
-                            completion(true,userJSON[responceKey.token].string!/*,images:[uiImage]?*/)
-                            print("download of image not possible")
-                        }*/
                     }else{
                         //login failde hence no token
                         completion(false,"nil", bannerImages)
@@ -296,7 +255,11 @@ public class Networking{
                     let productDetails = cartProduct(quantity: quantity, productID: productId)
                     productInCart.append(productDetails)
                 }
-                completion(true,productInCart)
+                if productInCart.count == 0{
+                   completion(true,nil)
+                }else{
+                    completion(true,productInCart)
+                }
             }else{
                 //fail to get the cart details
                completion(false,nil)
@@ -658,6 +621,83 @@ public class Networking{
            }
            
        }
+    
+    func getForgetPassordOTP(toPhoneNumber phoneNumber:String,completion:@escaping(_ result:Bool,_ token:String)->()){
+        let pram = ["phone":phoneNumber]
+        //trying to do networking for varification
+        Alamofire.request(url.forgetPasswordOtpURL,method: .post ,parameters : pram).responseJSON { (response) in
+            if response.result.isSuccess{
+              //networking done
+                let userJSON : JSON = JSON(response.result.value!)
+                print("forgotPassoword",userJSON)
+                if(userJSON[smsGateWay.message].string! == smsGateWayConstants.smsSendSuccessType){
+                    //take to the next view controller for otp Varification
+                    completion(true,userJSON["token"].string!)
+                }else{
+                    //failed to send otp
+                    completion(false,userJSON[smsGateWay.message].string!)
+                }
+                
+            }else{
+                //fail to do networking
+                completion(false,"Network Error")
+                print(response.error?.localizedDescription as Any)
+            }
+        }
+    }
+    
+    func varifyParrowordForForgetpassword(withOtp otp:String,andToken token:String,completion:@escaping (_ result:Bool,_ token:String?)->()){
+        
+        let pram = ["otp":otp,"token":token]
+        
+        Alamofire.request(url.newPasswordURL,method: .post ,parameters : pram).responseJSON { (response) in
+            if response.result.isSuccess{
+              //networking done
+                let userJSON : JSON = JSON(response.result.value!)
+                print("varifyParrowordForForgetpassword",userJSON)
+                if userJSON["token"].string != nil{
+                    if(userJSON[smsGateWay.message].string! == smsGateWayConstants.smsSendSuccessType){
+                        //take to the next view controller for otp Varification
+                        completion(true,userJSON["token"].string!)
+                    }
+                }else{
+                    //failed to send otp
+                    completion(false,userJSON[smsGateWay.message].string!)
+                }
+                
+            }else{
+                //fail to do networking
+                completion(false,"Network Error")
+                print(response.error?.localizedDescription as Any)
+            }
+        }
+        
+    }
+    
+    func setPassword(toNewPassword newPassword:String,usingToken Token:String ,completion:@escaping(_ result:Bool,_ type:String)->()){
+        
+        let pram = ["new_password":newPassword,"token":Token]
+        
+        Alamofire.request(url.newPasswordURL,method: .post ,parameters : pram).responseJSON { (response) in
+            if response.result.isSuccess{
+              //networking done
+                let userJSON : JSON = JSON(response.result.value!)
+                print("setPassword",userJSON)
+                if(userJSON[smsGateWay.message].string! == smsGateWayConstants.smsSendSuccessType){
+                    //take to the next view controller for otp Varification
+                    completion(true,userJSON[smsGateWay.message].string!)
+                }else{
+                    //failed to send otp
+                    completion(false,userJSON[smsGateWay.message].string!)
+                }
+                
+            }else{
+                //fail to do networking
+                completion(false,"Network Error")
+                print(response.error?.localizedDescription as Any)
+            }
+        }
+    }
     
 }
 
