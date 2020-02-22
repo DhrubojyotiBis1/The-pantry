@@ -278,7 +278,11 @@ extension HomeViewController{
                         print(i,productList[i])
                     }
                     self.products = productList
-                    self.performSegue(withIdentifier: segueId.productListVC, sender: nil)
+                    if self.products.count == 0{
+                        self.view.makeToast("Comming Soon!", duration: 0.8, position: .center, completion: nil)
+                    }else{
+                        self.performSegue(withIdentifier: segueId.productListVC, sender: nil)
+                    }
                 }else{
                 //show the error that happend with a popup
                     print("error in getting product details")

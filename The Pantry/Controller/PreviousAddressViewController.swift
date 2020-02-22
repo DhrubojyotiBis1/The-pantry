@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class PreviousAddressViewController: UIViewController {
     
@@ -94,15 +95,18 @@ extension PreviousAddressViewController{
         let credentials = save().getCredentials()
         let token = credentials["token"]!
         Networking().getAddress(withToken: token) { (result, address) in
+            SVProgressHUD.dismiss()
             if result != false{
                 if address?.count != 0{
                     self.userAddress = address!
                     self.previousAddressTableView.reloadData()
                 }else{
                     //no previos address present
+                    self.performSegue(withIdentifier: segueId.addAddressVCId, sender: nil)
                 }
             }else{
                 //network problem
+                self.view.makeToast("Something went wrong", duration: 2, position: .center, completion: nil)
             }
         }
     }
@@ -112,6 +116,7 @@ extension PreviousAddressViewController{
 
 extension PreviousAddressViewController{
     private func setup(){
+        SVProgressHUD.show()
         self.previousAddressTableView.delegate = self
         self.previousAddressTableView.dataSource = self
         

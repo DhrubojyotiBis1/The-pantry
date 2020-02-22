@@ -20,6 +20,7 @@ class TransactionViewController: UIViewController {
     
     var transactionHistory = [order]()
     var orderedProduct = [[selectedProduct]]()
+    var recomendedProduct = [product]()
     var totalCost = [String]()
     var isCommingFromTransactionVC = false
     var delegate:TransactionViewControllerProtocol?
@@ -31,14 +32,24 @@ class TransactionViewController: UIViewController {
         self.setup()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        SVProgressHUD.dismiss()
+    }
+    
     @IBAction func backButtonPressed(_ sender:UIButton){
         if self.isCommingFromTransactionVC {
-            //performSegue(withIdentifier: segueId.addressVC, sender: nil)
-            self.dismiss(animated: true) {
-                self.delegate?.didTransactionViewControllerDismiss()
-            }
+            self.getRecomendedProduct()
+            SVProgressHUD.show()
         }else{
             dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == segueId.HomeVCId{
+            let destination = segue.destination as! HomeViewController
+            destination.recomendedProducts = self.recomendedProduct
         }
     }
 }
@@ -106,6 +117,14 @@ extension TransactionViewController{
             }else{
                 self.view.makeToast(massage.somethingWentWrong, duration: massage.duration, position: .center)
             }
+        }
+    }
+    
+    private func getRecomendedProduct(){
+        let catagory = "recommended-for-you"
+        Networking().getListOfProducts(forCatagory: catagory) { (result, recomendedProducts) in
+            self.recomendedProduct = recomendedProducts
+            self.performSegue(withIdentifier: segueId.HomeVCId, sender: nil)
         }
     }
     

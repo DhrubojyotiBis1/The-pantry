@@ -21,6 +21,7 @@ class ProductListViewController: UIViewController{
     @IBOutlet weak var viewCartView:UIView!
     @IBOutlet weak var numberOfItemAddedLabel:UILabel!
     @IBOutlet weak var totalPriceLabel:UILabel!
+    @IBOutlet weak var collectionViewBollomConstrain: NSLayoutConstraint!
     
     var tempUrl:String?
     var delegate:ProductListViewControllerProtocol?
@@ -47,7 +48,6 @@ class ProductListViewController: UIViewController{
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if self.isGoingToTrasactionVC{
-            print("fuck")
             SVProgressHUD.show()
             self.isGoingToTrasactionVC = false
         }
@@ -119,8 +119,10 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
         cell.delegate = self
         cell.activityIndicator.startAnimating()
         cell.productSubtractButton.isHidden = true
+        cell.numOfItemSelected.isHidden = true
         cell.numOfItemSelected.text = "0"
         self.viewCartView.isHidden = true
+        self.collectionViewBollomConstrain.constant = 0
         cell.productAddButton.tag = indexPath.row
         cell.productSubtractButton.tag = indexPath.row
         cell.section = indexPath.section
@@ -136,6 +138,7 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
                     if(self.selectedProducts[i].product.productId ==  self.availableProducts[row].productId){
                         cell.numOfItemSelected.text = "\(self.selectedProducts[i].quantity)"
                         cell.productSubtractButton.isHidden = false
+                        cell.numOfItemSelected.isHidden = false
                     }
                     if(isfirstTime){
                         self.totalPrice += Double(self.selectedProducts[i].quantity) *  Double(self.selectedProducts[i].product.sellingPrice)!
@@ -188,6 +191,7 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
         
         if(self.totalPrice > 0){
             self.viewCartView.isHidden = false
+            self.collectionViewBollomConstrain.constant -= 50
         }
         
         //general information of the product
@@ -202,6 +206,7 @@ extension ProductListViewController:UICollectionViewDelegate,UICollectionViewDat
         if let screenWidth = self.view.window?.bounds.width{
             cell.cellWidth.constant = screenWidth/2.4
         }
+        self.view.layoutIfNeeded()
         return cell
         
     }
@@ -358,6 +363,7 @@ extension ProductListViewController{
         self.numberOfItemAdded = 0
         self.totalPrice = 0
         self.viewCartView.isHidden = true
+        self.collectionViewBollomConstrain.constant = 0
         if let selectedProduct = save().getCartDetails(){
             self.selectedProducts = selectedProduct
         }

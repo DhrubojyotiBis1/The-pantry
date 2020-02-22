@@ -27,6 +27,7 @@ class CheckOutViewController: UIViewController {
     @IBOutlet weak var coupon:UITextField!
     @IBOutlet weak var contentView:UIView!
     @IBOutlet weak var totalCost:UILabel!
+    @IBOutlet weak var gstLable:UILabel!
     
     var isCouponApplied = false
     var phoneNumber:String!
@@ -40,6 +41,11 @@ class CheckOutViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setUp()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        SVProgressHUD.dismiss()
     }
     
     @IBAction func applyCouponButtonPressed(_ sender:UIButton){
@@ -204,7 +210,7 @@ extension CheckOutViewController:RazorpayPaymentCompletionProtocolWithData{
     func onPaymentSuccess(_ payment_id: String, andData response: [AnyHashable : Any]?) {
         let resopayOrderId = response![razorPaySucessResponseKey.orderId] as! String
         let razorPaySignature = response![razorPaySucessResponseKey.signature] as! String
-        
+        SVProgressHUD.show()
         let usercredential = save().getCredentials()
         let token = usercredential[saveCredential.token]!
         Networking().checkTransactionStatus(withRazorPayPaymentId: payment_id, razorPayOrderId: resopayOrderId, razorPaySignature: razorPaySignature, andToken: token) { (result, massage) in
@@ -278,7 +284,8 @@ extension CheckOutViewController{
            totalPrice += Double(selectedProducts[i].product!.sellingPrice)! * Double(selectedProducts[i].quantity)
         }
         
-        self.totalCost.text = "\(totalPrice)"
+        self.totalCost.text = "₹\(totalPrice)"
+        self.gstLable.text = "₹\(0.05*totalPrice)"
     }
     
     @objc private func onTap(){

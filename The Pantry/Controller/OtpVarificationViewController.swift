@@ -31,7 +31,7 @@ class OtpVarificationViewController: UIViewController {
     
     @IBAction func continueButtonPressed(_ sender:UIButton){
         if isVarifyingForForgetPassword{
-            self.phoneNumber = "91" + self.phoneNumber
+            self.phoneNumber = "91-" + self.phoneNumber
         }
         self.neworkingForOtpVarification()
     }
