@@ -337,7 +337,7 @@ public class Networking{
         }
     }
     
-    //For resending the same otp 
+    //For resending the same otp
     func resendOtp(forPhoneNumber phoneNumber:String,completion:@escaping (_ result:Bool,_ token:Int)->()){
         let pram = [smsGateWay.authenticationKey:smsGateWayConstants.authenticationKey,smsGateWay.phoneNumber : phoneNumber,smsGateWay.reciveType:smsGateWayConstants.reciveType]
         //trying to do networking for varification
@@ -515,10 +515,10 @@ public class Networking{
                         let orderDate = transactionHistoryJSON[i][transactionKey.orderDate].string!.split(separator: " ")
                         let orderID = transactionHistoryJSON[i][transactionKey.orderId].int!
                         let isPaymentSucess:Int!
-                        if let sucess = transactionHistoryJSON[i][transactionKey.isSucess].int{
-                            isPaymentSucess = sucess
-                        }else{
+                        if transactionHistoryJSON[i]["status"] == "pending_payment"{
                             isPaymentSucess = 0
+                        }else{
+                            isPaymentSucess = 1
                         }
                         let transactionOrder = order(orderDate: "\(orderDate[0])", orderId: orderID, isOrderSuccess: isPaymentSucess)
                         transactionHistory.append(transactionOrder)
@@ -570,7 +570,7 @@ public class Networking{
                 tempImage = nil
             }
             completion(tempImage)
-        }   
+        }
     }
     
     func getAddress(withToken token:String,completion:@escaping (_ resut:Bool,_ address:[address]?)->()){

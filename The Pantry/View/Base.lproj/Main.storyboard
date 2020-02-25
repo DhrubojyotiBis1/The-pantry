@@ -969,7 +969,7 @@
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="80" id="KIb-cw-cJz"/>
                                                                         </constraints>
-                                                                        <state key="normal" image="veg"/>
+                                                                        <state key="normal" image="food (1)-1"/>
                                                                         <connections>
                                                                             <action selector="catagoryButtonPressed:" destination="YfH-Cc-Wmb" eventType="touchUpInside" id="x2h-aM-5Pb"/>
                                                                         </connections>
@@ -987,8 +987,8 @@
                                                                 <subviews>
                                                                     <button opaque="NO" tag="2" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jOP-2P-fDr">
                                                                         <rect key="frame" x="0.0" y="0.0" width="80" height="82"/>
-                                                                        <color key="backgroundColor" red="1" green="0.65761002030000004" blue="0.0046587621920000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                        <state key="normal" image="nonVeg"/>
+                                                                        <color key="backgroundColor" red="0.47058823529999999" green="0.79215686269999996" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                                        <state key="normal" image="food-and-restaurant"/>
                                                                         <connections>
                                                                             <action selector="catagoryButtonPressed:" destination="YfH-Cc-Wmb" eventType="touchUpInside" id="b1R-4s-XBV"/>
                                                                         </connections>
@@ -1006,8 +1006,8 @@
                                                                 <subviews>
                                                                     <button opaque="NO" tag="3" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rl6-jf-Y2Z">
                                                                         <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
-                                                                        <color key="backgroundColor" red="0.92366319890000004" green="0.48188972470000002" blue="0.44504928589999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                        <state key="normal" image="readyToEat"/>
+                                                                        <color key="backgroundColor" red="0.47058823529999999" green="0.79215686269999996" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                                        <state key="normal" image="fastfood"/>
                                                                         <connections>
                                                                             <action selector="catagoryButtonPressed:" destination="YfH-Cc-Wmb" eventType="touchUpInside" id="XFl-pO-Xhq"/>
                                                                         </connections>
@@ -1025,8 +1025,8 @@
                                                                 <subviews>
                                                                     <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hRJ-R8-PhY">
                                                                         <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
-                                                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                        <state key="normal" image="merchandise"/>
+                                                                        <color key="backgroundColor" red="0.47058823529999999" green="0.79215686269999996" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                                        <state key="normal" image="food (1) (1)"/>
                                                                         <connections>
                                                                             <action selector="catagoryButtonPressed:" destination="YfH-Cc-Wmb" eventType="touchUpInside" id="hgP-R4-yTS"/>
                                                                         </connections>
@@ -4755,35 +4755,35 @@
         <image name="checkmark" catalog="system" width="64" height="56"/>
         <image name="dotMenu" width="50" height="50"/>
         <image name="envelope.circle.fill" catalog="system" width="64" height="60"/>
+        <image name="fastfood" width="48" height="48"/>
+        <image name="food (1) (1)" width="48" height="48"/>
+        <image name="food (1)-1" width="48" height="48"/>
+        <image name="food-and-restaurant" width="48" height="48"/>
         <image name="icons8-add-bookmark-50" width="50" height="50"/>
         <image name="icons8-important-mail-24" width="24" height="24"/>
         <image name="icons8-logout-rounded-left-50" width="50" height="50"/>
         <image name="icons8-phone-26" width="26" height="26"/>
         <image name="icons8-share-24" width="24" height="24"/>
         <image name="menu" width="24" height="24"/>
-        <image name="merchandise" width="48" height="48"/>
         <image name="message.circle.fill" catalog="system" width="64" height="60"/>
         <image name="minus" catalog="system" width="64" height="12"/>
         <image name="minus.square" catalog="system" width="64" height="56"/>
         <image name="noImage" width="160" height="103.33333587646484"/>
-        <image name="nonVeg" width="48" height="48"/>
         <image name="person.circle" catalog="system" width="64" height="60"/>
         <image name="phone.circle.fill" catalog="system" width="64" height="60"/>
         <image name="plus" catalog="system" width="64" height="56"/>
         <image name="plus.app" catalog="system" width="64" height="56"/>
         <image name="plus.square" catalog="system" width="64" height="56"/>
-        <image name="readyToEat" width="48" height="48"/>
         <image name="unchecked-checkbox" width="50" height="50"/>
-        <image name="veg" width="48" height="48"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="iKW-bI-Zmj"/>
+        <segue reference="PFK-BV-5Vj"/>
         <segue reference="wsa-Vp-mfL"/>
         <segue reference="tgu-a8-psq"/>
-        <segue reference="408-V4-S0H"/>
+        <segue reference="bM1-so-pLB"/>
         <segue reference="bad-x7-UcN"/>
         <segue reference="4fN-zY-eZK"/>
-        <segue reference="UfU-kb-QFa"/>
+        <segue reference="uT9-kQ-yHz"/>
         <segue reference="6Lc-du-0XL"/>
         <segue reference="Ss4-HA-2nK"/>
     </inferredMetricsTieBreakers>
