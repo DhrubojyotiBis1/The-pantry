@@ -8,7 +8,6 @@
 
 import UIKit
 import Alamofire
-import SVProgressHUD
 
 class RegisterViewController: UIViewController {
 
@@ -18,7 +17,7 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var firstName: UITextField!
     @IBOutlet var registerView: UIView!
     @IBOutlet weak var registerButton: UIButton!
-    
+    var animationController:animation! = nil
     var mobileNumber = String()
     var bannerImages = [UIImage?]()
     var recomendedProduct = [product]()
@@ -37,7 +36,7 @@ class RegisterViewController: UIViewController {
     
 
     @IBAction func registerButtonPressed(_ sender: Any) {
-        SVProgressHUD.show()
+        animationController.play()
         neworking()
     }
     
@@ -89,7 +88,7 @@ extension RegisterViewController{
            Networking().getListOfProducts(forCatagory: catagory) { (result, recomendedProducts) in
                self.recomendedProduct = recomendedProducts
                if(result){
-                   SVProgressHUD.dismiss()
+                self.animationController.stop()
                    completion()
                }else{
                    //Internet problem
@@ -109,6 +108,7 @@ extension RegisterViewController{
         
         let VC = ViewController()
         VC.makeCardView(forButton: self.registerButton)
+        self.animationController = animation(animationView: self.view)
     }
     
     @objc private func onTab(){

@@ -200,12 +200,15 @@ extension HomeViewController{
              self.viewCartView.isHidden = false
              self.bottomCostrainTableView.constant += self.viewCartView.bounds.height
         }
-        /*for i in 0..<self.itemInCart.count{
-            self.numberOfItemInCart += self.itemInCart[i].quantity
-            self.totalPrice += Double(itemInCart[i].product!.sellingPrice)! * Double(itemInCart[i].quantity)
+        print("item:",self.itemInCart.count,"recomendedProducts:",self.recomendedProducts.count)
+        if self.recomendedProducts.count == 0{
+            for i in 0..<self.itemInCart.count{
+                self.numberOfItemInCart += self.itemInCart[i].quantity
+                self.totalPrice += Double(itemInCart[i].product!.sellingPrice)! * Double(itemInCart[i].quantity)
+            }
+            self.numberOfItemInCartLabel.text! = "\(numberOfItemInCart)"+"Item"
+            self.totalPricelabel.text = "₹"+"\(self.totalPrice)"
         }
-        self.numberOfItemInCartLabel.text! = "\(numberOfItemInCart)"+"Item"
-        self.totalPricelabel.text = "₹"+"\(self.totalPrice)"*/
         self.widthConstrainViewCartView.constant = self.view.bounds.width
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTap))

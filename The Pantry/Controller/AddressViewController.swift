@@ -11,6 +11,7 @@ import Toast_Swift
 
 class AddressViewController: UIViewController {
     
+    @IBOutlet var backgroundView: UIView!
     @IBOutlet weak var scrollViewBottomContrain: NSLayoutConstraint!
     @IBOutlet weak var addressViewHigntConstrain: NSLayoutConstraint!
     
@@ -97,8 +98,17 @@ extension AddressViewController{
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTapCheckBoxView))
         self.checkBoxView.addGestureRecognizer(tapGesture)
+        
+        let backgroundTapGesture = UITapGestureRecognizer(target: self, action: #selector(onBackgroundViewTap))
+        self.backgroundView.addGestureRecognizer(backgroundTapGesture)
     }
     
+    
+    @objc private func onBackgroundViewTap(){
+       for i in 0..<self.addBillingAddressTextFields.count {
+            self.addBillingAddressTextFields[i].endEditing(true)
+        }
+    }
     
     @objc private func onTapCheckBoxView(){
         self.checkBoxButtonPressed(self.checkBoxButton)

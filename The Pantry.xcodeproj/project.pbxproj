@@ -112,6 +112,7 @@
 		6FA83264239EE90A00DEC90E /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		6FBC7B6423D34F95007DE89D /* AddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressViewController.swift; sourceTree = "<group>"; };
 		6FCBE06823DB7CBB00E59C66 /* TransactionResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionResultViewController.swift; sourceTree = "<group>"; };
+		6FCE4E1C240817CD00625EB7 /* The Pantry.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "The Pantry.entitlements"; sourceTree = "<group>"; };
 		6FEE1730239F05C0002079FC /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		6FEE1732239F0ABD002079FC /* url.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = url.swift; sourceTree = "<group>"; };
 		6FEE1734239F0B28002079FC /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
@@ -261,6 +262,7 @@
 		E084D04B225BBC1200E6F163 /* The Pantry */ = {
 			isa = PBXGroup;
 			children = (
+				6FCE4E1C240817CD00625EB7 /* The Pantry.entitlements */,
 				6F5D06A923E8633200FB08DC /* 4762-food-carousel.json */,
 				E084D04C225BBC1200E6F163 /* AppDelegate.swift */,
 				6FA83263239EE3E100DEC90E /* Model */,
@@ -584,17 +586,19 @@
 			baseConfigurationReference = 9884DA8C67A82A5E9F87DB0E /* Pods-The Pantry.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "The Pantry/The Pantry.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 55DX457GXB;
+				DEVELOPMENT_TEAM = J7JQ93K637;
 				INFOPLIST_FILE = "$(SRCROOT)/The Pantry/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.gourmetatthepantry;
+				PRODUCT_BUNDLE_IDENTIFIER = com.btosc.gourmetatthepantry;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -605,17 +609,19 @@
 			baseConfigurationReference = 3A320FAEC629FFF472A5C9AC /* Pods-The Pantry.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "The Pantry/The Pantry.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 55DX457GXB;
+				DEVELOPMENT_TEAM = J7JQ93K637;
 				INFOPLIST_FILE = "$(SRCROOT)/The Pantry/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.gourmetatthepantry;
+				PRODUCT_BUNDLE_IDENTIFIER = com.btosc.gourmetatthepantry;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

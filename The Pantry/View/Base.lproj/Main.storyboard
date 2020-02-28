@@ -3315,6 +3315,7 @@
                     <connections>
                         <outlet property="addBillingAddresslable" destination="hrR-vZ-9FN" id="8Je-4L-zhl"/>
                         <outlet property="addressViewHigntConstrain" destination="wDo-hO-QU5" id="ECi-SM-Qkz"/>
+                        <outlet property="backgroundView" destination="xht-Wp-SK6" id="y38-BQ-vNN"/>
                         <outlet property="checkBoxButton" destination="nKA-hP-2zV" id="BgW-0Y-eHC"/>
                         <outlet property="checkBoxView" destination="c2d-jO-mI7" id="jwm-oT-3RG"/>
                         <outlet property="navigationBarView" destination="o1q-ci-XqC" id="weo-WK-2cv"/>
