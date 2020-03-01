@@ -52,19 +52,14 @@ class ContactUsViewController: UIViewController {
     }
     
     @IBAction func whatsappUsButtonPressed(_ sender:UIButton){
-        print("Whatsapp")
-        let textToShare = "The Pantry delivers ready to cook freshly prepped meal kits to your doorstep.\n http://gourmetatthepantry.com/"
         
-        let urlwhatsApp = "whatsapp://send?text=\(textToShare)"
-        if let urlString = urlwhatsApp.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed){
-            
-            if let whatsAppUrl = NSURL(string: urlString){
-                if UIApplication.shared.canOpenURL(whatsAppUrl as URL){
-                    if #available(iOS 10, *) {
-                        UIApplication.shared.open(whatsAppUrl as URL)
-                    } else {
-                        UIApplication.shared.openURL(whatsAppUrl as URL)
-                    }
+        let urlWhats = "https://api.whatsapp.com/send?phone=+918080913452&abid=12354&text=Hi,The_Pantry"
+        if let urlString = urlWhats.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed) {
+            if let whatsappURL = URL(string: urlString) {
+                if UIApplication.shared.canOpenURL(whatsappURL) {
+                    UIApplication.shared.open(whatsappURL, options: [:], completionHandler: nil)
+                } else {
+                    print("Install Whatsapp")
                 }
             }
         }

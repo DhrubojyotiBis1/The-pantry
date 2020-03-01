@@ -48,6 +48,8 @@ class HomeViewController: UIViewController {
     var bannerImages = [UIImage?]()
     var stringUrlForSelectedPage:String?
     var numberOfItemAdded = Int()
+    var selectedIndexpath = IndexPath()
+    var downloadImageArray = [Int:Bool]()
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -79,6 +81,17 @@ class HomeViewController: UIViewController {
         }else if segue.identifier == segueId.threeDotPopVCId{
             let destiination = segue.destination as! PopUpViewController
             destiination.delegate = self
+        }else if segue.identifier == segueId.productDescriptionVCId{
+            let destination = segue.destination as! ProductDescriptionViewController
+            destination.productForDescription = self.recomendedProducts[self.selectedIndexpath.row]
+            var temProductImage = [String:UIImage?]()
+            for i in 0..<self.recomendedProducts[self.selectedIndexpath.row].imageURL.count{
+                let productURL = self.generalStorageURL + self.recomendedProducts[self.selectedIndexpath.row].imageURL[i]
+                temProductImage[productURL] = self.recomendedProductImage[productURL]
+            }
+            destination.productImages = temProductImage
+            destination.productImageInCart = self.productInCartImage
+            destination.delegate = self
         }
     }
     
@@ -298,6 +311,13 @@ extension HomeViewController{
 extension HomeViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.recomendedProducts.count
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.selectedIndexpath = indexPath
+        self.performSegue(withIdentifier: segueId.productDescriptionVCId, sender: nil)
+        self.setupForViewCartView()
+        self.recomendedForYouTabelView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -551,7 +571,13 @@ extension HomeViewController:HomeTableViewCellProtocol{
     
 }
 
-extension HomeViewController:popUpPopUpViewControllerDelegate,MenuViewControllerProtocol{
+extension HomeViewController:popUpPopUpViewControllerDelegate,MenuViewControllerProtocol,ProductDescriptionProtocol{
+    func didProductDescriptionViewControllerDismiss(productInCart: [String : UIImage?]) {
+        self.productInCartImage = productInCart
+        self.setupForViewCartView()
+        self.recomendedForYouTabelView.reloadData()
+    }
+    
     func selectedMenu(option: Int?) {
         if let selectedOption = option{
             switch selectedOption {

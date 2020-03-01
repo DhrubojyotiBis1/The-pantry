@@ -434,7 +434,7 @@ public class Networking{
             if response.result.isSuccess{
               //networking done
                 let responce = JSON(response.result.value!)
-                print("doPreOrder \(responce)")
+                print("doPreOrder2 \(responce)")
                 if(responce[preOrderResponseKey.razorPayOrderId].string != nil){
                     let amount = Double(responce[preOrderResponseKey.amount].int!)
                     let razorPayKey = responce[preOrderResponseKey.razorPaykey].string!
@@ -515,10 +515,21 @@ public class Networking{
                         let orderDate = transactionHistoryJSON[i][transactionKey.orderDate].string!.split(separator: " ")
                         let orderID = transactionHistoryJSON[i][transactionKey.orderId].int!
                         let isPaymentSucess:Int!
-                        if transactionHistoryJSON[i]["status"] == "pending_payment"{
+                        if transactionHistoryJSON[i]["status"].string! == "pending_payment"{
                             isPaymentSucess = 0
-                        }else{
+                        }else if transactionHistoryJSON[i]["status"].string! == "canceled"{
                             isPaymentSucess = 1
+                        }else if transactionHistoryJSON[i]["status"].string! == "completed"{
+                            isPaymentSucess = 2
+                        }else if transactionHistoryJSON[i]["status"].string! == "on_hold"{
+                            isPaymentSucess = 3
+                        }else if transactionHistoryJSON[i]["status"].string! == "processing"{
+                            isPaymentSucess = 4
+                        }else if transactionHistoryJSON[i]["status"].string! == "pending"{
+                           isPaymentSucess = 5
+                        }else{
+                            //refunded
+                            isPaymentSucess = 6
                         }
                         let transactionOrder = order(orderDate: "\(orderDate[0])", orderId: orderID, isOrderSuccess: isPaymentSucess)
                         transactionHistory.append(transactionOrder)

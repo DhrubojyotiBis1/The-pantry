@@ -71,12 +71,35 @@ extension TransactionViewController:UITableViewDelegate,UITableViewDataSource{
         cell.date.text = transactionHistory[indexPath.row].orderDate
         cell.orderId.text = "Order Id #\(String(describing: transactionHistory[indexPath.row].orderId!))"
         
-        if(transactionHistory[indexPath.row].isOrderSuccess == 1){
+        if(transactionHistory[indexPath.row].isOrderSuccess == 2){
             cell.statusBackground.backgroundColor = UIColor(red: 120/255, green: 202/255, blue: 40/255, alpha: 1)
-            cell.statusLable.text = "Placed"
-        }else{
-            cell.statusBackground.backgroundColor = UIColor.systemYellow
+            cell.statusLable.text = "Completed"
+            cell.satatusBackgroungWidth.constant = 80
+        }else if transactionHistory[indexPath.row].isOrderSuccess == 1{
+           cell.statusBackground.backgroundColor = UIColor.systemRed
+            cell.statusLable.text = "Canceled"
+            cell.satatusBackgroungWidth.constant = 70
+        }else if transactionHistory[indexPath.row].isOrderSuccess == 3{
+            cell.statusBackground.backgroundColor = UIColor.systemOrange
+            cell.statusLable.text = "On Hold"
+            cell.satatusBackgroungWidth.constant = 70
+        }else if transactionHistory[indexPath.row].isOrderSuccess == 4{
+            cell.statusBackground.backgroundColor = UIColor(red: 255/255, green: 196/255, blue: 0/255, alpha: 1)
+            cell.statusLable.text = "Processing"
+            cell.satatusBackgroungWidth.constant = 80
+        }else if transactionHistory[indexPath.row].isOrderSuccess == 5{
+            cell.statusBackground.backgroundColor = UIColor.systemOrange
             cell.statusLable.text = "Pending"
+            cell.satatusBackgroungWidth.constant = 70
+        }else if transactionHistory[indexPath.row].isOrderSuccess == 6{
+            cell.statusBackground.backgroundColor = UIColor.systemRed
+            cell.statusLable.text = "Refunded"
+            cell.satatusBackgroungWidth.constant = 70
+        }else{
+            cell.statusBackground.backgroundColor = UIColor(red: 120/255, green: 202/255, blue: 40/255, alpha: 1)
+
+            cell.statusLable.text = "Pending Payment"
+            cell.satatusBackgroungWidth.constant = 120
         }
         
         return cell

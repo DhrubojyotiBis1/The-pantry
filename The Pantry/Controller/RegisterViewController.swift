@@ -73,6 +73,7 @@ extension RegisterViewController{
             }else{
                 print("Failed")
                 //show the alart that the registration is failed
+                self.animationController.stop()
                 let VC = ViewController()
                 VC.showMassage(withMassage: massage!, havingMassageType: .error, toViewController: self) {
                     print(massage as Any)

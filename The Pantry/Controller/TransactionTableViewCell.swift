@@ -10,6 +10,7 @@ import UIKit
 
 class TransactionTableViewCell: UITableViewCell {
     
+    @IBOutlet weak var satatusBackgroungWidth: NSLayoutConstraint!
     @IBOutlet weak var idAndProductPriceTableView: UITableView!
     @IBOutlet weak var statusLable:UILabel!
     @IBOutlet weak var statusBackground:UIView!
