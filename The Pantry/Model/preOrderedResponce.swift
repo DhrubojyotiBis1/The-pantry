@@ -14,4 +14,5 @@ struct preOrderResponce{
     var key:String?
     var razorPayOrderId:String?
     var massage:String?
+    var orderId:String?
 }

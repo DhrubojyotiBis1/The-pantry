@@ -210,10 +210,11 @@ extension CheckOutViewController:RazorpayPaymentCompletionProtocolWithData{
     func onPaymentSuccess(_ payment_id: String, andData response: [AnyHashable : Any]?) {
         let resopayOrderId = response![razorPaySucessResponseKey.orderId] as! String
         let razorPaySignature = response![razorPaySucessResponseKey.signature] as! String
+        let orderId = preOrderResponse.orderId!
         SVProgressHUD.show()
         let usercredential = save().getCredentials()
         let token = usercredential[saveCredential.token]!
-        Networking().checkTransactionStatus(withRazorPayPaymentId: payment_id, razorPayOrderId: resopayOrderId, razorPaySignature: razorPaySignature, andToken: token) { (result, massage) in
+        Networking().checkTransactionStatus(withRazorPayPaymentId: payment_id, razorPayOrderId: resopayOrderId, razorPaySignature: razorPaySignature, andToken: token, userOrderId:orderId ) { (result, massage) in
             if(result == 1){
                 //transaction done
                 self.transactionResult = result
@@ -243,14 +244,15 @@ extension CheckOutViewController:CheckOutViewControllerProtcol{
 
 extension CheckOutViewController{
     private func showPaymentForm(){
+        let imageUrl = AssetExtractor.createLocalUrl(forImageNamed: "Logo")
+        
         razorPay = Razorpay.initWithKey(self.preOrderResponse.key!, andDelegateWithData: self)
         let options: [String:Any] = [
             razorPayCredentials.amaount: self.preOrderResponse.totalAmoutToBePaid!, //This is in currency subunits. 100 = 100 paise= INR 1.
             razorPayCredentials.currency: razorPayConstant.currency,//We support more that 92 international currencies.
-            razorPayCredentials.description: "purchase description",
             razorPayCredentials.orderId: self.preOrderResponse.razorPayOrderId!,
-            razorPayCredentials.imageUrl: "ss",
-            razorPayCredentials.name: "Test",
+            razorPayCredentials.imageUrl: imageUrl!,
+            razorPayCredentials.name: "The Pantry",
             razorPayCredentials.contactProfile: [
                         "contact": phoneNumber,
                         "email": self.preOrderResponse.customerEmail!
@@ -302,4 +304,27 @@ extension CheckOutViewController{
             self.coupon.text! = ""
         }
     }
+}
+
+class AssetExtractor {
+
+    static func createLocalUrl(forImageNamed name: String) -> URL? {
+
+        let fileManager = FileManager.default
+        let cacheDirectory = fileManager.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+        let url = cacheDirectory.appendingPathComponent("\(name).png")
+
+        guard fileManager.fileExists(atPath: url.path) else {
+            guard
+                let image = UIImage(named: name),
+                let data = image.pngData()
+            else { return nil }
+
+            fileManager.createFile(atPath: url.path, contents: data, attributes: nil)
+            return url
+        }
+
+        return url
+    }
+
 }

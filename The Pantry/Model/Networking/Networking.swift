@@ -442,12 +442,12 @@ public class Networking{
                     let razorPayKey = responce[preOrderResponseKey.razorPaykey].string!
                     let orderId = responce[preOrderResponseKey.razorPayOrderId].string!
                     let customerEmail = responce[preOrderResponseKey.customerEmail].string!
-                    
-                    let preOrderResponse = preOrderResponce(totalAmoutToBePaid:amount , customerEmail: customerEmail, key: razorPayKey, razorPayOrderId: orderId,massage: preOrderResponseKey.sucessMassage)
+                    let userOrderId = "\(String(describing: responce["order_id"].int!))"
+                    let preOrderResponse = preOrderResponce(totalAmoutToBePaid:amount , customerEmail: customerEmail, key: razorPayKey, razorPayOrderId: orderId,massage: preOrderResponseKey.sucessMassage,orderId: userOrderId)
                     completion(true,preOrderResponse)
                 }
                 else{
-                    let preOrderResponse = preOrderResponce(totalAmoutToBePaid: nil, customerEmail: nil, key: nil, razorPayOrderId: nil, massage: responce["error"].string!)
+                    let preOrderResponse = preOrderResponce(totalAmoutToBePaid: nil, customerEmail: nil, key: nil, razorPayOrderId: nil, massage: responce["error"].string!,orderId: nil)
                     completion(false,preOrderResponse)
                 }
                 
@@ -460,9 +460,10 @@ public class Networking{
         }
     }
     
-    func checkTransactionStatus(withRazorPayPaymentId paymentId:String,razorPayOrderId orderId : String,razorPaySignature signature :String,andToken token:String,completion:@escaping(_ result:Int,_ massage:String?)->()){
+    func checkTransactionStatus(withRazorPayPaymentId paymentId:String,razorPayOrderId orderId : String,razorPaySignature signature :String,andToken token:String,userOrderId:String,completion:@escaping(_ result:Int,_ massage:String?)->()){
         
-        let param:[String:String] = [razorPayTransactionkey.token:token,razorPayTransactionkey.signature:signature,razorPayTransactionkey.paymentId:paymentId,razorPayTransactionkey.razorPayOrderId:orderId]
+        let param:[String:String] = [razorPayTransactionkey.token:token,razorPayTransactionkey.signature:signature,razorPayTransactionkey.paymentId:paymentId,razorPayTransactionkey.razorPayOrderId:orderId,razorPayTransactionkey.userOrderId:userOrderId]
+        
         
         Alamofire.request(url.transactionStatus,method: .post ,parameters : param).responseJSON { (response) in
                    if response.result.isSuccess{

@@ -157,6 +157,7 @@ struct razorPayTransactionkey {
     static let signature = "razorpay_signature"
     static let paymentId = "razorpay_payment_id"
     static let razorPayOrderId = "razorpay_order_id"
+    static let userOrderId = "order_id"
 }
 
 struct productkey{
