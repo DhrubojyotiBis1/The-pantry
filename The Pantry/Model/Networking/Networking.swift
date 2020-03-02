@@ -204,13 +204,15 @@ public class Networking{
             var products = [product]()
             if response.result.isSuccess{
               //Got the product detals
-                let userJSON : JSON = JSON(response.result.value!)
+                var userJSON : JSON = JSON(response.result.value!)
                 //par's the userJSON
                 //make a class name product details along with urls
                 //store each product in product details class arry
                 //send the arry back
                 print("getListOfProducts \(userJSON)")
                 for i in 0..<userJSON.count{
+                    userJSON[i]["selling price"].string!.removeLast()
+                    userJSON[i]["selling price"].string!.removeLast()
                     var tempImageURL = [String]()
                     let name = userJSON[i]["name"].string!
                     let sellingPrice = userJSON[i]["selling price"].string!
